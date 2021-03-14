@@ -1,21 +1,5 @@
-<%@page import="com.exam.booklist.BookTO"%>
-<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-<%
-	BookTO to = (BookTO)request.getAttribute("book_info");
-	String master_seq = to.getMaster_seq();
-	String isbn13 = to.getIsbn13();
-	String title = to.getTitle();
-	String author = to.getAuthor();
-	String publisher = to.getPublisher();
-	String img_url = to.getImg_url();
-	String description = to.getDescription();
-	String pub_date = to.getPub_date();
-	
-	
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,13 +10,7 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-	#table {
-		border: 1px solid black;
-		width : 60%;
-		align : center;
-	}
-</style>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 
@@ -69,56 +47,7 @@
     </div>
     
     <div id="content">
-    <table id="table">
-    	<tr>
-    		<td><div align="right"><input type="button" onclick="location.href='./book_list.do'" value="뒤로 가기"></div></td><td></td>
-   		</tr>
-   		<tr>
-   			<td rowspan="6"><img width="400px" src="<%=img_url %>" alt="이미지 없음"/></td>
-   			<td><div>책 제목 : <%=title %></div></td>
-   		</tr>
-   		<tr>
-   			<td><div>저자 : <%=author %></div></td>
-   		</tr>
-   		<tr>
-   			<td><div>출판사 : <%=publisher %></div></td>
-   		</tr>
-   		<tr>
-   			<td><div>출판일 : <%=pub_date %></div></td>
-   		</tr>
-   		<tr>
-   			<td><p>책 설명 : <%=description %></td>
-   		</tr>
-   		<tr>
-   			<td>
-   				<div>
-   					<div><h4>관련 게시글</h4></div>
-			    	<table border=1 width=100% >
-			    		<tr>
-				    		<th>게시글 제목</th>
-				    		<th>작성 일자</th>
-				    		<th>조회수</th>    		
-			    		</tr>
-			    		<tr>
-			    			<td>하 ... 얘드라 나 겨우했어 진짜</td>
-				    		<td>2021-03-13</td>
-				    		<td>1423</td>
-			    		</tr>
-			    		<tr>
-			    			<td>하 ... 얘드라 나 겨우했어 진짜</td>
-				    		<td>2021-03-13</td>
-				    		<td>1423</td>
-			    		</tr>
-			    	</table>
-   				</div>
-   			</td>
-   		</tr>
-        
-        	
-        </table>
-    </div>
-    <div>
-    	
+        <h1>책정보 페이지</h1>
     </div>
 </div>
 

@@ -1,57 +1,5 @@
-<%@page import="com.exam.paging.pagingTO"%>
-<%@page import="com.exam.booklist.BookTO"%>
-<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-    <%
-    
-	//ArrayList<BookTO> booklists = (ArrayList)request.getAttribute("booklist");
-    pagingTO pagelistTO = (pagingTO)request.getAttribute("paginglist");
-    ArrayList<BookTO> booklists = pagelistTO.getBookList();
-    int cpage = 1;
-    if(pagelistTO.getCpage()!= 0){
-    	cpage = pagelistTO.getCpage();
-    }
-    
-	int totolRecord = pagelistTO.getTotalrecord();
-	int recordPerPage= pagelistTO.getRecordPerPage();
-	int totalPage = pagelistTO.getTotalPage();
-	int blockPerPage = pagelistTO.getBlockPerPage();
-	int startBlock = pagelistTO.getStartBlock();
-	int endBlock = pagelistTO.getEndBlock();
-	
-	StringBuffer bookHTML = new StringBuffer();
-	
-	for (BookTO to : booklists){
-		//변수 담아 오기
-		String master_seq = to.getMaster_seq();
-		String isbn13 = to.getIsbn13();
-		String title= to.getTitle();
-		String author = to.getAuthor();
-		String publisher = to.getPublisher();
-		String img_url = to.getImg_url();
-		String description = to.getDescription();
-		String pub_date = to.getPub_date();
-		
-		// 아래의 HTMl 양식으로 append하기
-		bookHTML.append("<div>");
-		bookHTML.append("<table id=innerlist>");
-		bookHTML.append("<tr>");
-		bookHTML.append("<td rowspan='4' width='20%'><img width='200px' src='"+img_url+"' alt='이미지 없음'/></td>");
-		bookHTML.append("<td width=60% >책 제목 :"+title+"</td>");
-		bookHTML.append("<td rowspan='4' width=20>");
-		bookHTML.append("<a type='button' href='./book_info.do?master_seq="+master_seq+"'>자세히 보기</a>");
-		bookHTML.append("</td>");
-		bookHTML.append("</tr>");
-		bookHTML.append("<tr><td><div>저자 :"+author+"</div></td></tr>");
-		bookHTML.append("<tr><td><div>출판사 :"+publisher+"</div></td></tr>");
-		bookHTML.append("<tr><td><p>책 설명 :"+description+"</p></td></tr>");
-		bookHTML.append("</table>");
-		bookHTML.append("</div>");
-	}
-	
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,21 +7,7 @@
 <title>책갈피</title>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<style>
-#list {
-  border: 1px solid black;
-  padding: 15px;
-  width:100%;
-}
-#innerlist {
-  border: 1px solid black;
-  padding: 15px;
-  width:100%;
-}
-table {
-  border-spacing: 15px;
-}
-</style>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -98,8 +32,8 @@ table {
 	<a href="./book_list.do">책 구경하기</a>
 </div>
 
-<div >
-	<div >
+<div id="main">
+	<div id="header">
 		<p>
 			<span>
 				<button class="sidebar-btn" onclick="sidebarCollapse()">
@@ -107,84 +41,14 @@ table {
 	             </button>
 			</span>
 	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
-	        <span><a href="./login.do" align="right">시작하기</a></span>
-			<span><a href="./search.do" align="right"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
+	        <span><a href="./login.do">시작하기</a></span>
+			<span><a href="./search.do"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
     	</p>
     </div>
     
-    <div width=100%>
-        <div><h1>도서 리스트</h1></div>
-        <div width=100%>
-        	<table >
-        		<tr>
-        			<td width =10%> 검색어 필터</td>
-        			<td width=10%>토글 위치</td>
-        			<td width=60%>
-        				<form action="./book_list_ok.do" type="get" align = "right">
-        				<input type="text" name = "bookname"/>
-        				<input type="submit" value="검색"/>
-        				</form>
-        			</td>
-        		</tr>
-        	</table>
-        </div>
-     </div>
-     <div>
-   		<%= bookHTML %>
-     </div>
-     <div align="center">
-     <%
-     /*
-     if (startBlock== 1){
-			out.println("<span><a>처음</a></span>");
-		} else {
-			out.println("<span><a href='./book_list.do?cpage=1'>처음</a></span>");
-		}
-		
-		out.println("&nbsp;");
-		*/
-		if(cpage == 1){
-			out.println("<span><a href=''>이전 페이지</a></span>");
-		} else{
-			out.println("<span><a href='./book_list.do?cpage="+(cpage-1)+"'>이전 페이지</a></span>");
-		}
-		
-		out.println("<span> 현재 페이지 :" +cpage+"</span>");
-		/*
-		out.println("&nbsp;&nbsp;");
-     	
-     	for(int i=startBlock; i<=endBlock; i++){
-     		if(cpage == i){
-     			out.println("<span>["+i+"]</span>");
-     		} else {
-     			out.println("<span><a href ='./book_list.do?cpage="+i+"'>"+i+"</a></span>");
-     		}
-     	}
-     	*/
-     	out.println("&nbsp;");
-		
-		if(cpage == totalPage){
-			out.println("<span><a href=''>다음 페이지</a></span>");
-		} else{
-			out.println("<span><a href='./book_list.do?cpage="+(cpage+1)+"'>다음 페이지</a></span>");
-		}
-		
-		/*
-		out.println("&nbsp;");
-		
-		if (endBlock== totalPage){
-			out.println("<span><a> 끝</a></span>");
-		} else {
-			out.println("<span><a href='./book_list.do?cpage="+(endBlock+1)+"'> 끝</a></span>");
-		}
-		*/
-     		
-     %>
-     </div>
-     <div>
-     	<%= pagelistTO.toString() %>
-     </div>
-     
+    <div id="content">
+        <h1>책 리스트</h1>
+    </div>
 </div>
 
 </body>
