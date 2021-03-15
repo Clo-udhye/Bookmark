@@ -1,20 +1,34 @@
 package com.exam.bookmark;
 
+
 import java.util.ArrayList;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.exam.booklist.BookDAO;
+import com.exam.booklist.BookTO;
+import com.exam.paging.pagingTO;
+
+
 
 import com.exam.user.UserDAO;
 import com.exam.user.UserTO;
 
 @Controller
 public class HomeController {
+	@Autowired
+	private BookDAO bookdao; 
+	//에러 발생 위치 Error creating bean with name 'homeController': Unsatisfied dependency expressed through field 'bookdao' 
 	
 	@Autowired
 	UserDAO userDao;
@@ -52,12 +66,24 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/book_list.do")
-	public String book_list() {
+	public String book_list(Locale locale, Model model, pagingTO to) {
+		//paging 없는 일반 리스트 출력
+//		ArrayList<BookTO> booklist = bookdao.BooklistTemplate();
+//		model.addAttribute("booklist", booklist);
+		
+		pagingTO paginglist = bookdao.pagingList(to);
+		model.addAttribute("paginglist", paginglist);
 		return "book_list";
 	}
 	
-	@RequestMapping(value = "/book_info.do")
-	public String book_info() {
+	@RequestMapping(value = "/book_info.do", method = RequestMethod.GET)
+	public String book_info(HttpServletRequest req, Model model, pagingTO to) {
+		String master_seq = req.getParameter("master_seq");
+		BookTO book_info = bookdao.Book_infoTemplate(master_seq);
+		model.addAttribute("book_info", book_info);
+		int cpage = to.getCpage();
+		model.addAttribute("cpage", cpage);
+		
 		return "book_info";
 	}
 	
