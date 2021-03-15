@@ -2,10 +2,12 @@ package com.exam.bookmark;
 
 
 import java.util.ArrayList;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,11 +21,34 @@ import com.exam.paging.pagingTO;
 
 
 
+import com.exam.user.UserDAO;
+import com.exam.user.UserTO;
+
 @Controller
 public class HomeController {
 	@Autowired
 	private BookDAO bookdao; 
 	//에러 발생 위치 Error creating bean with name 'homeController': Unsatisfied dependency expressed through field 'bookdao' 
+	
+	@Autowired
+	UserDAO userDao;
+	
+	@RequestMapping(value = "/test.do")
+	public String test() {
+		return "test";
+	}
+	@RequestMapping(value = "/duplicationCheck.do")
+	public String duplicationCheck(HttpServletRequest request, Model model) {
+		
+		String item = request.getParameter("item");
+		String value = request.getParameter("value");
+		int flag = userDao.dupCheck(item, value);
+		
+		model.addAttribute("flag", flag);
+		
+		return "duplicationCheck";
+	}
+	
 	
 	@RequestMapping(value = "/home.do")
 	public String home() {
@@ -67,6 +92,23 @@ public class HomeController {
 		return "login";
 	}
 	
+	@RequestMapping(value = "/login_ok.do")
+	public String login_ok(HttpServletRequest request, Model model) {
+		UserTO to = new UserTO();
+		to.setId(request.getParameter("userID"));
+		to.setPassword(request.getParameter("userPassword"));
+		
+		//System.out.println(request.getParameter("userID"));
+		//System.out.println(request.getParameter("userPassword"));
+		
+		int flag = userDao.loginOk(to);
+		model.addAttribute("flag", flag);
+		
+		//System.out.println(flag);
+		
+		return "login_ok";
+	}
+	
 	@RequestMapping(value = "/mypage.do")
 	public String mypage() {
 		return "mypage";
@@ -80,6 +122,24 @@ public class HomeController {
 	@RequestMapping(value = "/signup.do")
 	public String signup() {
 		return "signup";
+	}
+	
+	@RequestMapping(value = "/signup_ok.do")
+	public String signup_ok(HttpServletRequest request, Model model) {
+		UserTO to = new UserTO();
+		to.setId(request.getParameter("userID"));
+		to.setPassword(request.getParameter("userPassword"));
+		to.setNickname(request.getParameter("nickname"));
+		to.setMail(request.getParameter("mail"));
+		if(!request.getParameter("address").trim().equals("")) {
+			to.setAddress(request.getParameter("address"));
+			to.setAddresses(request.getParameter("addresses"));
+		}
+
+		int flag = userDao.signupOk(to) ;
+		model.addAttribute("flag", flag);
+		
+		return "signup_ok";
 	}
 	
 	@RequestMapping(value = "/admin.do")
