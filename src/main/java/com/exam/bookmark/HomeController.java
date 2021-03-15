@@ -17,7 +17,24 @@ import com.exam.user.UserTO;
 public class HomeController {
 	
 	@Autowired
-	UserDAO dao;
+	UserDAO userDao;
+	
+	@RequestMapping(value = "/test.do")
+	public String test() {
+		return "test";
+	}
+	@RequestMapping(value = "/duplicationCheck.do")
+	public String duplicationCheck(HttpServletRequest request, Model model) {
+		
+		String item = request.getParameter("item");
+		String value = request.getParameter("value");
+		int flag = userDao.dupCheck(item, value);
+		
+		model.addAttribute("flag", flag);
+		
+		return "duplicationCheck";
+	}
+	
 	
 	@RequestMapping(value = "/home.do")
 	public String home() {
@@ -58,7 +75,7 @@ public class HomeController {
 		//System.out.println(request.getParameter("userID"));
 		//System.out.println(request.getParameter("userPassword"));
 		
-		int flag = dao.loginOk(to);
+		int flag = userDao.loginOk(to);
 		model.addAttribute("flag", flag);
 		
 		//System.out.println(flag);
@@ -79,6 +96,24 @@ public class HomeController {
 	@RequestMapping(value = "/signup.do")
 	public String signup() {
 		return "signup";
+	}
+	
+	@RequestMapping(value = "/signup_ok.do")
+	public String signup_ok(HttpServletRequest request, Model model) {
+		UserTO to = new UserTO();
+		to.setId(request.getParameter("userID"));
+		to.setPassword(request.getParameter("userPassword"));
+		to.setNickname(request.getParameter("nickname"));
+		to.setMail(request.getParameter("mail"));
+		if(!request.getParameter("address").trim().equals("")) {
+			to.setAddress(request.getParameter("address"));
+			to.setAddresses(request.getParameter("addresses"));
+		}
+
+		int flag = userDao.signupOk(to) ;
+		model.addAttribute("flag", flag);
+		
+		return "signup_ok";
 	}
 	
 	@RequestMapping(value = "/admin.do")

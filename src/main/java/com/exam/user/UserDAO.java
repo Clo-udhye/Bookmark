@@ -21,7 +21,7 @@ public class UserDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
-		int flag = 0;
+		int flag = 2;
 		
 		try{
 			conn = dataSource.getConnection();
@@ -48,4 +48,73 @@ public class UserDAO {
 		
 		return flag;
 	}
+	
+	//id, nickname duplication check 
+	public int dupCheck(String item, String value) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		int flag = 0; 
+		
+		try{
+			conn = dataSource.getConnection();
+			
+			String sql = "select count(*) as count from user where "+ item +"=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, value);
+			
+			rs = pstmt.executeQuery();		
+			if(rs.next()) {
+				if(rs.getString("count").equals("1")) {
+					flag = 0; //아이디, 닉네임 중복
+				}else
+					flag = 1; //중복된 아이디, 닉네임 없음
+			}					
+			
+		} catch(SQLException e){
+			System.out.println("[에러] " + e.getMessage());
+		} finally {
+			if(rs!=null) try{rs.close();}catch(SQLException e) {}
+			if(pstmt!=null) try{pstmt.close();}catch(SQLException e) {}
+			if(conn!=null) try{conn.close();}catch(SQLException e) {}
+		}
+		
+		return flag;
+	}
+	
+	//signupOk
+	public int signupOk(UserTO to) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		int flag = 0;
+
+		try{
+			conn = dataSource.getConnection();
+
+			String sql = "insert into user values(0, ?, ?, ?, ?, ?, ?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, to.getId());
+			pstmt.setString(2, to.getPassword());
+			pstmt.setString(3, to.getNickname());
+			pstmt.setString(4, to.getMail());
+			pstmt.setString(5, to.getAddress());
+			pstmt.setString(6, to.getAddresses());
+			
+			int result = pstmt.executeUpdate();
+			if(result == 1){
+				flag = 1;
+			}
+			
+		} catch(SQLException e){
+			System.out.println("[에러] " + e.getMessage());
+		} finally {
+			if(pstmt!=null) try{pstmt.close();}catch(SQLException e) {}
+			if(conn!=null) try{conn.close();}catch(SQLException e) {}
+		}
+
+		return flag;
+	}	
 }

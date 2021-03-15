@@ -17,6 +17,30 @@
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
+
+<script type="text/javascript">
+	window.onload = function(){
+		document.getElementById('login').onclick = function(){
+			if(document.login_frm.userID.value.trim()==''){
+				alert('아이디를 입력하셔야합니다.');
+				return false;
+			}
+			if(document.login_frm.userPassword.value.trim()==''){
+				alert('비밀번호를 입력하셔야합니다.');
+				return false;
+			}
+			
+			// 아이디 정규표현식, 영어소문자 숫자만 가능, 6~16자
+			const regexp = /^[a-z0-9]{6,16}$/;
+			if(!regexp.test(document.login_frm.userID.value.trim())){
+				alert('아이디는 6자이상 16자 이하의 영어소문자, 숫자로 이루어져 있습니다.');
+				return false;
+			}
+			document.login_frm.submit();
+		};
+	};
+</script>
+
 </head>
 <body>
 
@@ -54,7 +78,7 @@
 					<!-- 영역 크기 -->
 					<!-- 점보트론은 특정 컨텐츠, 정보를 두드러지게 하기 위한 큰 박스 -->
 					<div class="jumbotron" style="padding-top: 20px;">
-						<form method="post" action="./login_ok.do">
+						<form method="post" action="./login_ok.do" name="login_frm">
 							<h3 style="text-align: center;">로그인 화면</h3>
 							<div class="form-group">
 								<input type="text" class="form-control" placeholder="아이디" name="userID" maxlength="20">
@@ -62,8 +86,9 @@
 							<div class="form-group">
 								<input type="password" class="form-control" placeholder="비밀번호" name="userPassword" maxlength="20">
 							</div>
-							<input type="submit" class="btn btn-dark form-control"
-								value="로그인">
+							<input type="button" class="btn btn-dark form-control" value="로그인" id="login">
+							<input type="button" class="btn btn-dark" value="회원가입" onclick="location.href='./signup.do'" />
+							<input type="button" class="btn btn-dark" value="카카오로그인" onclick="location.href='#'" />
 						</form>
 					</div>
 				</div>
