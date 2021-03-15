@@ -14,6 +14,8 @@
 	String description = to.getDescription();
 	String pub_date = to.getPub_date();
 	
+	int cpage = (int)request.getAttribute("cpage");
+	// cpage는 받아오지만 뒤롸기 버튼 클릭 시 --> 해당 cpage를 받아가진 모못함
 	
 %>
 <!DOCTYPE html>
@@ -29,8 +31,14 @@
 <style>
 	#table {
 		border: 1px solid black;
-		width : 60%;
+		width : 70%;
+		height : 50%;
 		align : center;
+	}
+	#img {
+		padding : 10px;
+		align : center;
+		width : 400px;
 	}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -60,7 +68,7 @@
 			<span>
 				<button class="sidebar-btn" onclick="sidebarCollapse()">
 					<span><i class="fa fa-bars" aria-hidden="true"></i></span>
-	             </button>
+	            </button>
 			</span>
 	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
 	        <span><a href="./login.do">시작하기</a></span>
@@ -71,10 +79,10 @@
     <div id="content">
     <table id="table">
     	<tr>
-    		<td><div align="right"><input type="button" onclick="location.href='./book_list.do'" value="뒤로 가기"></div></td><td></td>
+    		<td colspan="1" ><div><input type="button" onclick="location.href='./book_list.do?cpage=<%=cpage %>'" value="뒤로 가기"></div></td>
    		</tr>
    		<tr>
-   			<td rowspan="6"><img width="400px" src="<%=img_url %>" alt="이미지 없음"/></td>
+   			<td rowspan="6"><img src="<%=img_url %>" alt="이미지 없음" id = "img"/></td>
    			<td><div>책 제목 : <%=title %></div></td>
    		</tr>
    		<tr>

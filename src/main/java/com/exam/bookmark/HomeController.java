@@ -52,10 +52,13 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/book_info.do", method = RequestMethod.GET)
-	public String book_info(HttpServletRequest req, Model model) {
+	public String book_info(HttpServletRequest req, Model model, pagingTO to) {
 		String master_seq = req.getParameter("master_seq");
 		BookTO book_info = bookdao.Book_infoTemplate(master_seq);
 		model.addAttribute("book_info", book_info);
+		int cpage = to.getCpage();
+		model.addAttribute("cpage", cpage);
+		
 		return "book_info";
 	}
 	

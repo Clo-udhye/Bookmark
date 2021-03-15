@@ -14,7 +14,7 @@
     	cpage = pagelistTO.getCpage();
     }
     
-	int totolRecord = pagelistTO.getTotalrecord();
+	int totalRecord = pagelistTO.getTotalrecord();
 	int recordPerPage= pagelistTO.getRecordPerPage();
 	int totalPage = pagelistTO.getTotalPage();
 	int blockPerPage = pagelistTO.getBlockPerPage();
@@ -31,7 +31,12 @@
 		String author = to.getAuthor();
 		String publisher = to.getPublisher();
 		String img_url = to.getImg_url();
-		String description = to.getDescription();
+		String description = "";
+		if (to.getDescription().equals("")){
+			description = "내용 없음";
+		} else {
+			description = to.getDescription() + "...";
+		}
 		String pub_date = to.getPub_date();
 		
 		// 아래의 HTMl 양식으로 append하기
@@ -72,7 +77,25 @@
 }
 table {
   border-spacing: 15px;
+  padding : "10";
 }
+
+.nav_btn {
+display:block;
+width: 60px; height: 30px;
+background-color: #000; color: #fff;
+line-height: 30px; text-align: center;
+cursor: pointer;
+}
+
+.nav_item {
+display:none;
+width: 60px; height: 200px;
+background-color: #777;
+}
+
+.opener { display:none; }
+.opener:checked ~ .nav_item { display:block; }
 </style>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -115,15 +138,22 @@ table {
     <div width=100%>
         <div><h1>도서 리스트</h1></div>
         <div width=100%>
-        	<table >
-        		<tr>
-        			<td width =10%> 검색어 필터</td>
-        			<td width=10%>토글 위치</td>
-        			<td width=60%>
+        	<table>
+        	<tr><td width = 100% height="40"> 현재 <%= totalRecord %>개의 책이 등록되어 있습니다.</td></tr>
+        		<tr >
+        			<td width=10% height="40"> 검색어 필터
+        				<label class="nav_btn" for="opener">OPEN</label>
+						<input class="opener" type="checkbox" id="opener">
+						<div class="nav_item"></div>
+        			</td>
+        			
+        			<td width=80%>
+        				<table ><tr>
         				<form action="./book_list_ok.do" type="get" align = "right">
-        				<input type="text" name = "bookname"/>
-        				<input type="submit" value="검색"/>
-        				</form>
+        				<td><input type="text" name = "bookname"/></td>
+        				<td><input type="submit" value="검색"/></td>
+        				</form></tr>
+        				</table>
         			</td>
         		</tr>
         	</table>
@@ -132,25 +162,24 @@ table {
      <div>
    		<%= bookHTML %>
      </div>
+     <br><br>
      <div align="center">
      <%
-     /*
-     if (startBlock== 1){
+     
+     	if (startBlock== 1){
 			out.println("<span><a>처음</a></span>");
 		} else {
 			out.println("<span><a href='./book_list.do?cpage=1'>처음</a></span>");
 		}
 		
 		out.println("&nbsp;");
-		*/
+		
 		if(cpage == 1){
 			out.println("<span><a href=''>이전 페이지</a></span>");
 		} else{
 			out.println("<span><a href='./book_list.do?cpage="+(cpage-1)+"'>이전 페이지</a></span>");
 		}
 		
-		out.println("<span> 현재 페이지 :" +cpage+"</span>");
-		/*
 		out.println("&nbsp;&nbsp;");
      	
      	for(int i=startBlock; i<=endBlock; i++){
@@ -160,7 +189,7 @@ table {
      			out.println("<span><a href ='./book_list.do?cpage="+i+"'>"+i+"</a></span>");
      		}
      	}
-     	*/
+     	
      	out.println("&nbsp;");
 		
 		if(cpage == totalPage){
@@ -169,7 +198,7 @@ table {
 			out.println("<span><a href='./book_list.do?cpage="+(cpage+1)+"'>다음 페이지</a></span>");
 		}
 		
-		/*
+		
 		out.println("&nbsp;");
 		
 		if (endBlock== totalPage){
@@ -177,14 +206,11 @@ table {
 		} else {
 			out.println("<span><a href='./book_list.do?cpage="+(endBlock+1)+"'> 끝</a></span>");
 		}
-		*/
+		
      		
      %>
      </div>
-     <div>
-     	<%= pagelistTO.toString() %>
-     </div>
-     
+     <br><br>
 </div>
 
 </body>

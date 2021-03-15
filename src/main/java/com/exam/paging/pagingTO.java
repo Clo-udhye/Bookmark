@@ -18,7 +18,7 @@ public class pagingTO {
 	public pagingTO() {
 		this.cpage = 1;
 		this.recordPerPage = 5;
-		this.blockPerPage = 3;
+		this.blockPerPage = 5;
 		}
 
 	public int getCpage() {

@@ -17,7 +17,7 @@ public class BookDAO {
 	private JdbcTemplate jdbcTemplate;
 	
 	public ArrayList<BookTO> BooklistTemplate(){
-		String sql = "select master_seq, isbn13, title, author, publisher, img_url, description, pub_date from book order by title limit 15";
+		String sql = "select master_seq, isbn13, title, author, publisher, img_url, description, pub_date order by master_seq from book limit 15";
 		ArrayList<BookTO> lists = (ArrayList<BookTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookTO>(BookTO.class));
 		return lists;
 	}
@@ -58,8 +58,13 @@ public class BookDAO {
 		pagingTO.setTotalrecord(totalItems);
 		
 		pagingTO.setTotalPage((totalItems/5)-1);
-		
-		String sql = "select master_seq, isbn13, title, author, publisher, img_url, description, pub_date from book order by title limit " + booklistTO.getRecordPerPage()+ " offset " + cpage* booklistTO.getRecordPerPage();
+		String sql ="";
+		if (cpage==1) {
+			sql = "select master_seq, isbn13, title, author, publisher, img_url, description, pub_date from book order by master_seq limit " + booklistTO.getRecordPerPage();
+		} else {
+			sql = "select master_seq, isbn13, title, author, publisher, img_url, description, pub_date from book order by master_seq limit " + booklistTO.getRecordPerPage()+ " offset " + cpage* booklistTO.getRecordPerPage();
+		}
+		 
 		ArrayList<BookTO> lists = (ArrayList<BookTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookTO>(BookTO.class));
 		pagingTO.setBookList(lists);
 		
