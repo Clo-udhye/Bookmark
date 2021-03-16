@@ -1,5 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%
+	// 현재 세션 상태를 체크한다
+	String userID = null;
+	if (session.getAttribute("userID") != null) {
+		userID = (String)session.getAttribute("userID");
+	}
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,7 +50,11 @@
 	             </button>
 			</span>
 	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
+	        <% if(userID == null){ %>
 	        <span><a href="./login.do">시작하기</a></span>
+	        <% }else{ %>
+	        <span><a href="./logout_ok.do">로그아웃</a></span>
+	        <% } %>
 			<span><a href="./search.do"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
     	</p>
     </div>

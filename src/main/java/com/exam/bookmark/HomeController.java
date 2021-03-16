@@ -33,10 +33,11 @@ public class HomeController {
 	@Autowired
 	UserDAO userDao;
 	
-	@RequestMapping(value = "/test.do")
-	public String test() {
-		return "test";
+	@RequestMapping(value = "/logout_ok.do")
+	public String logout_ok() {
+		return "logout_ok";
 	}
+	
 	@RequestMapping(value = "/duplicationCheck.do")
 	public String duplicationCheck(HttpServletRequest request, Model model) {
 		
