@@ -19,12 +19,28 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
+<style>
+	#main {
+		width : 100%;
+		height : 70%;
+	}
+	#month {
+		width : 100%;
+		border : 1px;
+		height:"500";
+	}
+	.img {
+		height : 200px; 
+		align :center;
+	}
+	
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
+<link rel="stylesheet" type="text/css" href="./css/home.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
 </head>
 <body>
@@ -60,9 +76,8 @@
     </div>
     
     <div id="content">
-        <h1>홈페이지</h1>
-    </div>
-</div>
+     <div><h1>홈페이지</h1></div>    
+	</div>
 
 </body>
 </html>
