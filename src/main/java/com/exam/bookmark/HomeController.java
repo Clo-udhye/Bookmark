@@ -19,6 +19,7 @@ import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import com.exam.boardlist.BoardDAO;
 import com.exam.boardlist.BoardTO;
 import com.exam.booklist.BookDAO;
+import com.exam.booklist.BookRelatedTO;
 import com.exam.booklist.BookTO;
 import com.exam.paging.pagingTO;
 import com.exam.user.SHA256;
@@ -120,7 +121,8 @@ public class HomeController {
 		model.addAttribute("book_info", book_info);
 		int cpage = to.getCpage();
 		model.addAttribute("cpage", cpage);
-		
+		ArrayList<BookRelatedTO> relatedBoard = bookdao.Book_infoTemplate_relatedBoard(master_seq);
+		model.addAttribute("relatedBoard", relatedBoard);
 		return "book_info";
 	}
 	

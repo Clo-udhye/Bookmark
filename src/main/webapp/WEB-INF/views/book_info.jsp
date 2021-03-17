@@ -1,3 +1,4 @@
+<%@page import="com.exam.booklist.BookRelatedTO"%>
 <%@page import="com.exam.booklist.BookTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -16,6 +17,29 @@
 	
 	int cpage = (int)request.getAttribute("cpage");
 	// cpage는 받아오지만 뒤롸기 버튼 클릭 시 --> 해당 cpage를 받아가진 모못함
+	
+	StringBuffer board_related = new StringBuffer();
+	
+	ArrayList<BookRelatedTO> lists = (ArrayList)request.getAttribute("relatedBoard");
+	if (lists.size() != 0 ){
+		for (BookRelatedTO bookRelatedTO : lists){
+			String board_title = bookRelatedTO.getBoard_title();
+			String board_date = bookRelatedTO.getBoard_date().substring(0, 10);
+			
+			String user_nickname = bookRelatedTO.getUser_nickname();
+			
+			board_related.append("<tr>");
+			board_related.append("<td>"+board_title+"</td>");
+			board_related.append("<td>"+board_date+"</td>");
+			board_related.append("<td>"+user_nickname+"</td>");
+			board_related.append("</tr>");
+		}
+	} else {
+		board_related.append("<tr>");
+		board_related.append("<td colspan='3'> 관련 게시글이 없습니다.</td>");
+		board_related.append("</tr>");
+	}
+	
 	
 %>
 <!DOCTYPE html>
@@ -40,6 +64,27 @@
 		align : center;
 		width : 400px;
 	}
+	.vertical {
+		width: max-content;
+		overflow-y: scroll;
+		height : 200px;
+	}
+	.wrap {
+		float: left;
+	}
+	.wrapTable table {
+		border : 1px;
+	}
+	.wrapTable tr,th,td {
+		padding : 5px;
+		margin : 5px;
+	}
+	.wrapTable tr:hover {
+		background-color : ivory;
+		font-color : black; 
+	}
+	
+
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
@@ -79,7 +124,7 @@
     <div id="content">
     <table id="table">
     	<tr>
-    		<td colspan="1" ><div><input type="button" onclick="history.back()" value="뒤로 가기"></div></td>
+    		<td colspan="2" align="right"><div ><input type="button" onclick="history.back()" value="뒤로 가기"></div></td>
    		</tr>
    		<tr>
    			<td rowspan="6"><img src="<%=img_url %>" alt="이미지 없음" id = "img"/></td>
@@ -101,23 +146,18 @@
    			<td>
    				<div>
    					<div><h4>관련 게시글</h4></div>
-			    	<table border=1 width=100% >
-			    		<tr>
-				    		<th>게시글 제목</th>
-				    		<th>작성 일자</th>
-				    		<th>조회수</th>    		
-			    		</tr>
-			    		<tr>
-			    			<td>하 ... 얘드라 나 겨우했어 진짜</td>
-				    		<td>2021-03-13</td>
-				    		<td>1423</td>
-			    		</tr>
-			    		<tr>
-			    			<td>하 ... 얘드라 나 겨우했어 진짜</td>
-				    		<td>2021-03-13</td>
-				    		<td>1423</td>
-			    		</tr>
-			    	</table>
+   					<div class="vertical">
+   						<div class="wrap">
+					    	<table border=1 width="1000" class="wrapTable" >
+					    		<tr>
+						    		<th>게시글 제목</th>
+						    		<th>작성 일자</th>
+						    		<th>작성자</th>    		
+					    		</tr>
+					    		<%= board_related%>
+					    	</table>
+				    	</div>
+			    	</div>
    				</div>
    			</td>
    		</tr>
