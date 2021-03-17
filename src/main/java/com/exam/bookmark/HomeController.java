@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.support.HttpRequestHandlerServlet;
 
 import com.exam.boardlist.BoardDAO;
+import com.exam.boardlist.BoardPagingTO;
 import com.exam.boardlist.BoardTO;
 import com.exam.booklist.BookDAO;
 import com.exam.booklist.BookTO;
@@ -39,15 +40,6 @@ public class HomeController {
 	
 	@RequestMapping(value = "/test.do")
 	public String test() {
-		/* 암호화할 텍스트 */
-		String text = "Hello, Java";
-		
-		/* SHA256 암호화 */
-		String encryptSHA256 = SHA256.encodeSHA256(text);
-		
-		/* SHA256 암호화 결과 */
-		System.out.println("SHA256 암호화 요청 텍스트 : " + text);
-		System.out.println("SHA256 암호화 완료 텍스트 : " + encryptSHA256);
 		return "test";
 	}
 	
@@ -70,11 +62,23 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/list.do")
-	public String list(Locale locale, Model model) {
+	public String list(HttpServletRequest request, Model model) {
 		//paging 없는 일반 리스트 출력
-		ArrayList<BoardTO> lists = boardDao.boardList();
-		model.addAttribute("lists", lists);
+		//ArrayList<BoardTO> lists = boardDao.boardList();
+		//model.addAttribute("lists", lists);
 		//System.out.println(lists);
+		
+		int cpage = 1;	// cpage가 없으면 1
+		if(request.getParameter("cpage") != null && !request.getParameter("cpage").equals("")){	
+			cpage = Integer.parseInt(request.getParameter("cpage"));
+		}
+		
+		BoardPagingTO pagingTO = new BoardPagingTO();
+		pagingTO.setCpage(cpage);
+		
+		pagingTO = boardDao.boardList(pagingTO);
+		model.addAttribute("pagingTO", pagingTO);
+		
 		return "board_list";
 	}
 	

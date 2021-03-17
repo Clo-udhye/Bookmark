@@ -170,6 +170,15 @@
 		};
 	};
 </script>
+<script>
+	//툴팁
+	$(document).ready(function(){
+		$('[data-bs-toggle="tooltip"]').tooltip();
+	});
+	//주소모달
+	$(".modal-content").load("/test.do");
+
+</script>
 </head>
 <body>
 
@@ -225,11 +234,15 @@
 								<input type="password" class="form-control" placeholder="비밀번호 확인(*)" name="userPasswordCheck" id="userPasswordCheck" maxlength="20">
 							</div>
 							<div class="form-group">
-								<input type="email" class="form-control" placeholder="이메일(*)" name="mail" maxlength="20">
+								<input type="email" class="form-control" placeholder="이메일(*)" name="mail" maxlength="20" data-bs-toggle="tooltip" data-bs-placement="bottom" title="이메일은 아이디/비밀번호 찾기 이용됩니다. 정확하게 입력해주세요.">
 							</div>
 							<div class="form-group">
 							
 								<input type="text" class="form-control" placeholder="주소" name="address" maxlength="20">
+								
+								<a id="login" data-bs-toggle="modal" data-bs-target="#modal" role="button">우편번호 찾기</a>
+								<div id="modal" class="modal fade" tabindex="-1" role="dialog"> <div class="modal-dialog"> <div class="modal-content"> </div> </div> </div>
+
 								<input type="text" class="form-control" placeholder="상세 주소" name="addresses" maxlength="20">
 							</div>
 							<input type="button" class="btn btn-dark form-control" value="회원가입" id="signup">

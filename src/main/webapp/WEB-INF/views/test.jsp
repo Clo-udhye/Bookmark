@@ -1,31 +1,42 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-<%@ page import="com.exam.user.UserDAO"%>
+   
+<!-- Modal Header -->
+<div class="modal-header">
+	<h4 class="modal-title">글 작성하기</h4>
+	<button type="button" class="close" data-dismiss="modal">&times;</button>
+</div>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>책갈피</title>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<!-- Modal body -->
+<div class="modal-body">
+	<h6>Hello</h6>
+</div>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- Modal footer -->
+<div class="modal-footer">
+	<button type="button" class="btn btn-submit" data-update="modal">업로드 하기</button>
+	<button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+</div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 
-<!-- sidebar -->
-<link rel="stylesheet" type="text/css" href="./css/sidebar.css">
-<script type="text/javascript" src="./js/sidebar.js"></script>
-<script type="text/javascript">
-</script>
-</head>
-<body>
-	<input type="text" id="userID" />
-	<input type="password" id="userPassword"/>
-	<button type="button" class="button" id="btn">비밀번호 암호화 확인</button>
-</body>
-</html>
+<div class="card align-middle">
+	<div class="card-title">
+		<h2 class="card-title text-center">Login</h2>
+	</div>
+	<div class="card-body">
+		<form method="post">
+			<h5 class="form-signin-heading">Sign in</h5>
+			<label class="sr-only">Your ID</label> <input type="text" id="uid"
+				class="form-control" placeholder="ID" required autofocus><BR>
+			<label class="sr-only">Password</label> <input type="password"
+				class="form-control" placeholder="Password" required><br>
+			<div class="checkbox">
+				<label> <input type="checkbox" value="remember-me">
+					remember me
+				</label>
+			</div>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Sing
+				in</button>
+		</form>
+	</div>
+</div>

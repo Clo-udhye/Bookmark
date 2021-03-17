@@ -9,10 +9,11 @@
 
 	request.setCharacterEncoding("utf-8");
 
-	ArrayList<BoardTO> lists = (ArrayList)request.getAttribute( "lists" );
+	//ArrayList<BoardTO> lists = (ArrayList)request.getAttribute( "lists" );
+	BoardPagingTO pagingTO = (BoardPagingTO)request.getAttribute( "pagingTO" );
 	
 	StringBuffer sbHtml = new StringBuffer();
-	for( BoardTO to : lists ) {
+	for( BoardTO to : pagingTO.getBoardLists() ) {
 		String seq = to.getSeq();
 		String date = to.getDate();
 		String title = to.getTitle();
