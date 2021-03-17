@@ -1,5 +1,10 @@
 Manifest-Version: 1.0
+<<<<<<< HEAD
 Built-By: yc019
 Build-Jdk: 15.0.1
+=======
+Built-By: SonMinji
+Build-Jdk: 1.8.0_261
+>>>>>>> fa44c52203c4407f0c72bee6cb8372c5d1594a2e
 Created-By: Maven Integration for Eclipse
 

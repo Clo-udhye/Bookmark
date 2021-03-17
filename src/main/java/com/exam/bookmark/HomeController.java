@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.support.HttpRequestHandlerServlet;
 
+import com.exam.boardlist.BoardDAO;
+import com.exam.boardlist.BoardTO;
 import com.exam.booklist.BookDAO;
 import com.exam.booklist.BookTO;
 import com.exam.paging.pagingTO;
@@ -33,6 +35,9 @@ public class HomeController {
 	
 	@Autowired
 	UserDAO userDao;
+	
+	@Autowired
+	BoardDAO boardDao;
 	
 	@RequestMapping(value = "/test.do")
 	public String test() {
@@ -57,7 +62,11 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/list.do")
-	public String list() {
+	public String list(Locale locale, Model model) {
+		//paging 없는 일반 리스트 출력
+		ArrayList<BoardTO> lists = boardDao.boardList();
+		model.addAttribute("lists", lists);
+		//System.out.println(lists);
 		return "board_list";
 	}
 	
