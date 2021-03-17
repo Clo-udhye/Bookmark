@@ -22,51 +22,14 @@
     	SearchResult.append("<div><h1>도서 리스트</h1></div>");
     }
     
-	int totalRecord = pagelistTO.getTotalrecord();
-	int recordPerPage= pagelistTO.getRecordPerPage();
-	int totalPage = pagelistTO.getTotalPage();
-	int blockPerPage = pagelistTO.getBlockPerPage();
-	int startBlock = pagelistTO.getStartBlock();
-	int endBlock = pagelistTO.getEndBlock();
-	
-	StringBuffer bookHTML = new StringBuffer();
-	
-	for (BookTO to : booklists){
-		//변수 담아 오기
-		String master_seq = to.getMaster_seq();
-		String isbn13 = to.getIsbn13();
-		String title= to.getTitle();
-		String author = to.getAuthor();
-		String publisher = "";
-		if (to.getPublisher().equals("")){
-			publisher = "미등록";
-		} else {
-			publisher = to.getPublisher();
-		}
-		String img_url = to.getImg_url();
-		String description = "";
-		if (to.getDescription().equals("")){
-			description = "내용 없음";
-		} else {
-			description = to.getDescription() + "...";
-		}
-		String pub_date = to.getPub_date();
-			// 아래의 HTMl 양식으로 append하기
+    StringBuffer bookHTML = new StringBuffer();
+		
 			bookHTML.append("<div>");
-			bookHTML.append("<table id=innerlist>");
-			bookHTML.append("<tr>");
-			bookHTML.append("<td rowspan='4' width='20%'><img width='200px' src='"+img_url+"' alt='이미지 없음'/></td>");
-			bookHTML.append("<td width=60% >책 제목 :"+title+"</td>");
-			bookHTML.append("<td rowspan='4' width=20>");
-			bookHTML.append("<a type='button' href='./book_info.do?master_seq="+master_seq+"'>자세히 보기</a>");
-			bookHTML.append("</td>");
-			bookHTML.append("</tr>");
-			bookHTML.append("<tr><td><div>저자 :"+author+"</div></td></tr>");
-			bookHTML.append("<tr><td><div>출판사 :"+publisher+"</div></td></tr>");
-			bookHTML.append("<tr><td><p>책 설명 :"+description+"</p></td></tr>");
-			bookHTML.append("</table>");
+			bookHTML.append("<table witdh=100% align='center'><tr><td>");
+			bookHTML.append("<img  src='./images/no_result.jpg' />");
+			bookHTML.append("</td></tr></table>");
 			bookHTML.append("</div>");
-	}
+	
 	
 %>
 <!DOCTYPE html>
@@ -142,7 +105,7 @@ table {
         <div width=100%>
         	<table >
         	
-        	<tr><td width = 100% height="40"> 현재 <%= totalRecord %>개의 책이 등록되어 있습니다.</td></tr>
+        	<tr><td width = 100% height="40"> <span id="result">검색 결과가 없습니다.</span></td></tr>
         		<tr>
         			<td height="50" width="500"></td>
         			<td>
@@ -172,53 +135,9 @@ table {
      <div>
    		<%= bookHTML %>
      </div>
+     <div><input type='button' onclick='history.back()' value='뒤로 가기'></div>
      <br><br>
      <div align="center">
-     <%
-     
-     	if (startBlock== 1){
-			out.println("<span><a>처음</a></span>");
-		} else {
-			out.println("<span><a href='./book_list.do?cpage=1'>처음</a></span>");
-		}
-		
-		out.println("&nbsp;");
-		
-		if(cpage == 1){
-			out.println("<span><a href=''>이전 페이지</a></span>");
-		} else{
-			out.println("<span><a href='./book_list.do?cpage="+(cpage-1)+"'>이전 페이지</a></span>");
-		}
-		
-		out.println("&nbsp;&nbsp;");
-     	
-     	for(int i=startBlock; i<=endBlock; i++){
-     		if(cpage == i){
-     			out.println("<span>["+i+"]</span>");
-     		} else {
-     			out.println("<span><a href ='./book_list.do?cpage="+i+"'>"+i+"</a></span>");
-     		}
-     	}
-     	
-     	out.println("&nbsp;");
-		
-		if(cpage == totalPage){
-			out.println("<span><a href=''>다음 페이지</a></span>");
-		} else{
-			out.println("<span><a href='./book_list.do?cpage="+(cpage+1)+"'>다음 페이지</a></span>");
-		}
-		
-		
-		out.println("&nbsp;");
-		
-		if (endBlock== totalPage){
-			out.println("<span><a> 끝</a></span>");
-		} else {
-			out.println("<span><a href='./book_list.do?cpage="+totalPage+"'> 끝</a></span>");
-		}
-		
-     	
-     %>
      </div>
      <br><br>
 </div>

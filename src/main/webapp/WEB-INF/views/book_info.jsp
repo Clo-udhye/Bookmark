@@ -79,7 +79,7 @@
     <div id="content">
     <table id="table">
     	<tr>
-    		<td colspan="1" ><div><input type="button" onclick="location.href='./book_list.do?cpage=<%=cpage %>'" value="뒤로 가기"></div></td>
+    		<td colspan="1" ><div><input type="button" onclick="history.back()" value="뒤로 가기"></div></td>
    		</tr>
    		<tr>
    			<td rowspan="6"><img src="<%=img_url %>" alt="이미지 없음" id = "img"/></td>

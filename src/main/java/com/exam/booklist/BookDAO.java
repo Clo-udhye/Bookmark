@@ -41,6 +41,25 @@ public class BookDAO {
 		//(BookTO) jdbcTemplate.query(sql, new BeanPropertyRowMapper(BookTO.class));
 		return book;
 	}
+	public BookTO Book_infoTemplate_relatedBoard(String master_seq){
+		String sql = "select b.seq, b.date, b.title, u.nickname from board as b join user as u on b.useq = u.seq where b.bseq=? order by b.seq desc";
+		BookTO book = (BookTO) jdbcTemplate.queryForObject(sql, new Object[]{master_seq}, new RowMapper<BookTO>() {
+			public BookTO mapRow(ResultSet rs, int rowNum) throws SQLException{
+				BookTO to = new BookTO();
+				to.setMaster_seq(rs.getString("master_seq"));
+				to.setIsbn13(rs.getString("isbn13"));
+				to.setTitle(rs.getNString("title"));
+				to.setAuthor(rs.getString("author"));
+				to.setPublisher(rs.getNString("publisher"));
+				to.setImg_url(rs.getString("img_url"));
+				to.setDescription(rs.getString("description"));
+				to.setPub_date(rs.getString("pub_date"));
+				return to;
+			}
+		});
+		//(BookTO) jdbcTemplate.query(sql, new BeanPropertyRowMapper(BookTO.class));
+		return book;
+	}
 	
 	public pagingTO pagingList(pagingTO booklistTO) {
 		//paging
@@ -64,7 +83,55 @@ public class BookDAO {
 		} else {
 			sql = "select master_seq, isbn13, title, author, publisher, img_url, description, pub_date from book order by master_seq limit " + booklistTO.getRecordPerPage()+ " offset " + cpage* booklistTO.getRecordPerPage();
 		}
-		 
+		
+		ArrayList<BookTO> lists = (ArrayList<BookTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookTO>(BookTO.class));
+		pagingTO.setBookList(lists);
+		
+		pagingTO.setStartBlock(((cpage-1)/blockPerPage) * blockPerPage + 1);
+		pagingTO.setEndBlock(((cpage-1)/blockPerPage)* blockPerPage + blockPerPage );
+		if(pagingTO.getEndBlock() >= pagingTO.getTotalPage()) {
+			pagingTO.setEndBlock(pagingTO.getTotalPage());
+		}
+		
+		return pagingTO;
+	}
+	public pagingTO pagingSearch(pagingTO booklistTO, String name, String bookname) {
+		//paging
+		int cpage = booklistTO.getCpage();
+		int recordPerPage = booklistTO.getRecordPerPage();
+		int blockPerPage = booklistTO.getBlockPerPage();
+		
+		pagingTO pagingTO = new pagingTO();
+		pagingTO.setCpage(cpage);
+		pagingTO.setRecordPerPage(recordPerPage);
+		pagingTO.setBlockPerPage(blockPerPage);
+		String queryTotalRecords = "";
+		if(name.equals("제목")) {
+			queryTotalRecords = "select count(*) from book where title like '%"+bookname+"%'";
+		} else if (name.equals("작가")){
+			queryTotalRecords = "select count(*) from book where author like '%"+bookname+"%'";
+		}
+		int totalItems = jdbcTemplate.queryForObject(queryTotalRecords, Integer.class);
+		pagingTO.setTotalrecord(totalItems);
+		
+		pagingTO.setTotalPage((totalItems/5)-1);
+		String sql ="";
+		// preparedstatement 로 하면 자동으로 sql 에서 ''(문자열 화)한다 
+		if (cpage==1) {
+			if(name.equals("제목")) {
+			sql = "select master_seq, isbn13, title, author, publisher, img_url, description, pub_date from book where title like '%"+ bookname +"%' order by master_seq limit " + booklistTO.getRecordPerPage();
+			} else if (name.equals("작가")){
+				sql = "select master_seq, isbn13, title, author, publisher, img_url, description, pub_date from book where author like '%"+ bookname +"%' order by master_seq limit " + booklistTO.getRecordPerPage();
+			}
+			
+		} else {
+			if(name.equals("제목")) {
+				sql = "select master_seq, isbn13, title, author, publisher, img_url, description, pub_date from book where title like '%"+ bookname +"%' order by master_seq limit " + booklistTO.getRecordPerPage()+ " offset " + cpage* booklistTO.getRecordPerPage();
+			} else if (name.equals("작가")){
+				sql = "select master_seq, isbn13, title, author, publisher, img_url, description, pub_date from book where author like '%"+ bookname +"%' order by master_seq limit " + booklistTO.getRecordPerPage()+ " offset " + cpage* booklistTO.getRecordPerPage();
+			}
+		}
+		
 		ArrayList<BookTO> lists = (ArrayList<BookTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookTO>(BookTO.class));
 		pagingTO.setBookList(lists);
 		
