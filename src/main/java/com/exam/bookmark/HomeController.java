@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.support.HttpRequestHandlerServlet;
 
 import com.exam.booklist.BookDAO;
 import com.exam.booklist.BookTO;
@@ -74,6 +75,25 @@ public class HomeController {
 		pagingTO paginglist = bookdao.pagingList(to);
 		model.addAttribute("paginglist", paginglist);
 		return "book_list";
+	}
+	@RequestMapping(value = "/book_list_search.do")
+	public String book_list_search(HttpServletRequest req , Model model, pagingTO to) {
+		String name = req.getParameter("search");
+		String bookname = req.getParameter("bookname");
+		//System.out.println(name);
+		//System.out.println(bookname);
+		pagingTO paginglist = bookdao.pagingSearch(to, name, bookname);
+		if (paginglist.getTotalrecord() == 0) {
+			model.addAttribute("paginglist", paginglist);
+			model.addAttribute("bookname", bookname);
+			System.out.println("book_list_NoResult");
+			return "book_list_NoResult";
+		} else {
+			model.addAttribute("paginglist", paginglist);
+			model.addAttribute("bookname", bookname);
+			System.out.println("book_list");
+			return "book_list";
+		}
 	}
 	
 	@RequestMapping(value = "/book_info.do", method = RequestMethod.GET)

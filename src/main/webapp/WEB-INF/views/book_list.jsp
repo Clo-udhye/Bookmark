@@ -13,6 +13,14 @@
     if(pagelistTO.getCpage()!= 0){
     	cpage = pagelistTO.getCpage();
     }
+    String bookname = "";
+    StringBuffer SearchResult = new StringBuffer();
+    if (request.getAttribute("bookname") != null){
+    	bookname = (String)request.getAttribute("bookname");
+    	SearchResult.append("<div ><h1><span id='result'>"+bookname+"</span> 으로 검색한 결과</h1></div>");
+    } else {
+    	SearchResult.append("<div><h1>도서 리스트</h1></div>");
+    }
     
 	int totalRecord = pagelistTO.getTotalrecord();
 	int recordPerPage= pagelistTO.getRecordPerPage();
@@ -29,7 +37,12 @@
 		String isbn13 = to.getIsbn13();
 		String title= to.getTitle();
 		String author = to.getAuthor();
-		String publisher = to.getPublisher();
+		String publisher = "";
+		if (to.getPublisher().equals("")){
+			publisher = "미등록";
+		} else {
+			publisher = to.getPublisher();
+		}
 		String img_url = to.getImg_url();
 		String description = "";
 		if (to.getDescription().equals("")){
@@ -38,22 +51,21 @@
 			description = to.getDescription() + "...";
 		}
 		String pub_date = to.getPub_date();
-		
-		// 아래의 HTMl 양식으로 append하기
-		bookHTML.append("<div>");
-		bookHTML.append("<table id=innerlist>");
-		bookHTML.append("<tr>");
-		bookHTML.append("<td rowspan='4' width='20%'><img width='200px' src='"+img_url+"' alt='이미지 없음'/></td>");
-		bookHTML.append("<td width=60% >책 제목 :"+title+"</td>");
-		bookHTML.append("<td rowspan='4' width=20>");
-		bookHTML.append("<a type='button' href='./book_info.do?master_seq="+master_seq+"'>자세히 보기</a>");
-		bookHTML.append("</td>");
-		bookHTML.append("</tr>");
-		bookHTML.append("<tr><td><div>저자 :"+author+"</div></td></tr>");
-		bookHTML.append("<tr><td><div>출판사 :"+publisher+"</div></td></tr>");
-		bookHTML.append("<tr><td><p>책 설명 :"+description+"</p></td></tr>");
-		bookHTML.append("</table>");
-		bookHTML.append("</div>");
+			// 아래의 HTMl 양식으로 append하기
+			bookHTML.append("<div>");
+			bookHTML.append("<table id=innerlist>");
+			bookHTML.append("<tr>");
+			bookHTML.append("<td rowspan='4' width='20%'><img width='200px' src='"+img_url+"' alt='이미지 없음'/></td>");
+			bookHTML.append("<td width=60% >책 제목 :"+title+"</td>");
+			bookHTML.append("<td rowspan='4' width=20>");
+			bookHTML.append("<a type='button' href='./book_info.do?master_seq="+master_seq+"'>자세히 보기</a>");
+			bookHTML.append("</td>");
+			bookHTML.append("</tr>");
+			bookHTML.append("<tr><td><div>저자 :"+author+"</div></td></tr>");
+			bookHTML.append("<tr><td><div>출판사 :"+publisher+"</div></td></tr>");
+			bookHTML.append("<tr><td><p>책 설명 :"+description+"</p></td></tr>");
+			bookHTML.append("</table>");
+			bookHTML.append("</div>");
 	}
 	
 %>
@@ -79,19 +91,9 @@ table {
   border-spacing: 15px;
   padding : "10";
 }
-
-.nav_btn {
-display:block;
-width: 60px; height: 30px;
-background-color: #000; color: #fff;
-line-height: 30px; text-align: center;
-cursor: pointer;
-}
-
-.nav_item {
-display:none;
-width: 60px; height: 200px;
-background-color: #777;
+#result {
+	 font-style: italic;
+	 color:blue;
 }
 
 .opener { display:none; }
@@ -121,8 +123,8 @@ background-color: #777;
 	<a href="./book_list.do">책 구경하기</a>
 </div>
 
-<div >
-	<div >
+<div id="main">
+	<div id="header">
 		<p>
 			<span>
 				<button class="sidebar-btn" onclick="sidebarCollapse()">
@@ -135,24 +137,32 @@ background-color: #777;
     	</p>
     </div>
     
-    <div width=100%>
-        <div><h1>도서 리스트</h1></div>
+    <div id="content" width=100%>
+        <%=SearchResult %>
         <div width=100%>
-        	<table>
+        	<table >
+        	
         	<tr><td width = 100% height="40"> 현재 <%= totalRecord %>개의 책이 등록되어 있습니다.</td></tr>
-        		<tr >
-        			<td width=10% height="40"> 검색어 필터
-        				<label class="nav_btn" for="opener">OPEN</label>
-						<input class="opener" type="checkbox" id="opener">
-						<div class="nav_item"></div>
-        			</td>
-        			
-        			<td width=80%>
-        				<table ><tr>
-        				<form action="./book_list_ok.do" type="get" align = "right">
-        				<td><input type="text" name = "bookname"/></td>
-        				<td><input type="submit" value="검색"/></td>
-        				</form></tr>
+        		<tr>
+        			<td height="50" width="500"></td>
+        			<td>
+        				<table>
+        				<form action="./book_list_search.do" type="get" align = "right">
+        				<tr>
+	        				<td width="50">
+	        					<select name="search">
+								    <option value="제목" selected="selected">제목 검색</option>
+								    <option value="작가">작가 명 검색</option>
+								</select>
+							</td>
+        					<td>
+        						<input type="text" name = "bookname" width="50"/>
+       						</td>
+        					<td>
+        						<input type="submit" value="검색" width="100"/>
+       						</td>
+        				</tr>
+        				</form>
         				</table>
         			</td>
         		</tr>
@@ -204,10 +214,10 @@ background-color: #777;
 		if (endBlock== totalPage){
 			out.println("<span><a> 끝</a></span>");
 		} else {
-			out.println("<span><a href='./book_list.do?cpage="+(endBlock+1)+"'> 끝</a></span>");
+			out.println("<span><a href='./book_list.do?cpage="+totalPage+"'> 끝</a></span>");
 		}
 		
-     		
+     	
      %>
      </div>
      <br><br>
