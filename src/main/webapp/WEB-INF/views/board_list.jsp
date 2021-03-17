@@ -1,5 +1,55 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+<%@ page import="com.exam.boardlist.BoardTO" %>
+<%@ page import="com.exam.boardlist.BoardPagingTO" %>
+<%@ page import="java.util.ArrayList" %>
+
+<%
+
+	request.setCharacterEncoding("utf-8");
+
+	ArrayList<BoardTO> lists = (ArrayList)request.getAttribute( "lists" );
+	
+	StringBuffer sbHtml = new StringBuffer();
+	for( BoardTO to : lists ) {
+		String seq = to.getSeq();
+		String date = to.getDate();
+		String title = to.getTitle();
+		String useq = to.getUseq();
+		String filename = to.getFilename();
+		String filesize = to.getFilesize();
+		String content = to.getContent();
+		String bseq = to.getBseq();
+		String hit = to.getHit();
+		String comment = to.getComment();
+		
+		
+		sbHtml.append("<tr>");
+		sbHtml.append("<td width='20%' class='last2'>");
+		sbHtml.append("	<div class='board'>");
+		sbHtml.append("		<table class='boardT'>");
+		sbHtml.append("		<tr>");
+		sbHtml.append("			<td class='boardThumbWrap'>");
+		sbHtml.append("				<div class='boardThumb'>");
+		
+		
+		sbHtml.append("					<a href='board_view.jsp'><img src='./upload/"+filename+"' border='0' width='100%' /></a>");
+		
+		//sbHtml.append("						<div class='transbox'>");
+	  	//sbHtml.append("							<p>"+title+"</p>");
+	  	//sbHtml.append("						</div>");
+		
+	  	sbHtml.append("				</div>");
+		sbHtml.append("			</td>");
+		sbHtml.append("		</tr>");
+		sbHtml.append("		</table>");
+		sbHtml.append("	</div>");
+		sbHtml.append("</td>");
+		sbHtml.append("</tr>");
+	}
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +67,25 @@
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
+
+<!-- ■■ 내가 추가한 부분 ■■ -->
+<style type="text/css">
+	
+	.boardThumb img:hover {opacity:0.5;}
+	.board_pagetab { text-align: center; } 
+	.board_pagetab a { text-decoration: none; font: 15px verdana; color: #000; padding: 0 3px 0 3px; }
+	.board_pagetab a:hover { text-decoration: underline; background-color:#f2f2f2; }
+</style>
+<!--
+이미지(테이블) 가운데 위치하게 하고 싶음.. ◆◆
+이미지 마우스 갖다대면 불투명
+페이지탭 가운데 위치
+페이지탭 ... 글자색 검은색
+페이지탭 마우스 갖다대면 밑줄 & 회색 배경
+
+-->
+<!-- ■■ /내가 추가한 부분 ■■ -->
+
 </head>
 <body>
 
@@ -48,6 +117,32 @@
     
     <div id="content">
         <h1>게시글 리스트</h1>
+        
+        <!-- ■■ 내가 추가한 부분 ■■ -->
+        <!-- 게시판 -->
+	    <table class="board_list">
+			<tr>
+				<%= sbHtml %>
+			</tr>
+		</table>
+		<!--//게시판-->
+	
+        <!--페이지넘버-->
+		<div class="paginate_regular">
+			<div class="board_pagetab">
+				<span class="off"><a href="#">&lt;처음&gt;</a>&nbsp;</span>
+				<span class="off"><a href="#">&lt;이전&gt;</a>&nbsp;</span>
+				<span class="on"><a href="#">( 1 )</a></span>
+				<span class="off"><a href="#"> 2 </a></span>
+				<span class="off"><a href="#"> 3 </a></span>
+				<span class="off"><a href="#"> 4 </a></span>
+				<span class="off"><a href="#"> 5 </a></span>
+				<span class="off">&nbsp;<a href="#">&lt;다음&gt;</a></span>
+				<span class="off">&nbsp;<a href="#">&lt;끝&gt;</a></span>
+			</div>
+		</div>
+		<!--//페이지넘버-->
+		<!-- ■■ /내가 추가한 부분 ■■ -->
     </div>
 </div>
 
