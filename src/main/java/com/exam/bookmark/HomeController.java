@@ -21,9 +21,7 @@ import com.exam.boardlist.BoardTO;
 import com.exam.booklist.BookDAO;
 import com.exam.booklist.BookTO;
 import com.exam.paging.pagingTO;
-
-
-
+import com.exam.user.SHA256;
 import com.exam.user.UserDAO;
 import com.exam.user.UserTO;
 
@@ -41,8 +39,18 @@ public class HomeController {
 	
 	@RequestMapping(value = "/test.do")
 	public String test() {
+		/* 암호화할 텍스트 */
+		String text = "Hello, Java";
+		
+		/* SHA256 암호화 */
+		String encryptSHA256 = SHA256.encodeSHA256(text);
+		
+		/* SHA256 암호화 결과 */
+		System.out.println("SHA256 암호화 요청 텍스트 : " + text);
+		System.out.println("SHA256 암호화 완료 텍스트 : " + encryptSHA256);
 		return "test";
 	}
+	
 	@RequestMapping(value = "/duplicationCheck.do")
 	public String duplicationCheck(HttpServletRequest request, Model model) {
 		
@@ -125,7 +133,9 @@ public class HomeController {
 	public String login_ok(HttpServletRequest request, Model model) {
 		UserTO to = new UserTO();
 		to.setId(request.getParameter("userID"));
-		to.setPassword(request.getParameter("userPassword"));
+		//비밀번호 암호화
+		//to.setPassword(request.getParameter("userPassword"));
+		to.setPassword(SHA256.encodeSHA256(request.getParameter("userPassword")));
 		
 		//System.out.println(request.getParameter("userID"));
 		//System.out.println(request.getParameter("userPassword"));
@@ -136,6 +146,11 @@ public class HomeController {
 		//System.out.println(flag);
 		
 		return "login_ok";
+	}
+	
+	@RequestMapping(value = "/logout_ok.do")
+	public String logout_ok() {
+		return "logout_ok";
 	}
 	
 	@RequestMapping(value = "/mypage.do")
@@ -157,7 +172,11 @@ public class HomeController {
 	public String signup_ok(HttpServletRequest request, Model model) {
 		UserTO to = new UserTO();
 		to.setId(request.getParameter("userID"));
-		to.setPassword(request.getParameter("userPassword"));
+		
+		//비밀번호 암호화
+		//to.setPassword(request.getParameter("userPassword"));
+		to.setPassword(SHA256.encodeSHA256(request.getParameter("userPassword")));
+		
 		to.setNickname(request.getParameter("nickname"));
 		to.setMail(request.getParameter("mail"));
 		if(!request.getParameter("address").trim().equals("")) {

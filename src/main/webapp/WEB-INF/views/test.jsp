@@ -21,49 +21,11 @@
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
 <script type="text/javascript">
-	
-	window.onload = function(){
-		document.getElementById('userID').onchange = function(){
-			$('#id_check_sucess').hide();
-			$('.id_overlap_button').show();
-			$('.username_input').attr("check_result", "fail");
-		}
-		document.getElementById('btn').onclick = function(){			
-			const id = document.getElementById('userID').value.trim();
-		
-			const request = new XMLHttpRequest();
-			request.onreadystatechange = function(){
-				if(request.readyState == 4){
-					if(request.status == 200){
-						const data = request.responseXML;
-						const flags = data.getElementsByTagName('flag');
-						let flag = flags[0].childNodes[0].nodeValue;
-					
-						if(flag == 0){
-							alert("이미 존재하는 아이디 입니다.");
-							
-					    
-						} else{
-							alert("사용가능한 아이디 입니다.");
-					          $('.username_input').attr("check_result", "success");
-					          $('#id_check_sucess').show();
-					          $('.id_overlap_button').hide();
-						}
-						
-					} else{
-						alert('에러페이지');
-					}
-				}
-			};
-			request.open('GET', './duplicationCheck.do?item=id&value=' + id, true);
-			request.send();
-		};
-	};
-	</script>
+</script>
 </head>
 <body>
-	<input type="text" class="username_input" id="userID" check_result="fail" required />
-	<button type="button" class="id_overlap_button" id="btn">중복검사</button>
-	<i class="fa fa-check" id="id_check_sucess" style="display: none;" aria-hidden="true" ></i>
+	<input type="text" id="userID" />
+	<input type="password" id="userPassword"/>
+	<button type="button" class="button" id="btn">비밀번호 암호화 확인</button>
 </body>
 </html>
