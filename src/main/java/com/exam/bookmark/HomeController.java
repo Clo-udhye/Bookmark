@@ -27,6 +27,8 @@ import com.exam.theseMonthBoard.Home_BoardTO;
 import com.exam.user.SHA256;
 import com.exam.user.UserDAO;
 import com.exam.user.UserTO;
+import com.exam.zipcode.ZipcodeDAO;
+import com.exam.zipcode.ZipcodeTO;
 
 @Controller
 public class HomeController {
@@ -38,6 +40,9 @@ public class HomeController {
 	UserDAO userDao;
 	
 	@Autowired
+	ZipcodeDAO zipcodeDao;
+	
+	@Autowired
 	BoardDAO boardDao;
 	
 	@Autowired
@@ -45,30 +50,8 @@ public class HomeController {
 	
 	@RequestMapping(value = "/test.do")
 	public String test() {
-		/* 암호화할 텍스트 */
-		String text = "Hello, Java";
-		
-		/* SHA256 암호화 */
-		String encryptSHA256 = SHA256.encodeSHA256(text);
-		
-		/* SHA256 암호화 결과 */
-		System.out.println("SHA256 암호화 요청 텍스트 : " + text);
-		System.out.println("SHA256 암호화 완료 텍스트 : " + encryptSHA256);
 		return "test";
 	}
-	
-	@RequestMapping(value = "/duplicationCheck.do")
-	public String duplicationCheck(HttpServletRequest request, Model model) {
-		
-		String item = request.getParameter("item");
-		String value = request.getParameter("value");
-		int flag = userDao.dupCheck(item, value);
-		
-		model.addAttribute("flag", flag);
-		
-		return "duplicationCheck";
-	}
-	
 	
 	@RequestMapping(value = "/home.do")
 	public String home(HttpServletRequest req , Model model) {
@@ -209,4 +192,31 @@ public class HomeController {
 		return "admin";
 	}
 	
+	@RequestMapping(value = "/duplicationCheck.do")
+	public String duplicationCheck(HttpServletRequest request, Model model) {
+		
+		String item = request.getParameter("item");
+		String value = request.getParameter("value");
+		int flag = userDao.dupCheck(item, value);
+		
+		model.addAttribute("flag", flag);
+		
+		return "duplicationCheck";
+	}
+	
+	@RequestMapping(value = "/zipsearch.do")
+	public String zipsearch(HttpServletRequest request, Model model) {
+		
+		String strDong = null;
+		if(!request.getParameter("strDong").trim().equals("")) {
+			strDong = request.getParameter("strDong");
+		}
+		
+		//System.out.println("strDong : " + strDong);
+		ArrayList<ZipcodeTO> lists = zipcodeDao.searchLists(strDong);
+		model.addAttribute("lists", lists);
+		return "zipsearch";
+	}
+	
+
 }
