@@ -41,24 +41,11 @@ public class BookDAO {
 		//(BookTO) jdbcTemplate.query(sql, new BeanPropertyRowMapper(BookTO.class));
 		return book;
 	}
-	public BookTO Book_infoTemplate_relatedBoard(String master_seq){
-		String sql = "select b.seq, b.date, b.title, u.nickname from board as b join user as u on b.useq = u.seq where b.bseq=? order by b.seq desc";
-		BookTO book = (BookTO) jdbcTemplate.queryForObject(sql, new Object[]{master_seq}, new RowMapper<BookTO>() {
-			public BookTO mapRow(ResultSet rs, int rowNum) throws SQLException{
-				BookTO to = new BookTO();
-				to.setMaster_seq(rs.getString("master_seq"));
-				to.setIsbn13(rs.getString("isbn13"));
-				to.setTitle(rs.getNString("title"));
-				to.setAuthor(rs.getString("author"));
-				to.setPublisher(rs.getNString("publisher"));
-				to.setImg_url(rs.getString("img_url"));
-				to.setDescription(rs.getString("description"));
-				to.setPub_date(rs.getString("pub_date"));
-				return to;
-			}
-		});
+	public ArrayList<BookRelatedTO> Book_infoTemplate_relatedBoard(String master_seq){
+		String sql = "select b.seq as board_seq, b.date as board_date, b.title as board_title, u.nickname as user_nickname from board as b join user as u on b.useq = u.seq where b.bseq="+master_seq+" order by b.seq desc";
+		ArrayList<BookRelatedTO> lists = (ArrayList<BookRelatedTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookRelatedTO>(BookRelatedTO.class));
 		//(BookTO) jdbcTemplate.query(sql, new BeanPropertyRowMapper(BookTO.class));
-		return book;
+		return lists;
 	}
 	
 	public pagingTO pagingList(pagingTO booklistTO) {

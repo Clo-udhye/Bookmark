@@ -19,11 +19,16 @@ import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import com.exam.boardlist.BoardDAO;
 import com.exam.boardlist.BoardTO;
 import com.exam.booklist.BookDAO;
+import com.exam.booklist.BookRelatedTO;
 import com.exam.booklist.BookTO;
 import com.exam.paging.pagingTO;
+import com.exam.theseMonthBoard.Home_BoardDAO;
+import com.exam.theseMonthBoard.Home_BoardTO;
 import com.exam.user.SHA256;
 import com.exam.user.UserDAO;
 import com.exam.user.UserTO;
+import com.exam.zipcode.ZipcodeDAO;
+import com.exam.zipcode.ZipcodeTO;
 
 @Controller
 public class HomeController {
@@ -35,37 +40,23 @@ public class HomeController {
 	UserDAO userDao;
 	
 	@Autowired
+	ZipcodeDAO zipcodeDao;
+	
+	@Autowired
 	BoardDAO boardDao;
+	
+	@Autowired
+	Home_BoardDAO home_boardDAO;
 	
 	@RequestMapping(value = "/test.do")
 	public String test() {
-		/* 암호화할 텍스트 */
-		String text = "Hello, Java";
-		
-		/* SHA256 암호화 */
-		String encryptSHA256 = SHA256.encodeSHA256(text);
-		
-		/* SHA256 암호화 결과 */
-		System.out.println("SHA256 암호화 요청 텍스트 : " + text);
-		System.out.println("SHA256 암호화 완료 텍스트 : " + encryptSHA256);
 		return "test";
 	}
 	
-	@RequestMapping(value = "/duplicationCheck.do")
-	public String duplicationCheck(HttpServletRequest request, Model model) {
-		
-		String item = request.getParameter("item");
-		String value = request.getParameter("value");
-		int flag = userDao.dupCheck(item, value);
-		
-		model.addAttribute("flag", flag);
-		
-		return "duplicationCheck";
-	}
-	
-	
 	@RequestMapping(value = "/home.do")
-	public String home() {
+	public String home(HttpServletRequest req , Model model) {
+		ArrayList<Home_BoardTO> lists = home_boardDAO.BoardlistTemplate();
+		model.addAttribute("lists", lists);
 		return "home";
 	}
 	
@@ -79,7 +70,12 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/view.do")
-	public String view() {
+	public String view(HttpServletRequest req , Model model) {
+		String seq = req.getParameter("seq");
+		System.out.println(seq);
+		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(seq);
+		model.addAttribute("home_BoardTO", home_BoardTO);
+		
 		return "board_view";
 	}
 	
@@ -120,7 +116,8 @@ public class HomeController {
 		model.addAttribute("book_info", book_info);
 		int cpage = to.getCpage();
 		model.addAttribute("cpage", cpage);
-		
+		ArrayList<BookRelatedTO> relatedBoard = bookdao.Book_infoTemplate_relatedBoard(master_seq);
+		model.addAttribute("relatedBoard", relatedBoard);
 		return "book_info";
 	}
 	
@@ -195,4 +192,31 @@ public class HomeController {
 		return "admin";
 	}
 	
+	@RequestMapping(value = "/duplicationCheck.do")
+	public String duplicationCheck(HttpServletRequest request, Model model) {
+		
+		String item = request.getParameter("item");
+		String value = request.getParameter("value");
+		int flag = userDao.dupCheck(item, value);
+		
+		model.addAttribute("flag", flag);
+		
+		return "duplicationCheck";
+	}
+	
+	@RequestMapping(value = "/zipsearch.do")
+	public String zipsearch(HttpServletRequest request, Model model) {
+		
+		String strDong = null;
+		if(!request.getParameter("strDong").trim().equals("")) {
+			strDong = request.getParameter("strDong");
+		}
+		
+		//System.out.println("strDong : " + strDong);
+		ArrayList<ZipcodeTO> lists = zipcodeDao.searchLists(strDong);
+		model.addAttribute("lists", lists);
+		return "zipsearch";
+	}
+	
+
 }
