@@ -19,8 +19,11 @@ import org.springframework.web.context.support.HttpRequestHandlerServlet;
 import com.exam.boardlist.BoardDAO;
 import com.exam.boardlist.BoardTO;
 import com.exam.booklist.BookDAO;
+import com.exam.booklist.BookRelatedTO;
 import com.exam.booklist.BookTO;
 import com.exam.paging.pagingTO;
+import com.exam.theseMonthBoard.Home_BoardDAO;
+import com.exam.theseMonthBoard.Home_BoardTO;
 import com.exam.user.SHA256;
 import com.exam.user.UserDAO;
 import com.exam.user.UserTO;
@@ -42,13 +45,18 @@ public class HomeController {
 	@Autowired
 	BoardDAO boardDao;
 	
+	@Autowired
+	Home_BoardDAO home_boardDAO;
+	
 	@RequestMapping(value = "/test.do")
 	public String test() {
 		return "test";
 	}
 	
 	@RequestMapping(value = "/home.do")
-	public String home() {
+	public String home(HttpServletRequest req , Model model) {
+		ArrayList<Home_BoardTO> lists = home_boardDAO.BoardlistTemplate();
+		model.addAttribute("lists", lists);
 		return "home";
 	}
 	
@@ -62,7 +70,12 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/view.do")
-	public String view() {
+	public String view(HttpServletRequest req , Model model) {
+		String seq = req.getParameter("seq");
+		System.out.println(seq);
+		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(seq);
+		model.addAttribute("home_BoardTO", home_BoardTO);
+		
 		return "board_view";
 	}
 	
@@ -103,7 +116,8 @@ public class HomeController {
 		model.addAttribute("book_info", book_info);
 		int cpage = to.getCpage();
 		model.addAttribute("cpage", cpage);
-		
+		ArrayList<BookRelatedTO> relatedBoard = bookdao.Book_infoTemplate_relatedBoard(master_seq);
+		model.addAttribute("relatedBoard", relatedBoard);
 		return "book_info";
 	}
 	

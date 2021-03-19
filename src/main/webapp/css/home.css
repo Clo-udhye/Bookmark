@@ -44,9 +44,7 @@ li{
 	overflow: hidden;
 	display: block;
 	margin: 17px auto 0;
-	background:
-		url(//t1.daumcdn.net/brunch9/static/images/pc/txt_brunch_v5_181004_v2.png)
-		no-repeat 0 0;
+		
 	text-indent: -9999px
 }
 
@@ -2989,8 +2987,7 @@ body {
 	z-index: 1;
 	margin: 0 50px;
 	width: 130px;
-	height: 172px;
-	background-color: #fff
+	height: 150px;
 }
 
 .dimmed_book_type1 {
@@ -3074,7 +3071,6 @@ body {
 	line-height: 18px;
 	font-family: "SF Pro Bold", "Malgun Gothic";
 	letter-spacing: .2px;
-	color: #fff;
 	text-align: center
 }
 
