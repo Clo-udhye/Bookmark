@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.support.HttpRequestHandlerServlet;
 
 import com.exam.boardlist.BoardDAO;
+import com.exam.boardlist.BoardPagingTO;
 import com.exam.boardlist.BoardTO;
 import com.exam.booklist.BookDAO;
 import com.exam.booklist.BookRelatedTO;
 import com.exam.booklist.BookTO;
 import com.exam.paging.pagingTO;
+import com.exam.theseMonthBoard.Home_BoardDAO;
+import com.exam.theseMonthBoard.Home_BoardTO;
 import com.exam.user.SHA256;
 import com.exam.user.UserDAO;
 import com.exam.user.UserTO;
@@ -43,27 +46,54 @@ public class HomeController {
 	@Autowired
 	BoardDAO boardDao;
 	
+	@Autowired
+	Home_BoardDAO home_boardDAO;
+	
 	@RequestMapping(value = "/test.do")
 	public String test() {
 		return "test";
 	}
 	
 	@RequestMapping(value = "/home.do")
-	public String home() {
+	public String home(HttpServletRequest req , Model model) {
+		ArrayList<Home_BoardTO> lists = home_boardDAO.BoardlistTemplate();
+		model.addAttribute("lists", lists);
 		return "home";
 	}
 	
 	@RequestMapping(value = "/list.do")
-	public String list(Locale locale, Model model) {
-		//paging 없는 일반 리스트 출력
-		ArrayList<BoardTO> lists = boardDao.boardList();
-		model.addAttribute("lists", lists);
+	public String list(HttpServletRequest request, Model model) {
+		//public String list(Locale locale, Model model) {	
+		// paging 없는 일반 리스트 출력
+		//ArrayList<BoardTO> lists = boardDao.boardList();
+		//model.addAttribute("lists", lists);
 		//System.out.println(lists);
+		
+		// paging 리스트 출력
+		//BoardPagingTO pagingTO = boardDao.boardList(to);
+		//model.addAttribute("pagingTO", pagingTO);
+		
+		int cpage = 1;   // cpage가 없으면 1
+		if(request.getParameter("cpage") != null && !request.getParameter("cpage").equals("")){   
+			cpage = Integer.parseInt(request.getParameter("cpage"));
+		}
+	      
+		BoardPagingTO pagingTO = new BoardPagingTO();
+		pagingTO.setCpage(cpage);
+	      
+		pagingTO = boardDao.boardList(pagingTO);
+		model.addAttribute("pagingTO", pagingTO);
+
 		return "board_list";
 	}
 	
 	@RequestMapping(value = "/view.do")
-	public String view() {
+	public String view(HttpServletRequest req , Model model) {
+		String seq = req.getParameter("seq");
+		System.out.println(seq);
+		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(seq);
+		model.addAttribute("home_BoardTO", home_BoardTO);
+		
 		return "board_view";
 	}
 	

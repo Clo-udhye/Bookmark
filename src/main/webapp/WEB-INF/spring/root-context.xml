@@ -6,13 +6,12 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 			<property name="driverClassName" value="org.mariadb.jdbc.Driver"/>
-<<<<<<< HEAD
-			<!-- <property name="url" value="jdbc:mysql://49.50.174.216:3306/bookmark"/> -->
-			<property name="url" value="jdbc:mysql://49.50.174.216:3306/bookmark"/>
-=======
 			<property name="url" value="jdbc:mysql://49.50.174.216:3306/bookmark"/> 
 			<!-- <property name="url" value="jdbc:mysql://localhost:3306/bookmark"/> -->
->>>>>>> b399bd7b5be1d59b173e8d23c9e5e1d2eea1a4fb
+
+			<!-- <property name="url" value="jdbc:mysql://localhost:3306/bookmark"/> -->
+			<property name="url" value="jdbc:mysql://49.50.174.216:3306/bookmark"/>
+>>>>>>> a82a4362a59e2a608ef026c9498ff92f1e4c32c5
 			<property name="username" value="root"/>
 			<property name="password" value="!123456"/>
 		</bean>
