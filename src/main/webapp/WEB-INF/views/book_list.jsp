@@ -53,12 +53,12 @@
 		String pub_date = to.getPub_date();
 			// 아래의 HTMl 양식으로 append하기
 			bookHTML.append("<div>");
-			bookHTML.append("<table id=innerlist>");
+			bookHTML.append("<table id=innerlist align='center'>");
 			bookHTML.append("<tr>");
 			bookHTML.append("<td rowspan='4' width='20%'><img width='200px' src='"+img_url+"' alt='이미지 없음'/></td>");
 			bookHTML.append("<td width=60% >책 제목 :"+title+"</td>");
-			bookHTML.append("<td rowspan='4' width=20>");
-			bookHTML.append("<a type='button' href='./book_info.do?master_seq="+master_seq+"'>자세히 보기</a>");
+			bookHTML.append("<td rowspan='4' width=40 align='center'>");
+			bookHTML.append("<a type='button' href='./book_info.do?master_seq="+master_seq+"' id='simple_button' class='btn btn-dark' ' >자세히 보기</a>");
 			bookHTML.append("</td>");
 			bookHTML.append("</tr>");
 			bookHTML.append("<tr><td><div>저자 :"+author+"</div></td></tr>");
@@ -85,17 +85,31 @@
 #innerlist {
   border: 1px solid black;
   padding: 15px;
-  width:100%;
+  width:80%;
+ 
 }
 table {
   border-spacing: 15px;
   padding : "10";
+  
+}
+.button1{
+	width: 30px;
+	font-size: 25px;
+
+}
+#simple_button{
+	text-align: center;
+	position: right;
+	width: 120px;
 }
 #result {
 	 font-style: italic;
 	 color:blue;
 }
-
+.text1{
+	font-color: white;
+}
 .opener { display:none; }
 .opener:checked ~ .nav_item { display:block; }
 </style>
@@ -126,40 +140,49 @@ table {
 <div id="main">
 	<div id="header">
 		<p>
-			<span>
+		<table>
+		<tr>
+			<td width=5%><span>
 				<button class="sidebar-btn" onclick="sidebarCollapse()">
 					<span><i class="fa fa-bars" aria-hidden="true"></i></span>
 	             </button>
 			</span>
-	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
-	        <span><a href="./login.do" align="right">시작하기</a></span>
-			<span><a href="./search.do" align="right"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
+			</td>
+	        <td width=5%><span><a class="navbar-brand" href="./home.do" > <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span></td>
+	       
+		   <td width=85% align="right"><span><a class="button1" href="./login.do" style="color: black; " >start</a></span></td>
+		   <td width=5%><span><a href="./search.do" style="color: black;"><i class="fa fa-search fa-lg" aria-hidden="true"></i></a></span></td>
+			
+		</tr>
+		</table>		
     	</p>
     </div>
     
-    <div id="content" width=100%>
+    <div id="content" width=100% > 
         <%=SearchResult %>
-        <div width=100%>
-        	<table >
+        <div width=100% >
+        	<table>
         	
-        	<tr><td width = 100% height="40"> 현재 <%= totalRecord %>개의 책이 등록되어 있습니다.</td></tr>
+        	<tr><td width = 80% height="40" > 현재 <%= totalRecord %>개의 책이 등록되어 있습니다.</td></tr>
         		<tr>
-        			<td height="50" width="500"></td>
+        			<td height="50" width="300" ></td>
         			<td>
-        				<table>
-        				<form action="./book_list_search.do" type="get" align = "right">
+        				<table width="550">
+        				<form action="./book_list_search.do" type="get" align="left">
         				<tr>
-	        				<td width="50">
-	        					<select name="search">
+	        				<td  width="50">
+	        					<select name="search" style="border-radius: 4px">
 								    <option value="제목" selected="selected">제목 검색</option>
 								    <option value="작가">작가 명 검색</option>
 								</select>
 							</td>
         					<td>
-        						<input type="text" name = "bookname" width="50"/>
+        						<input type="text" name = "bookname" width=50 style="border-radius: 4px"/>
        						</td>
-        					<td>
-        						<input type="submit" value="검색" width="100"/>
+        					<td width="213" align="left">
+        						<button type="submit" value="검색" width="50" class="btn btn-dark">검색</button>
+        						
+        						
        						</td>
         				</tr>
         				</form>
@@ -173,6 +196,7 @@ table {
    		<%= bookHTML %>
      </div>
      <br><br>
+     <footer>
      <div align="center">
      <%
      
@@ -187,7 +211,7 @@ table {
 		if(cpage == 1){
 			out.println("<span><a href=''>이전 페이지</a></span>");
 		} else{
-			out.println("<span><a href='./book_list.do?cpage="+(cpage-1)+"'>이전 페이지</a></span>");
+			out.println("<span><a href='./book_list.do?cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' color='white'></i></a></span>");
 		}
 		
 		out.println("&nbsp;&nbsp;");
@@ -205,7 +229,7 @@ table {
 		if(cpage == totalPage){
 			out.println("<span><a href=''>다음 페이지</a></span>");
 		} else{
-			out.println("<span><a href='./book_list.do?cpage="+(cpage+1)+"'>다음 페이지</a></span>");
+			out.println("<span><a href='./book_list.do?cpage="+(cpage+1)+"' ><i class='fa fa-arrow-right' aria-hidden='true'></i></a></span>");
 		}
 		
 		
@@ -220,6 +244,7 @@ table {
      	
      %>
      </div>
+     </footer>
      <br><br>
 </div>
 
