@@ -1,49 +1,5 @@
 @charset "utf-8"; 
 
-#daumIndex {
-	overflow: hidden;
-	position: absolute;
-	left: -9999px;
-	width: 0;
-	height: 1px;
-	margin: 0;
-	padding: 0
-}
-
-.ir_pm {
-	display: block;
-	overflow: hidden;
-	font-size: 0;
-	line-height: 0;
-	text-indent: -9999px
-}
-
-.ir_wa {
-	display: block;
-	overflow: hidden;
-	position: relative;
-	z-index: -1;
-	width: 100%;
-	height: 100%
-}
-
-.screen_out {
-	overflow: hidden;
-	position: absolute;
-	width: 0;
-	height: 0;
-	line-height: 0;
-	text-indent: -9999px
-}
-
-.show {
-	display: block
-}
-
-.hide {
-	display: none
-}
-
 a {
 	color: #333;
 	text-decoration: none
@@ -55,6 +11,10 @@ a:active, a:hover {
 
 a:active {
 	background-color: transparent
+}
+
+li{
+	list-style-type: none;
 }
 
 .wrap_brunch {
@@ -598,7 +558,7 @@ body {
 
 .editor_pic .wrap_slide {
 	overflow: visible;
-	width: 960px;
+	width: 1280px;
 	height: 520px
 }
 
@@ -648,7 +608,7 @@ body {
 
 .wrap_pic {
 	overflow: hidden;
-	width: 960px
+	width: 1280px
 }
 
 .wrap_pic .info_g .info_by {
@@ -2704,8 +2664,10 @@ body {
 }
 
 .brunch_writers .wrap_writers {
-	width: 960px;
+	width: 1280px;
+	/*margin: 50px auto 85px*/
 	margin: 50px auto 85px
+	
 }
 
 .brunch_writers .list_writers:after {
@@ -2717,7 +2679,7 @@ body {
 .brunch_writers .list_writers li {
 	position: relative;
 	float: left;
-	width: 310px;
+	width: 290px;
 	height: 100%;
 	margin-left: 15px;
 	margin-bottom: 15px;
@@ -2960,28 +2922,23 @@ body {
 }
 
 .PC_DISCOVER_BRUNCHBOOK .item_pic_type1 {
-	width: 50%;
+	width: 480px;
 	height: 520px
 }
 
 .PC_DISCOVER_BRUNCHBOOK .item_pic_type2 {
-	width: 50%;
+	width: 480px;
 	height: 260px
 }
 
 .PC_DISCOVER_BRUNCHBOOK .item_pic_type3 {
-	width: 50%;
+	width: 480px;
 	height: 260px
 }
 
-.PC_DISCOVER_B2 .item_pic {
+.PC_DISCOVER_BRUNCHBOOK .item_pic_type4 {
 	width: 320px;
 	height: 520px
-}
-
-.PC_DISCOVER_B2 .append_info {
-	display: table;
-	height: 100%
 }
 
 .PC_DISCOVER_BRUNCHBOOK .append_info {
@@ -5321,127 +5278,6 @@ body {
 	}
 }
 
-.cover_weekly .dimmed_book_type1 {
-	width: 7px
-}
-
-.ico_list {
-	width: 13px;
-	height: 13px;
-	background-position: -100px -370px
-}
-
-.ico_time_type1 {
-	width: 13px;
-	height: 13px;
-	background-position: -120px -370px
-}
-
-.ico_like {
-	width: 13px;
-	height: 13px;
-	background-position: -140px -370px
-}
-
-.ico_subscribe {
-	width: 13px;
-	height: 13px;
-	background-position: -160px -370px
-}
-
-.ico_badge {
-	display: block;
-	width: 40px;
-	height: 40px;
-	padding: 10px 0 0;
-	border-radius: 50%;
-	font-size: 12px;
-	line-height: 18px;
-	text-align: center;
-	box-sizing: border-box
-}
-
-.dimmed_book_type1 {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 9px;
-	height: 100%
-}
-
-.dimmed_book_type1:before {
-	position: absolute;
-	top: 0;
-	right: 2px;
-	width: 1px;
-	height: 100%;
-	background: rgba(0, 0, 0, .05);
-	content: ''
-}
-
-.dimmed_book_type1:after {
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 2px;
-	height: 100%;
-	background: rgba(255, 255, 255, .1);
-	content: ''
-}
-
-.cover_weekly .cont_cover {
-	position: absolute;
-	top: 46px;
-	right: 36px;
-	z-index: 10;
-	width: 88px;
-	height: 118px;
-	background-color: #fff
-}
-
-.cover_weekly .cont_cover .tit_cover {
-	display: block;
-	display: -webkit-box;
-	overflow: hidden;
-	max-height: 78px;
-	padding: 6px 8px 0;
-	font-weight: 400;
-	font-size: 13px;
-	line-height: 18px;
-	color: #666;
-	-webkit-line-clamp: initial;
-	box-sizing: border-box
-}
-
-.cover_weekly .txt_writer {
-	display: block;
-	overflow: hidden;
-	position: absolute;
-	bottom: 4px;
-	left: 0;
-	width: 88px;
-	padding: 0 8px;
-	font-size: 11px;
-	line-height: 17px;
-	color: #959595;
-	letter-spacing: -.075em;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	box-sizing: border-box
-}
-
-.cover_weekly .txt_publisher {
-	display: block;
-	position: absolute;
-	bottom: 8px;
-	left: 0;
-	width: 100%;
-	font-size: 11px;
-	line-height: 17px;
-	color: #fff;
-	font-family: "SF Pro Bold", "Malgun Gothic";
-	text-align: center
-}
 
 .list_content {
 	width: 735px;
@@ -5467,411 +5303,5 @@ body {
 	line-height: 15px;
 	color: #959595;
 	font-family: "SF Pro Bold", "Malgun Gothic"
-}
 
-.box_content .txt_publisher {
-	display: block;
-	position: absolute;
-	bottom: 8px;
-	left: 0;
-	width: 100%;
-	font-size: 11px;
-	line-height: 17px;
-	color: #fff;
-	font-family: "SF Pro Bold", "Malgun Gothic";
-	text-align: center
-}
-
-.box_content .book_cover {
-	display: block;
-	position: relative;
-	width: 210px;
-	height: 300px;
-	padding: 63px 0 0;
-	border-radius: 2px 6px 6px 2px;
-	background-color: #fff;
-	box-sizing: border-box
-}
-
-.box_content .cont_cover {
-	position: relative;
-	margin: 0 46px;
-	height: 160px;
-	z-index: 1;
-	background-color: #fff
-}
-
-.box_content .book_cover .tit_cover {
-	display: block;
-	display: -webkit-box;
-	overflow: hidden;
-	max-height: 115px;
-	padding: 8px 12px 0 12px;
-	font-weight: 400;
-	font-size: 17px;
-	line-height: 24px;
-	color: #666;
-	-webkit-line-clamp: initial;
-	word-break: keep-all;
-	word-wrap: break-word;
-	-webkit-box-orient: vertical;
-	text-align: left
-}
-
-.box_content .book_cover .txt_writer {
-	display: block;
-	display: -webkit-box;
-	overflow: hidden;
-	position: absolute;
-	bottom: 10px;
-	left: 0;
-	width: 100%;
-	max-height: 32px;
-	padding: 0 16px 0 12px;
-	font-size: 11px;
-	line-height: 16px;
-	color: #959595;
-	box-sizing: border-box;
-	text-overflow: ellipsis;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
-	word-break: break-all
-}
-
-.box_content .book_cover .txt_publisher {
-	display: block;
-	position: absolute;
-	left: 0;
-	z-index: 1;
-	width: 100%;
-	font-size: 12px;
-	line-height: 18px;
-	font-family: "SF Pro Bold";
-	color: #fff;
-	text-align: center
-}
-
-.box_content .book_cover .ico_likeit_type2 {
-	position: absolute;
-	top: -11px;
-	right: 19px
-}
-
-.box_content .book_cover_type1 {
-	position: relative;
-	width: 210px;
-	height: 300px;
-	padding: 63px 0 0;
-	border-radius: 2px 6px 6px 2px;
-	box-shadow: 0 6px 10px 0 rgba(0, 0, 0, .1)
-}
-
-.box_content .book_cover_type1 .cont_cover {
-	margin: 0 46px;
-	height: 160px
-}
-
-.box_content .book_cover_type1 .tit_cover {
-	max-height: 94px;
-	padding: 8px 13px 0 9px;
-	font-size: 17px;
-	line-height: 24px;
-	color: #666;
-	-webkit-line-clamp: 4
-}
-
-.box_content .book_cover_type1 .txt_writer {
-	max-height: 36px;
-	bottom: 10px;
-	padding: 0 16px 0 9px;
-	font-size: 11px;
-	line-height: 16px
-}
-
-.box_content .book_cover_type1 .tit_g {
-	display: block;
-	padding: 10px 0 0;
-	font-weight: 400;
-	font-size: 14px;
-	line-height: 20px;
-	color: #959595
-}
-
-.box_content .book_cover_type1 .dimmed_book_type1, .cover_book .dimmed_book_type1
-	{
-	width: 9px
-}
-
-.box_content .tit_cover {
-	text-align: center
-}
-
-.box_content .author_cover, .box_content .txt_writer {
-	text-align: left
-}
-
-.box_content .tit_content {
-	display: block;
-	padding: 20px 0 0 0;
-	font-weight: 400
-}
-
-.box_content .tit_subject {
-	display: block;
-	display: -webkit-box;
-	overflow: hidden;
-	max-height: 54px;
-	padding: 4px 0 0;
-	font-size: 18px;
-	line-height: 27px;
-	word-break: break-all;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 2
-}
-
-.box_content .list_post_info {
-	display: block;
-	padding: 6px 0 0
-}
-
-.box_content .list_post_info dt {
-	margin-top: 3px
-}
-
-.box_content .list_post_info dd, .box_content .list_post_info dt {
-	display: inline-block;
-	vertical-align: top
-}
-
-.box_content .list_post_info dd+dt {
-	padding-left: 12px
-}
-
-.box_content .txt_g {
-	padding-left: 2px;
-	font-size: 12px;
-	line-height: 18px;
-	color: #959595
-}
-
-.box_content .ico_time_type1 {
-	margin-right: 1px
-}
-
-.box_content .ico_subscribe {
-	margin-top: 1px
-}
-
-.box_content .ico_like {
-	margin-right: 1px
-}
-
-.box_content .cover_book {
-	position: relative;
-	width: 210px;
-	height: 300px;
-	border-radius: 2px 6px 6px 2px;
-	background-color: #fff;
-	overflow: hidden
-}
-
-.box_content .cover_book img {
-	display: block;
-	width: 100%;
-	border-radius: 2px 6px 6px 2px
-}
-
-.box_content .dimmed_book {
-	display: block;
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 10px;
-	height: 100%;
-	background-color: rgba(0, 0, 0, .04)
-}
-
-.book_cover .dimmed_cover {
-	display: block;
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	border-radius: 2px 6px 6px 0;
-	background-color: rgba(0, 0, 0, .1)
-}
-
-.box_content .cover_book_type3 .dimmed_cover {
-	display: block;
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 114px;
-	border-radius: 0 0 6px 0;
-	background-color: rgba(0, 0, 0, .1)
-}
-
-.box_content .cover_book_type3 .info_cover {
-	display: table;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: auto;
-	width: 100%;
-	height: 186px;
-	border-radius: 2px 6px 0 0;
-	border: 1px solid #eee;
-	border-bottom: none;
-	box-sizing: border-box;
-	background: 0 none
-}
-
-.box_content .cover_book_type3 .img_thumb {
-	padding-top: 186px;
-	border-radius: 0 0 6px 2px
-}
-
-.box_content .cover_book_type3 .bg_thumb {
-	display: block;
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 210px;
-	height: 114px;
-	border-radius: 0 0 6px 2px
-}
-
-.box_content .cover_book_type3 .tit_cover {
-	display: table-cell;
-	padding: 51px 52px 0;
-	font-size: 18px;
-	line-height: 26px;
-	color: #666;
-	vertical-align: top;
-	font-weight: 400;
-	word-break: break-all;
-	word-wrap: break-word
-}
-
-.wrap_magazine .wrap_profile_btn {
-	padding: 28px 0 2px;
-	text-align: center;
-	font-size: 0;
-	line-height: 0
-}
-
-.box_content+.wrap_profile_btn {
-	padding: 58px 35px 0 0
-}
-
-.wrap_profile_btn .link_type1 {
-	display: inline-block;
-	width: 158px;
-	height: 38px;
-	border: 1px solid #ddd;
-	vertical-align: top
-}
-
-.wrap_profile_btn .link_type1+.link_type1 {
-	margin-left: 10px
-}
-
-.wrap_profile_btn .inner_link {
-	display: block;
-	padding: 11px 0 0;
-	font-size: 14px;
-	line-height: 16px;
-	color: #666
-}
-
-.wrap_profile_btn+.list_content {
-	padding: 10px 0 0
-}
-
-.box_content .wrap_bagde .ico_brunch_v1 {
-	display: block;
-	overflow: hidden;
-	position: absolute;
-	top: -10px;
-	right: -12px;
-	z-index: 100;
-	width: 40px;
-	height: 40px
-}
-
-.box_content .wrap_bagde .ico_brunch_v1+.ico_brunch_v1 {
-	z-index: 99;
-	top: 21px
-}
-
-.box_content .badge_king {
-	background-position: -50px -660px
-}
-
-.box_content .badge_gold {
-	background-position: -100px -660px
-}
-
-.box_content .badge_silver {
-	background-position: -150px -660px
-}
-
-.box_content .badge_month {
-	background-position: 0 -660px
-}
-
-.box_content .badge_type2 {
-	background-position: 0 -660px
-}
-
-.result_search .list_content {
-	width: 972px;
-	margin-top: -28px
-}
-
-.result_search .list_content .box_content {
-	min-height: 413px;
-	margin-right: 33px;
-	animation: fadein .7s
-}
-
-@
-keyframes fadein {
-	from {opacity: .3
-}
-
-to {
-	opacity: 1
-}
-
-}
-.box_filter_type1 {
-	height: 100px
-}
-
-.list_content.list_like .tit_subject {
-	padding-top: 17px
-}
-
-.box_content .info_author {
-	display: block;
-	overflow: hidden;
-	padding-top: 4px;
-	margin-bottom: 5px;
-	line-height: 14px;
-	font-size: 12px;
-	color: #959595;
-	text-overflow: ellipsis;
-	white-space: nowrap
-}
-
-.box_content .info_author .txt_by {
-	margin-right: 1px;
-	font-family: Georgia, sans-serif;
-	font-style: italic;
-	font-size: 11px;
-	line-height: 16px;
-	vertical-align: top
 }
