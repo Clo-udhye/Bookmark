@@ -48,6 +48,9 @@
     
     <div id="content">
         <h1>검색 페이지</h1>
+        <!-- span span 같은 줄, p p 한 줄 건너 띄고 다른 줄, div div 바로 아래 줄 -->
+        <div>
+        </div>
     </div>
 </div>
 

@@ -12,7 +12,7 @@ public class BoardPagingTO {
 	private int startBlock;
 	private int endBlock;
 	
-	private ArrayList<BoardTO> boardLists;
+	private ArrayList<BoardTO> boardList;
 
 	public BoardPagingTO() {
 		this.cpage = 1;
@@ -67,11 +67,12 @@ public class BoardPagingTO {
 		this.endBlock = endBlock;
 	}
 	
-	public ArrayList<BoardTO> getBoardLists() {
-		return boardLists;
+	public ArrayList<BoardTO> getBoardList() {
+		return boardList;
 	}
-	public void setBoardLists(ArrayList<BoardTO> boardLists) {
-		this.boardLists = boardLists;
+
+	public void setBoardList(ArrayList<BoardTO> boardList) {
+		this.boardList = boardList;
 	}
 	
 }

@@ -73,6 +73,8 @@ public class BoardDAO {
 		int recordPerPage = pagingTO.getRecordPerPage();
 		int blockPerPage = pagingTO.getBlockPerPage();
 		
+		//ArrayList<BoardTO> lists = new ArrayList<BoardTO>();
+		
 		try{
 			conn = dataSource.getConnection();
 
@@ -94,7 +96,7 @@ public class BoardDAO {
 			
 			if(rs.next()) {
 				for(int i=0; i<recordPerPage; i++){
-					BoardTO to =new BoardTO();
+					BoardTO to = new BoardTO();
 					to.setSeq( rs.getString( "seq" ) );
 					to.setDate( rs.getString( "date" ) );
 					to.setTitle( rs.getString( "title" ) );
@@ -108,23 +110,29 @@ public class BoardDAO {
 
 					lists.add(to);
 					
+					
+					// DB에 저장된 데이터가 더이상 없는 경우 아래 구문을 수행한다.
 					if(!rs.next()){
-						for(; i<recordPerPage; i++){
+						// 한 페이지에 recordPerPage개(예를 들면 10개) 게시글을 넣기로 했는데 데이터가 recordPerPage개(10개)보다 적을 경우. 아래 for문을 수행한다.
+						for(; i<recordPerPage-1; i++){
 							BoardTO to1 =new BoardTO();
 							lists.add(to1);
 						}
+						// 만약 한 페이지에 recordPerPage개(예를 들면 10개) 게시글을 넣기로 했는데 데이터가 recordPerPage개(10개)일 경우 아무것도 안하고 그대로 종료.
 						break;
 					}
+					
 				}
 			}
 			
-			pagingTO.setBoardLists(lists);
+			pagingTO.setBoardList(lists);
 			
 			pagingTO.setStartBlock(((cpage-1)/blockPerPage)*blockPerPage + 1);
 			pagingTO.setEndBlock(((cpage-1)/blockPerPage)*blockPerPage + blockPerPage);
 			if(pagingTO.getEndBlock()>=pagingTO.getTotalPage()) {
 				pagingTO.setEndBlock(pagingTO.getTotalPage());
 			}
+			
 		} catch(SQLException e){
 			System.out.println("[에러] " + e.getMessage());
 		} finally {
@@ -132,7 +140,7 @@ public class BoardDAO {
 			if(pstmt!=null) try{pstmt.close();} catch(SQLException e) {}
 			if(conn!=null) try{conn.close();} catch(SQLException e) {}
 		}
-		
+		//System.out.println(pagingTO.getCpage());
 		return pagingTO;
 	}
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.support.HttpRequestHandlerServlet;
 
 import com.exam.boardlist.BoardDAO;
+import com.exam.boardlist.BoardPagingTO;
 import com.exam.boardlist.BoardTO;
 import com.exam.booklist.BookDAO;
 import com.exam.booklist.BookRelatedTO;
@@ -61,11 +62,28 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/list.do")
-	public String list(Locale locale, Model model) {
-		//paging 없는 일반 리스트 출력
-		ArrayList<BoardTO> lists = boardDao.boardList();
-		model.addAttribute("lists", lists);
+	public String list(HttpServletRequest request, Model model) {
+		//public String list(Locale locale, Model model) {	
+		// paging 없는 일반 리스트 출력
+		//ArrayList<BoardTO> lists = boardDao.boardList();
+		//model.addAttribute("lists", lists);
 		//System.out.println(lists);
+		
+		// paging 리스트 출력
+		//BoardPagingTO pagingTO = boardDao.boardList(to);
+		//model.addAttribute("pagingTO", pagingTO);
+		
+		int cpage = 1;   // cpage가 없으면 1
+		if(request.getParameter("cpage") != null && !request.getParameter("cpage").equals("")){   
+			cpage = Integer.parseInt(request.getParameter("cpage"));
+		}
+	      
+		BoardPagingTO pagingTO = new BoardPagingTO();
+		pagingTO.setCpage(cpage);
+	      
+		pagingTO = boardDao.boardList(pagingTO);
+		model.addAttribute("pagingTO", pagingTO);
+
 		return "board_list";
 	}
 	
