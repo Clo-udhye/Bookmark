@@ -170,6 +170,22 @@
 		};
 	};
 </script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+	  $("#modal-button").click(function(){
+		  	const regexp2 = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]{2,12}$/;
+			if(!regexp2.test($('#address').val().trim())){
+				alert('동이름으로 검색해주세요');
+				$('#address').val('');
+			}
+			
+			$('.modal-content').load("./zipsearch.do?strDong="+$('#address').val());
+			
+	  });
+	});
+</script>
+
 </head>
 <body>
 
@@ -229,7 +245,16 @@
 							</div>
 							<div class="form-group">
 							
-								<input type="text" class="form-control" placeholder="주소" name="address" maxlength="20">
+								<input type="text" class="form-control" placeholder="주소" id="address" name="address" maxlength="20"> 
+								
+								<button id="modal-button" data-bs-toggle="modal" data-bs-target="#modal" type="button" class="btn btn-dark form-control">우편번호 검색</button>
+								<div id="modal" class="modal fade" tabindex="-1" role="dialog">
+									<div class="modal-dialog">
+										<div class="modal-content">
+										</div>
+									</div>
+								</div>
+
 								<input type="text" class="form-control" placeholder="상세 주소" name="addresses" maxlength="20">
 							</div>
 							<input type="button" class="btn btn-dark form-control" value="회원가입" id="signup">
