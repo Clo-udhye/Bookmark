@@ -27,24 +27,26 @@
 	// cpage는 받아오지만 뒤롸기 버튼 클릭 시 --> 해당 cpage를 받아가진 모못함
 	
 	StringBuffer board_related = new StringBuffer();
-	
+	int i = 0;
 	ArrayList<BookRelatedTO> lists = (ArrayList)request.getAttribute("relatedBoard");
 	if (lists.size() != 0 ){
 		for (BookRelatedTO bookRelatedTO : lists){
 			String board_title = bookRelatedTO.getBoard_title();
 			String board_date = bookRelatedTO.getBoard_date().substring(0, 10);
-			
+			String board_seq = bookRelatedTO.getBoard_seq();
 			String user_nickname = bookRelatedTO.getUser_nickname();
 			
 			board_related.append("<tr>");
 			board_related.append("<td>"+board_title+"</td>");
 			board_related.append("<td>"+board_date+"</td>");
 			board_related.append("<td>"+user_nickname+"</td>");
-			board_related.append("</tr>");
+			board_related.append("<td><input type='button' value='보러가기' id='modal-link"+i+"' data-bs-toggle='modal' data-bs-target='#modal' board_seq='"+board_seq+"'/>");
+			board_related.append("</tr> \n");
+			i += 1;
 		}
 	} else {
 		board_related.append("<tr>");
-		board_related.append("<td colspan='3'> 관련 게시글이 없습니다.</td>");
+		board_related.append("<td colspan='4'> 관련 게시글이 없습니다.</td>");
 		board_related.append("</tr>");
 	}
 	
@@ -96,6 +98,24 @@
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+<!-- 모달창 생성 -->
+<script type="text/javascript">
+		
+		$(document).ready(function(){
+			for(var index=0; index<<%=lists.size()%>; index++){
+			    $("#modal-link"+index).click(function(){
+			    	//console.log($(this).attr('id')); //  $("#modal-link"+index) 클릭은 잘 되는 중
+			    	// 각 hidden의 value값을 읽어 오지 못하고 있다. --> hidden 말고 input 태그 내 attr을 임의로 생성해서 받아올 수 있음 
+			    	var seq = $(this).attr('board_seq');
+		    		//console.log(seq);
+			        $('.modal-content').load("./view.do"+"?seq=" + seq);   
+			    });
+			}
+		});
+	
+</script>
+
 
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
@@ -150,45 +170,68 @@
    		</tr>
    		<tr>
    			<td rowspan="6"><img src="<%=img_url %>" alt="이미지 없음" id = "img"/></td>
-   			<td><div>책 제목 : <%=title %></div></td>
+   			<td colspan="2"><div>책 제목 : <%=title %></div></td>
    		</tr>
    		<tr>
-   			<td><div>저자 : <%=author %></div></td>
+   			<td colspan="2"><div>저자 : <%=author %></div></td>
    		</tr>
    		<tr>
-   			<td><div>출판사 : <%=publisher %></div></td>
+   			<td colspan="2"><div>출판사 : <%=publisher %></div></td>
    		</tr>
    		<tr>
-   			<td><div>출판일 : <%=pub_date %></div></td>
+   			<td colspan="2"><div>출판일 : <%=pub_date %></div></td>
    		</tr>
    		<tr>
-   			<td><p>책 설명 : <%=description %></td>
+   			<td colspan="2"><p>책 설명 : <%=description %></td>
    		</tr>
    		<tr>
-   			<td>
+   			<td colspan="2">
    				<div>
    					<div><h4>관련 게시글</h4></div>
+   					<% if (lists.size() != 0){ %>
    					<div class="vertical">
    						<div class="wrap">
 					    	<table border=1 width="1000" class="wrapTable" >
 					    		<tr>
 						    		<th>게시글 제목</th>
 						    		<th>작성 일자</th>
-						    		<th>작성자</th>    		
+						    		<th>작성자</th>
+						    		<th></th>    		
 					    		</tr>
 					    		<%= board_related%>
 					    	</table>
 				    	</div>
 			    	</div>
+			    	<% } else { %>
+			    	<div height="200">
+   						<div class="wrap">
+					    	<table border=1 width="1000" class="wrapTable"  >
+					    		<tr>
+						    		<th>게시글 제목</th>
+						    		<th>작성 일자</th>
+						    		<th>작성자</th>
+						    		<th></th>    		
+					    		</tr>
+					    		<%= board_related%>
+					    	</table>
+				    	</div>
+			    	</div>
+			    	<% } %>
    				</div>
    			</td>
    		</tr>
-        
-        	
         </table>
+        
     </div>
     <div>
-    	
+    	<!-- 모달창 정보 -->
+             <div id="modal" class="modal fade" tabindex="-1">
+                <div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
+                   <div class="modal-content">
+                   
+                   </div>
+                </div>
+             </div>
     </div>
 </div>
 

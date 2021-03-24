@@ -42,7 +42,7 @@ public class BookDAO {
 		return book;
 	}
 	public ArrayList<BookRelatedTO> Book_infoTemplate_relatedBoard(String master_seq){
-		String sql = "select b.seq as board_seq, b.date as board_date, b.title as board_title, u.nickname as user_nickname from board as b join user as u on b.useq = u.seq where b.bseq="+master_seq+" order by b.seq desc";
+		String sql = "select b.seq as board_seq, b.date as board_date, b.title as board_title, u.nickname as user_nickname from board as b join user as u on b.useq = u.seq where b.bseq="+master_seq+" order by b.date desc";
 		ArrayList<BookRelatedTO> lists = (ArrayList<BookRelatedTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<BookRelatedTO>(BookRelatedTO.class));
 		//(BookTO) jdbcTemplate.query(sql, new BeanPropertyRowMapper(BookTO.class));
 		return lists;

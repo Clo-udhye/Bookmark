@@ -13,6 +13,7 @@
 		//System.out.println(session.getAttribute("userInfo"));
 	}
 	
+
 	ArrayList<Home_BoardTO> theseBoards = (ArrayList)request.getAttribute("lists");
 	
 	Home_BoardTO to1 = theseBoards.get(0);
@@ -64,25 +65,14 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-	     $("#modal-link1").click(function(){
-	         console.log('버튼 클릭'+ $("#modal-link1 #board_seq").val() );
-	         $('.modal-content').load("./view.do" + "?seq=" + $("#modal-link1 #board_seq").val());   
-	     });
+		for ( let i = 1; i <=3; i++){
+		    $("#modal-link"+i).click(function(){
+		        var seq = $("#modal-link"+i+" #board_seq").val().split("/");
+		        $('.modal-content').load("./view.do" + "?seq=" + seq[0]);   
+		    });
+		}
     });
 	
-	$(document).ready(function(){
-	     $("#modal-link2").click(function(){
-	         console.log('버튼 클릭'+ $("#modal-link2 #board_seq").val() );
-	         $('.modal-content').load("./view.do" + "?seq=" + $("#modal-link2 #board_seq").val());   
-	     });
-   });
-	
-	$(document).ready(function(){
-	     $("#modal-link3").click(function(){
-	         console.log('버튼 클릭'+ $("#modal-link3 #board_seq").val() );
-	         $('.modal-content').load("./view.do" + "?seq=" + $("#modal-link3 #board_seq").val());   
-	     });
-   });
 </script>
 
 </head>
@@ -167,7 +157,7 @@
 								</div>
 
 								<div class="item_pic item_pic_type4 ">														
-									<a id="modal-link1" data-bs-toggle="modal" data-bs-target="#modal" class="link_item #home_discover" > 
+									<a id="modal-link1" data-bs-toggle="modal" data-bs-target="#modal" class="link_item" > 
 										<input type="hidden" id="board_seq" value=<%=seq1 %>/>
 										<!--  hover동작 class(위에 link_item #home_discover)  -->
 										<img
@@ -175,7 +165,7 @@
 										class="img_pic" alt="<%= title1%>">
 										<div class="append_info">
 											<div class="info_g">
-												<div class="inner_g" style="padding-left : 10px;padding-right : 10px; padding-top : 50px;">
+												<div class="inner_g" style="padding-left : 10px;padding-right : 10px; padding-top : 180px;">
 													<em class="cate_pic"></em> 
 													<strong class="tit_pic"><%= title1%></strong> 
 													<span class="txt_pic">&quot;</span> 
@@ -332,7 +322,7 @@
 				</ul>
 			</div>
    			<!-- 모달창 정보 -->
-             <div id="modal" class="modal fade" tabindex="-1">
+             <div id="modal" class="modal fade" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
                    <div class="modal-content">
                    

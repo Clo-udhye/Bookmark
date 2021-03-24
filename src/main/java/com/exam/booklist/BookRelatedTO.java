@@ -5,6 +5,7 @@ public class BookRelatedTO {
 	private String board_date;
 	private String board_title;
 	private String user_nickname;
+	
 	public String getBoard_seq() {
 		return board_seq;
 	}

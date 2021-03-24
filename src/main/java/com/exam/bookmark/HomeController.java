@@ -2,8 +2,9 @@ package com.exam.bookmark;
 
 
 import java.util.ArrayList;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Locale;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
+import com.exam.BoardAction.BoardActionDAO;
 import com.exam.admin.AdminDAO;
 import com.exam.admin.PagingBoardTO;
 import com.exam.admin.PagingUserTO;
@@ -21,6 +22,7 @@ import com.exam.booklist.BookDAO;
 import com.exam.booklist.BookRelatedTO;
 import com.exam.booklist.BookTO;
 import com.exam.paging.pagingTO;
+import com.exam.theseMonthBoard.Board_CommentTO;
 import com.exam.theseMonthBoard.Home_BoardDAO;
 import com.exam.theseMonthBoard.Home_BoardTO;
 import com.exam.user.LoginTO;
@@ -49,7 +51,11 @@ public class HomeController {
 	Home_BoardDAO home_boardDAO;
 	
 	@Autowired
+	BoardActionDAO boardActionDAO;
+
+	@Autowired
 	AdminDAO adminDao;
+
 	
 	@RequestMapping(value = "/test.do")
 	public String test() {
@@ -92,11 +98,57 @@ public class HomeController {
 	@RequestMapping(value = "/view.do")
 	public String view(HttpServletRequest req , Model model) {
 		String seq = req.getParameter("seq");
-		//System.out.println(seq);
+		HttpSession session = req.getSession();
+		if (session.getAttribute("userInfo") != null) {
+			UserTO userInfo = (UserTO)session.getAttribute("userInfo");
+			String userID = userInfo.getId();
+			int count_check = home_boardDAO.likey_check(seq, userID);
+			model.addAttribute("like_count_check", count_check);
+		}
 		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(seq);
 		model.addAttribute("home_BoardTO", home_BoardTO);
-		
+		ArrayList<Board_CommentTO> board_CommentTO = home_boardDAO.CommentListTemplate(seq);
+		model.addAttribute("board_commentTO", board_CommentTO);
+		int count = home_boardDAO.likey_count(seq);
+		model.addAttribute("likey_count", count);
 		return "board_view";
+	}
+	@RequestMapping(value = "/comment.do")
+	public String comment(HttpServletRequest req , Model model) {
+		String writer_seq = req.getParameter("user");
+		String comment = req.getParameter("comment");
+		String board_seq = req.getParameter("bseq");
+		
+		int flag = boardActionDAO.comment(writer_seq, comment, board_seq);
+		model.addAttribute("flag", flag);
+		return "comment_ok";
+	}
+	@RequestMapping(value = "/comment_check.do")
+	public String comment_check(HttpServletRequest req , Model model) {
+		String seq = req.getParameter("bseq");
+		
+		int count = home_boardDAO.likey_count(seq);
+		model.addAttribute("likey_count", count);
+		return "comment_ok";
+	}
+	
+	@RequestMapping(value = "/likey.do")
+	public String likey(HttpServletRequest req , Model model) {
+		String writer_seq = req.getParameter("user");
+		String board_seq = req.getParameter("bseq");
+		
+		int flag_like = boardActionDAO.likey(writer_seq, board_seq);
+		model.addAttribute("flag_like", flag_like);
+		return "likey_ok";
+	}
+	@RequestMapping(value = "/unlikey.do")
+	public String unlikey(HttpServletRequest req , Model model) {
+		String writer_seq = req.getParameter("user");
+		String board_seq = req.getParameter("bseq");
+		//System.out.println("unlikey.do controller");
+		int flag_like = boardActionDAO.unlikey(writer_seq, board_seq);
+		model.addAttribute("flag_like", flag_like);
+		return "likey_ok";
 	}
 	
 	@RequestMapping(value = "/book_list.do")
