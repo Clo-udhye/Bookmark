@@ -63,7 +63,7 @@
     <div id="content">
        <table>
        	<tr>
-       		<td rowspan="3" border="1"> <img src="./images/<%=filename %>" style="width : 500px; height : 500px;"/></td>
+       		<td rowspan="3" border="1"> <img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></td>
        		<td >
 	       		<table width="620" height="50">
 	       			<tr>

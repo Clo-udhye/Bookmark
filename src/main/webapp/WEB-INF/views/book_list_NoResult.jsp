@@ -1,3 +1,4 @@
+<%@page import="com.exam.user.UserTO"%>
 <%@page import="com.exam.paging.pagingTO"%>
 <%@page import="com.exam.booklist.BookTO"%>
 <%@page import="java.util.ArrayList"%>
@@ -5,7 +6,13 @@
     pageEncoding="UTF-8"%>
     
     <%
-    
+ 	// 현재 세션 상태를 체크한다
+ 	UserTO userInfo = null;
+	if(session.getAttribute("userInfo") != null) {
+		userInfo = (UserTO)session.getAttribute("userInfo");
+		//System.out.println(session.getAttribute("userInfo"));
+	}
+ 	
 	//ArrayList<BookTO> booklists = (ArrayList)request.getAttribute("booklist");
     pagingTO pagelistTO = (pagingTO)request.getAttribute("paginglist");
     ArrayList<BookTO> booklists = pagelistTO.getBookList();
@@ -79,9 +86,19 @@ table {
 		<h3>당신의 책갈피</h3>
 	</div>
 
-	<p>User1님이 로그인 중 입니다.</p>
+	<%if (userInfo != null) {%>
+		<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
+	<%} else {%>
+		<p>로그인해주세요.</p>
+	<%}%>
 	<a href="./home.do">Home</a>
-	<a href="./mypage.do">My Page</a>
+		<%if(userInfo != null){
+		if(userInfo.getId().equals("testadmin1")) {%>
+			<a href="./admin.do">Admin Page</a>
+		<%} else{ %>
+			<a href="./mypage.do">My Page</a>
+		<%}
+	}%>
 	<a href="./list.do">모든 게시글 보기</a>
 	<a href="./book_list.do">책 구경하기</a>
 </div>
@@ -95,7 +112,11 @@ table {
 	             </button>
 			</span>
 	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
-	        <span><a href="./login.do" align="right">시작하기</a></span>
+	        <% if(userInfo == null){ %>
+	        <span><a href="./login.do">시작하기</a></span>
+	        <% }else{ %>
+	        <span><a href="./logout_ok.do">로그아웃</a></span>
+	        <% } %>
 			<span><a href="./search.do" align="right"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
     	</p>
     </div>
