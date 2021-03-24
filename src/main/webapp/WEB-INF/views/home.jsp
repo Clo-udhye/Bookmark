@@ -14,6 +14,7 @@
 		userID = (String)session.getAttribute("userID");
 	}
 	
+	
 	Home_BoardTO to1 = theseBoards.get(0);
 	String seq1 = to1.getSeq();
 	String title1 = to1.getTitle();
@@ -63,25 +64,14 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-	     $("#modal-link1").click(function(){
-	         console.log('버튼 클릭'+ $("#modal-link1 #board_seq").val() );
-	         $('.modal-content').load("./view.do" + "?seq=" + $("#modal-link1 #board_seq").val());   
-	     });
+		for ( let i = 1; i <=3; i++){
+		    $("#modal-link"+i).click(function(){
+		        var seq = $("#modal-link"+i+" #board_seq").val().split("/");
+		        $('.modal-content').load("./view.do" + "?seq=" + seq[0]);   
+		    });
+		}
     });
 	
-	$(document).ready(function(){
-	     $("#modal-link2").click(function(){
-	         console.log('버튼 클릭'+ $("#modal-link2 #board_seq").val() );
-	         $('.modal-content').load("./view.do" + "?seq=" + $("#modal-link2 #board_seq").val());   
-	     });
-   });
-	
-	$(document).ready(function(){
-	     $("#modal-link3").click(function(){
-	         console.log('버튼 클릭'+ $("#modal-link3 #board_seq").val() );
-	         $('.modal-content').load("./view.do" + "?seq=" + $("#modal-link3 #board_seq").val());   
-	     });
-   });
 </script>
 
 </head>
@@ -164,7 +154,7 @@
 										class="img_pic" alt="<%= title1%>">
 										<div class="append_info">
 											<div class="info_g">
-												<div class="inner_g" style="padding-left : 10px;padding-right : 10px; padding-top : 50px;">
+												<div class="inner_g" style="padding-left : 10px;padding-right : 10px; padding-top : 180px;">
 													<em class="cate_pic"></em> 
 													<strong class="tit_pic"><%= title1%></strong> 
 													<span class="txt_pic">&quot;</span> 
