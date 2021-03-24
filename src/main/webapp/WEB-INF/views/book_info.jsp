@@ -1,3 +1,4 @@
+<%@page import="com.exam.user.UserTO"%>
 <%@page import="com.exam.booklist.BookRelatedTO"%>
 <%@page import="com.exam.booklist.BookTO"%>
 <%@page import="java.util.ArrayList"%>
@@ -5,6 +6,13 @@
     pageEncoding="UTF-8"%>
     
 <%
+	//현재 세션 상태를 체크한다
+	UserTO userInfo = null;
+	if(session.getAttribute("userInfo") != null) {
+		userInfo = (UserTO)session.getAttribute("userInfo");
+		//System.out.println(session.getAttribute("userInfo"));
+	}
+	
 	BookTO to = (BookTO)request.getAttribute("book_info");
 	String master_seq = to.getMaster_seq();
 	String isbn13 = to.getIsbn13();
@@ -120,9 +128,19 @@
 		<h3>당신의 책갈피</h3>
 	</div>
 
-	<p>User1님이 로그인 중 입니다.</p>
+	<%if (userInfo != null) {%>
+		<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
+	<%} else {%>
+		<p>로그인해주세요.</p>
+	<%}%>
 	<a href="./home.do">Home</a>
-	<a href="./mypage.do">My Page</a>
+		<%if(userInfo != null){
+		if(userInfo.getId().equals("testadmin1")) {%>
+			<a href="./admin.do">Admin Page</a>
+		<%} else{ %>
+			<a href="./mypage.do">My Page</a>
+		<%}
+	}%>
 	<a href="./list.do">모든 게시글 보기</a>
 	<a href="./book_list.do">책 구경하기</a>
 </div>
@@ -136,7 +154,11 @@
 	            </button>
 			</span>
 	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
+	        <% if(userInfo == null){ %>
 	        <span><a href="./login.do">시작하기</a></span>
+	        <% }else{ %>
+	        <span><a href="./logout_ok.do">로그아웃</a></span>
+	        <% } %>
 			<span><a href="./search.do"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
     	</p>
     </div>

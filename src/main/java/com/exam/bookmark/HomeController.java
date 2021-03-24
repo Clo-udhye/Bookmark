@@ -4,24 +4,20 @@ package com.exam.bookmark;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.util.Locale;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.sql.DataSource;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.support.HttpRequestHandlerServlet;
-
 import com.exam.BoardAction.BoardActionDAO;
+import com.exam.admin.AdminDAO;
+import com.exam.admin.PagingBoardTO;
+import com.exam.admin.PagingUserTO;
 import com.exam.boardlist.BoardDAO;
 import com.exam.boardlist.BoardPagingTO;
-import com.exam.boardlist.BoardTO;
 import com.exam.booklist.BookDAO;
 import com.exam.booklist.BookRelatedTO;
 import com.exam.booklist.BookTO;
@@ -29,6 +25,7 @@ import com.exam.paging.pagingTO;
 import com.exam.theseMonthBoard.Board_CommentTO;
 import com.exam.theseMonthBoard.Home_BoardDAO;
 import com.exam.theseMonthBoard.Home_BoardTO;
+import com.exam.user.LoginTO;
 import com.exam.user.SHA256;
 import com.exam.user.UserDAO;
 import com.exam.user.UserTO;
@@ -55,6 +52,10 @@ public class HomeController {
 	
 	@Autowired
 	BoardActionDAO boardActionDAO;
+
+	@Autowired
+	AdminDAO adminDao;
+
 	
 	@RequestMapping(value = "/test.do")
 	public String test() {
@@ -98,9 +99,9 @@ public class HomeController {
 	public String view(HttpServletRequest req , Model model) {
 		String seq = req.getParameter("seq");
 		HttpSession session = req.getSession();
-		if (session.getAttribute("userID") != null) {
-			String userID = (String)session.getAttribute("userID");
-			//System.out.println(userID);
+		if (session.getAttribute("userInfo") != null) {
+			UserTO userInfo = (UserTO)session.getAttribute("userInfo");
+			String userID = userInfo.getID();
 			int count_check = home_boardDAO.likey_check(seq, userID);
 			model.addAttribute("like_count_check", count_check);
 		}
@@ -208,8 +209,9 @@ public class HomeController {
 		//System.out.println(request.getParameter("userID"));
 		//System.out.println(request.getParameter("userPassword"));
 		
-		int flag = userDao.loginOk(to);
-		model.addAttribute("flag", flag);
+		LoginTO lto = userDao.loginOk(to);
+		model.addAttribute("lto", lto);
+
 		
 		//System.out.println(flag);
 		
@@ -259,7 +261,34 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/admin.do")
-	public String admin() {
+	public String admin(HttpServletRequest request, Model model) {
+		//ArrayList<AdminUserListTO> userList = adminDao.userList();
+		//model.addAttribute("userList", userList);
+		//System.out.println(userList.size());
+		int upage = 1;   // upage가 없으면 1
+		if(request.getParameter("upage") != null && !request.getParameter("upage").equals("")){   
+			upage = Integer.parseInt(request.getParameter("upage"));
+		}
+	      
+		PagingUserTO pUserList = new PagingUserTO();
+		pUserList.setUpage(upage);
+	      
+		pUserList = adminDao.userList(pUserList);
+		model.addAttribute("pUserList", pUserList);
+		
+		//ArrayList<AdminBoardListTO> boardList = adminDao.boardList();
+		//model.addAttribute("boardList", boardList);
+		int bpage = 1;   // upage가 없으면 1
+		if(request.getParameter("bpage") != null && !request.getParameter("bpage").equals("")){   
+			bpage = Integer.parseInt(request.getParameter("bpage"));
+		}
+	      
+		PagingBoardTO pBoardList = new PagingBoardTO();
+		pBoardList.setBpage(bpage);
+	      
+		pBoardList = adminDao.boardList(pBoardList);
+		model.addAttribute("pBoardList", pBoardList);
+		
 		return "admin";
 	}
 	

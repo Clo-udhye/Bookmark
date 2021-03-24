@@ -16,26 +16,33 @@ public class UserDAO {
 	private DataSource dataSource;
 
 	//loginOk
-	public int loginOk(UserTO to) {
+	public LoginTO loginOk(UserTO to) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		
-		int flag = 2;
+		LoginTO lto = new LoginTO(); 
+		lto.setFlag(2);
 		
 		try{
 			conn = dataSource.getConnection();
 			
-			String sql = "select id, password from user where id=?";
+			String sql = "select seq, id, nickname, password from user where id=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, to.getId());
 			
+			UserTO uto = new UserTO();
 			rs = pstmt.executeQuery();		
 			if(rs.next()) {
 				if(rs.getString("password").equals(to.getPassword())) {
-					flag = 1; //로그인 성공
+					lto.setFlag(1); //로그인 성공
+					uto.setSeq(rs.getString("seq"));
+					uto.setId(rs.getString("id"));
+					uto.setNickname(rs.getString("nickname"));
+					
+					lto.setUto(uto);
 				}else
-					flag = 0; //비밀번호 틀림
+					lto.setFlag(0); //비밀번호 틀림
 			}					
 			
 		} catch(SQLException e){
@@ -46,7 +53,7 @@ public class UserDAO {
 			if(conn!=null) try{conn.close();}catch(SQLException e) {}
 		}
 		
-		return flag;
+		return lto;
 	}
 	
 	//id, nickname duplication check 
