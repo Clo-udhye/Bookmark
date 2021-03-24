@@ -1,13 +1,13 @@
 package com.exam.user;
 
 public class UserTO {
-	String seq;
-	String id;
-	String password;
-	String nickname;
-	String mail;
-	String address;
-	String addresses;
+	private String seq;
+	private String id;
+	private String password;
+	private String nickname;
+	private String mail;
+	private String address;
+	private String addresses;
 	
 	public String getSeq() {
 		return seq;

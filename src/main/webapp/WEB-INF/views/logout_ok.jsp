@@ -2,7 +2,9 @@
 	pageEncoding="UTF-8"%>
 
 <%
-	session.invalidate();
+	//session.invalidate(); 	//세션 전체 삭제
+	//session에 해당하는 이름을 매개변수로 넣어줘야 한다*/
+	session.removeAttribute("userInfo");
 
 	out.println("<script type='text/javascript'>");
 	

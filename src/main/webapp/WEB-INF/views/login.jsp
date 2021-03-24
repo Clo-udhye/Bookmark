@@ -1,14 +1,16 @@
+<%@page import="com.exam.user.UserTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
 <%
 	// 현재 세션 상태를 체크한다
-	String userID = null;
-	if (session.getAttribute("userID") != null) {
-		userID = (String)session.getAttribute("userID");
+	UserTO userInfo = null;
+	if(session.getAttribute("userInfo") != null) {
+		userInfo = (UserTO)session.getAttribute("userInfo");
+		//System.out.println(session.getAttribute("userInfo"));
 	}
 	// 이미 로그인했으면 다시 로그인을 할 수 없게 한다
-	if (userID != null) {
+	if (userInfo != null) {
 		out.println("<script type='text/javascript'>");
 		out.println("alert('이미 로그인이 되어 있습니다')");
 		out.println("location.href='./home.do'");
@@ -64,9 +66,19 @@
 			<h3>당신의 책갈피</h3>
 		</div>
 	
-		<p>User1님이 로그인 중 입니다.</p>
+		<%if (userInfo != null) {%>
+			<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
+		<%} else {%>
+			<p>로그인해주세요.</p>
+		<%}%>
 		<a href="./home.do">Home</a>
-		<a href="./mypage.do">My Page</a>
+			<%if(userInfo != null){
+			if(userInfo.getId().equals("testadmin1")) {%>
+				<a href="./admin.do">Admin Page</a>
+			<%} else{ %>
+				<a href="./mypage.do">My Page</a>
+			<%}
+		}%>
 		<a href="./list.do">모든 게시글 보기</a>
 		<a href="./book_list.do">책 구경하기</a>
 	</div>

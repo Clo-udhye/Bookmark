@@ -1,5 +1,258 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<%@page import="com.exam.admin.AdminBoardListTO"%>
+<%@page import="com.exam.admin.PagingBoardTO"%>
+<%@page import="com.exam.admin.AdminUserListTO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.exam.admin.PagingUserTO"%>
+<%@page import="com.exam.user.UserTO"%>
+    
+<%
+		StringBuffer userHtml = new StringBuffer();
+		StringBuffer boardHtml = new StringBuffer();
+
+		UserTO userInfo = null;
+    	if(session.getAttribute("userInfo") != null) {
+    		userInfo = (UserTO)session.getAttribute("userInfo");
+    		if(!userInfo.getId().equals("testadmin1")) {
+		    	out.println("<script type='text/javascript'>");
+		    	out.println("alert('관리자만 접근할수있습니다.')");
+		    	out.println("history.back();");
+		    	out.println("</script>");
+    		} else{
+    			// 사용자 관리
+    	    	PagingUserTO pUto = (PagingUserTO)request.getAttribute( "pUserList" );
+    	    	int upage = pUto.getUpage();
+    	    	
+    	    	int uTotalRecode = pUto.getTotalrecord();    	
+    	    	int uTotalPage = pUto.getTotalPage();
+
+    	    	int uStartBlock = pUto.getStartBlock();
+    	    	int uEndBlock = pUto.getEndBlock();
+    	    	
+    	    	ArrayList<AdminUserListTO> userList = pUto.getUserList();
+    			
+    	    	// 게시글 관리
+    	    	PagingBoardTO pBto = (PagingBoardTO)request.getAttribute( "pBoardList" );
+    	    	int bpage = pBto.getBpage();
+    	    	
+    	    	int bTotalRecode = pBto.getTotalrecord();    	
+    	    	int bTotalPage = pBto.getTotalPage();
+
+    	    	int bStartBlock = pBto.getStartBlock();
+    	    	int bEndBlock = pBto.getEndBlock();
+    	    	
+    	    	ArrayList<AdminBoardListTO> boardList = pBto.getBoardList();
+    	    	
+    	    	//사용자 관리
+    	    	//StringBuffer userHtml = new StringBuffer();
+    	    	userHtml.append("<table border=1 width=500 class='table'>");
+    	    	userHtml.append("<thead>");
+    	    	userHtml.append("<tr>");
+    	    	userHtml.append("<td colspan='5'>");
+    	    	userHtml.append("총 회원 : " + uTotalRecode +"명");
+    	    	userHtml.append("</td>");
+    	    	userHtml.append("</tr>");
+    	    	userHtml.append("<tr>");
+    	    	userHtml.append("<th>#</th><th>아이디</th><th>별명</th><th>게시글수</th><th>&nbsp;</th>");
+    	    	userHtml.append("</tr>");
+    	    	userHtml.append("</thead>");
+    	    	userHtml.append("<tbody>");
+    	    	for(AdminUserListTO to: userList){
+    	    		userHtml.append("<tr>");
+    	    		userHtml.append("<th>"+to.getUseq()+"</th>");
+    	    		userHtml.append("<td>"+to.getId()+"</td>");
+    	    		userHtml.append("<td>"+to.getNickname()+"</td>");
+    	    		userHtml.append("<td>"+to.getBcount()+"</td>");
+    	    		userHtml.append("<td>");
+    	    		userHtml.append("<input id='' type='button' class='btn btn-outline-dark btn-sm' value='탈퇴' />");
+    	    		userHtml.append("</td>");
+    	    		userHtml.append("</tr>");
+    	    	}
+    	    	//마지막페이지 테이블 크기 맞춤 
+    	    	for(int i=userList.size(); i<pUto.getRecordPerPage(); i++){
+    	    		userHtml.append("<tr>");
+    	    		userHtml.append("<th>&nbsp;</th>");
+    	    		userHtml.append("</tr>");
+    	    	}
+    	    	userHtml.append("</tbody>");
+    	    	userHtml.append("<tfoot>");
+    	       	userHtml.append("<tr>");
+    	       	userHtml.append("<td colspan='5'>");
+    	    	userHtml.append("<div>");
+    	    	userHtml.append("<ul class='pagination'>");
+    	    	
+    	    	//처음으로
+    	    	userHtml.append("<li class='page-item'>");
+    	    	if(upage == 1) {
+    	    		userHtml.append("<a class='page-link' aria-label='First'>");
+    	    	}else{
+    	    		userHtml.append("<a class='page-link' href='./admin.do?upage=1&bpage="+bpage+"' aria-label='First'>");
+    	    	}
+    	    	userHtml.append("<span aria-hidden='true'>&laquo;</span>");
+    	    	userHtml.append("</a>");
+    	    	userHtml.append("</li>");
+    	    	
+    	    	//이전 페이지
+    	    	userHtml.append("<li class='page-item'>");
+    	    	if(upage == 1) {
+    	    		userHtml.append("<a class='page-link' aria-label='Previous'>");
+    	    	}else{
+    	    		userHtml.append("<a class='page-link' href='./admin.do?upage="+(upage-1)+"&bpage="+bpage+"' aria-label='Previous'>");
+    	    	}
+    	    	userHtml.append("<span aria-hidden='true'>&lt;</span>");
+    	    	userHtml.append("</a>");
+    	    	userHtml.append("</li>");
+    	    	
+    	    	// 페이지
+    	    	for(int i=uStartBlock; i<=uEndBlock; i++) {
+    			
+    				if(upage == i) {
+    					// 현재 페이지
+    					userHtml.append("<li class='page-item active'><a class='page-link' href='./admin.do?upage="+i+"&bpage="+bpage+"'>"+i+"</a></li>");
+    				} else {
+    					userHtml.append("<li class='page-item'><a class='page-link' href='./admin.do?upage="+i+"&bpage="+bpage+"'>"+i+"</a></li>");
+    				}
+    			}
+    	    	
+    	    	//다음 페이지
+    	    	userHtml.append("<li class='page-item'>");
+    	    	if(upage == uTotalPage) {
+    	    		userHtml.append("<a class='page-link' aria-label='Next'>");
+    	    	}else{
+    	    		userHtml.append("<a class='page-link' href='./admin.do?upage="+(upage+1)+"&bpage="+bpage+"' aria-label='Next'>");
+    	    	}
+    	    	userHtml.append("<span aria-hidden='true'>&gt;</span>");
+    	    	userHtml.append("</a>");
+    	    	userHtml.append("</li>");
+    	    	
+    	    	// 끝페이지
+    	    	userHtml.append("<li class='page-item'>");
+    	    	if(upage == uTotalPage) {
+    	    		userHtml.append("<a class='page-link' aria-label='Last'>");
+    	    	}else{
+    	    		userHtml.append("<a class='page-link' href='./admin.do?upage="+uTotalPage+"&bpage="+bpage+"' aria-label='Last'>");
+    	    	}
+    	    	userHtml.append("<span aria-hidden='true'>&raquo;</span>");
+    	    	userHtml.append("</a>");
+    	    	userHtml.append("</li>");
+    	    	
+    	    	userHtml.append("</ul>");
+    	    	userHtml.append("</div>");
+    	    	userHtml.append("</td>");
+    	    	userHtml.append("</tr>");
+    	    	userHtml.append("</tfoot>");
+    	    	userHtml.append("</table>");
+    	    	
+    	    	
+    	    	// 게시글 관리
+    	    	//StringBuffer boardHtml = new StringBuffer();
+    	    	boardHtml.append("<table border=1 width=900 class='table'>");
+    	    	boardHtml.append("<thead>");
+    	 
+    	    	boardHtml.append("<tr>");
+    	    	boardHtml.append("<td colspan=6>");
+    	    	boardHtml.append("총 게시글 : " + bTotalRecode +"개");
+    	    	boardHtml.append("</td>");
+    	    	boardHtml.append("</tr>");
+    	    	
+    	    	boardHtml.append("<tr>");
+    	    	boardHtml.append("<th>#</th><th>제목</th><th>작성자</th><th>조회수</th><th>댓글</th><th>좋아요</th>");
+    	    	boardHtml.append("</tr>");
+    	    	boardHtml.append("</thead>");
+    	    	boardHtml.append("<tbody>");
+    	    	for(AdminBoardListTO to: boardList){
+    	    		boardHtml.append("<tr>");
+    	    		boardHtml.append("<th>"+to.getBseq()+"</th>");
+    	    		boardHtml.append("<td>"+to.getTitle()+"</td>");
+    	    		boardHtml.append("<td>"+to.getNickname()+"("+to.getId()+")</td>");
+    	    		boardHtml.append("<td>"+to.getHit()+"</td>");
+    	    		boardHtml.append("<td>"+to.getComment()+"</td>");
+    	    		boardHtml.append("<td>"+to.getLikey()+"</td>");
+    	    		boardHtml.append("</tr>");
+    	    	}
+    	    	//마지막페이지 테이블 크기 맞춤 
+    	    	for(int i=boardList.size(); i<pBto.getRecordPerPage(); i++){
+    	    		boardHtml.append("<tr>");
+    	    		boardHtml.append("<th>&nbsp;</th>");
+    	    		boardHtml.append("</tr>");
+    	    	}
+    	    	boardHtml.append("</tbody>");
+    	    	boardHtml.append("<tfoot>");
+    	    	boardHtml.append("<tr>");
+    	    	boardHtml.append("<td colspan='6'>");
+    	    	boardHtml.append("<div>");
+    	    	boardHtml.append("<ul class='pagination'>");
+    	    	//처음으로
+    	    	boardHtml.append("<li class='page-item'>");
+    	    	if(upage == 1) {
+    	    		boardHtml.append("<a class='page-link' aria-label='First'>");
+    	    	}else{
+    	    		boardHtml.append("<a class='page-link' href='./admin.do?upage="+upage+"&bpage=1' aria-label='First'>");
+    	    	}
+    	    	boardHtml.append("<span aria-hidden='true'>&laquo;</span>");
+    	    	boardHtml.append("</a>");
+    	    	boardHtml.append("</li>");
+    	    	
+    	    	//이전 페이지
+    	    	boardHtml.append("<li class='page-item'>");
+    	    	if(upage == 1) {
+    	    		boardHtml.append("<a class='page-link' aria-label='Previous'>");
+    	    	}else{
+    	    		boardHtml.append("<a class='page-link' href='./admin.do?upage="+upage+"&bpage="+(bpage-1)+"' aria-label='Previous'>");
+    	    	}
+    	    	boardHtml.append("<span aria-hidden='true'>&lt;</span>");
+    	    	boardHtml.append("</a>");
+    	    	boardHtml.append("</li>");
+    	    	
+    	    	// 페이지
+    	    	for(int i=bStartBlock; i<=bEndBlock; i++) {
+    			
+    				if(bpage == i) {
+    					// 현재 페이지
+    					boardHtml.append("<li class='page-item active'><a class='page-link' href='./admin.do?upage="+upage+"&bpage="+i+"'>"+i+"</a></li>");
+    				} else {
+    					boardHtml.append("<li class='page-item'><a class='page-link' href='./admin.do?upage="+upage+"&bpage="+i+"'>"+i+"</a></li>");
+    				}
+    			}
+    	    	
+    	    	//다음 페이지
+    	    	boardHtml.append("<li class='page-item'>");
+    	    	if(bpage == bTotalPage) {
+    	    		boardHtml.append("<a class='page-link' aria-label='Next'>");
+    	    	}else{
+    	    		boardHtml.append("<a class='page-link' href='./admin.do?upage="+upage+"&bpage="+(bpage+1)+"' aria-label='Next'>");
+    	    	}
+    	    	boardHtml.append("<span aria-hidden='true'>&gt;</span>");
+    	    	boardHtml.append("</a>");
+    	    	boardHtml.append("</li>");
+    	    	
+    	    	// 끝페이지
+    	    	boardHtml.append("<li class='page-item'>");
+    	    	if(bpage == bTotalPage) {
+    	    		boardHtml.append("<a class='page-link' aria-label='Last'>");
+    	    	}else{
+    	    		boardHtml.append("<a class='page-link' href='./admin.do?upage="+upage+"&bpage="+bTotalPage+"' aria-label='Last'>");
+    	    	}
+    	    	boardHtml.append("<span aria-hidden='true'>&raquo;</span>");
+    	    	boardHtml.append("</a>");
+    	    	boardHtml.append("</li>");
+    	    	boardHtml.append("</ul>");
+    	    	boardHtml.append("</div>");
+    	    	boardHtml.append("</td>");
+    	    	boardHtml.append("</tr>");
+    	    	boardHtml.append("</tfoot>");
+    	    	boardHtml.append("</table>");
+    		}
+    	} else {
+    		out.println("<script type='text/javascript'>");
+    		out.println("alert('로그인해주세요.')");
+    		out.println("location.href='./login.do'");
+    		out.println("</script>");
+    	}
+    
+    %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,9 +278,19 @@
 		<h3>당신의 책갈피</h3>
 	</div>
 
-	<p>User1님이 로그인 중 입니다.</p>
+	<%if (userInfo != null) {%>
+		<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
+	<%} else {%>
+		<p>로그인해주세요.</p>
+	<%}%>
 	<a href="./home.do">Home</a>
-	<a href="./mypage.do">My Page</a>
+		<%if(userInfo != null){
+		if(userInfo.getId().equals("testadmin1")) {%>
+			<a href="./admin.do">Admin Page</a>
+		<%} else{ %>
+			<a href="./mypage.do">My Page</a>
+		<%}
+	}%>
 	<a href="./list.do">모든 게시글 보기</a>
 	<a href="./book_list.do">책 구경하기</a>
 </div>
@@ -41,13 +304,30 @@
 	             </button>
 			</span>
 	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
+	        <% if(userInfo == null){ %>
 	        <span><a href="./login.do">시작하기</a></span>
+	        <% }else{ %>
+	        <span><a href="./logout_ok.do">로그아웃</a></span>
+	        <% } %>
 			<span><a href="./search.do"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
     	</p>
     </div>
     
     <div id="content">
-        <h1>관리자 페이지</h1>
+        <table>
+        	<tr>
+        		<td>
+        			<div id="user-list">
+						<%=userHtml %>
+					</div>
+        		</td>
+        		<td>
+        			<div id="board-list">
+						<%=boardHtml %>
+					</div>
+        		</td>
+        	</tr>
+        </table>
     </div>
 </div>
 

@@ -28,5 +28,6 @@
 	<context:component-scan base-package="com.exam.paging" />
 	<context:component-scan base-package="com.exam.theseMonthBoard" />
 	<context:component-scan base-package="com.exam.zipcode" />	
+	<context:component-scan base-package="com.exam.admin" />	
 
 </beans:beans>
