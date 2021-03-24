@@ -2988,6 +2988,7 @@ body {
 	margin: 0 50px;
 	width: 130px;
 	height: 150px;
+	background-color: #fff;
 }
 
 .dimmed_book_type1 {
@@ -3071,6 +3072,7 @@ body {
 	line-height: 18px;
 	font-family: "SF Pro Bold", "Malgun Gothic";
 	letter-spacing: .2px;
+	color: #fff;
 	text-align: center
 }
 

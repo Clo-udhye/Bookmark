@@ -157,7 +157,7 @@
 								</div>
 
 								<div class="item_pic item_pic_type4 ">														
-									<a id="modal-link1" data-bs-toggle="modal" data-bs-target="#modal" class="link_item #home_discover" > 
+									<a id="modal-link1" data-bs-toggle="modal" data-bs-target="#modal" class="link_item" > 
 										<input type="hidden" id="board_seq" value=<%=seq1 %>/>
 										<!--  hover동작 class(위에 link_item #home_discover)  -->
 										<img
@@ -322,7 +322,7 @@
 				</ul>
 			</div>
    			<!-- 모달창 정보 -->
-             <div id="modal" class="modal fade" tabindex="-1">
+             <div id="modal" class="modal fade" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
                    <div class="modal-content">
                    

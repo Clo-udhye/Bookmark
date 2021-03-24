@@ -101,7 +101,7 @@ public class HomeController {
 		HttpSession session = req.getSession();
 		if (session.getAttribute("userInfo") != null) {
 			UserTO userInfo = (UserTO)session.getAttribute("userInfo");
-			String userID = userInfo.getID();
+			String userID = userInfo.getId();
 			int count_check = home_boardDAO.likey_check(seq, userID);
 			model.addAttribute("like_count_check", count_check);
 		}

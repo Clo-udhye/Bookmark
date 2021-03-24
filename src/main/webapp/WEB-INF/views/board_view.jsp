@@ -1,3 +1,4 @@
+<%@page import="com.exam.user.UserTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.exam.theseMonthBoard.Board_CommentTO"%>
 <%@page import="com.exam.theseMonthBoard.Home_BoardTO"%>
@@ -6,14 +7,16 @@
 <%
 
 		// 댓글 작성 및 좋아요 누를 시 --> 조회수도 같이 증가 --> 좋아요, 댓글 관련 ajax 처리
-
+		// 모달 반복 클릭 시, --> 배경계속 까매짐 --> 
 
 	//로그인 시, 해당 게시글 좋아요 유무
 	int like_count_check = 0;
 	//현재 세션 상태를 체크한다
+	UserTO userInfo = null;
 	String userID = null;
-	if (session.getAttribute("userID") != null) {
-		userID = (String)session.getAttribute("userID");
+	if (session.getAttribute("userInfo") != null) {
+		userInfo= (UserTO)session.getAttribute("userInfo");
+		userID = userInfo.getId();
 		like_count_check = (Integer)request.getAttribute("like_count_check");
 		//System.out.println(like_count_check);
 	}
@@ -36,7 +39,7 @@
 	String comment = to.getComment();
 	String hit = to.getHit();
 	String boardUserID = to.getUserID();
-	String useq = to.getUseq();
+	//String useq = to.getUseq();
 	
 	StringBuffer commentHTML = new StringBuffer();
 	ArrayList<Board_CommentTO> comment_lists = (ArrayList)request.getAttribute("board_commentTO");
@@ -58,13 +61,6 @@
 	
 
 %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>책갈피</title>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -111,8 +107,8 @@ $(function() {
 	// 등록하기 버튼 클릭 시, 알림창 생성 및 댓글 DB 입력
 	$('#comment_btn').click(function () {
 		<%
-		if (session.getAttribute("userID") != null) {
-			userID = (String)session.getAttribute("userID");
+		if (userInfo != null) {
+			userID = userInfo.getId();
 		%>
 			let comment = $('#comment_text').val();
 			console.log(comment);
@@ -158,8 +154,8 @@ $(function() {
 		<%
 			//System.out.println("like_count_check :"+ like_count_check );
 			if( like_count_check == 0){ // like한 기록이 없는 경우
-				if (session.getAttribute("userID") != null) { //로그인 되어있는 경우
-					userID = (String)session.getAttribute("userID");
+				if (userInfo != null) { //로그인 되어있는 경우
+					userID = userInfo.getId();
 			%>
 					$.ajax({
 						url : './likey.do',
@@ -175,10 +171,8 @@ $(function() {
 							console.log('Error');
 						}
 					});
-					
-				});
 				<%
-			} else { // 로그인이 안되어 있는 경우 --> 로그인 창 --> 로그인 후 현 페이지로 돌아오는 거 필요
+				} else { // 로그인이 안되어 있는 경우 --> 로그인 창 --> 로그인 후 현 페이지로 돌아오는 거 필요
 				%>
 					var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
 						if(comfirm_login == true){
@@ -187,7 +181,7 @@ $(function() {
 			<% 
 				}
 			} else if (like_count_check >= 1){ // 좋아요 누는 기록이 있는 경우 
-				userID = (String)session.getAttribute("userID");
+				userID = userInfo.getId();
 				%>
 				$.ajax({
 					url : './unlikey.do',
@@ -210,10 +204,6 @@ $(function() {
 });
 
 </script>
-</head>
-<body>
-<div id="main" width=100%>
-    <div id="content">
        <table>
        	<tr>
        		<td rowspan="3" border="1"> <img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></td>
@@ -225,7 +215,7 @@ $(function() {
 	       				<td width="100">조회수 : <%=hit %></td>
 	       				<td rowspan="2">
 	       				<table>
-	       				<% if (userID == null) {%> <!-- 로그인이 안되어 있을 시, 수정.삭제 버튼 x -->
+	       				<% if (userInfo == null) {%> <!-- 로그인이 안되어 있을 시, 수정.삭제 버튼 x -->
 	       					<tr><td></td></tr>
 	       				<% } else if (userID != null && userID.equals(boardUserID)) { %> <!-- 로그인 o, Board의 useq랑 같을 때 -> 버튼 생성 -->
 	       					<tr><td><input type="button" value="수정"/></td><td><input type="button" value="삭제"/></td></tr>
@@ -299,16 +289,9 @@ $(function() {
 	       				</td>
 	       				<td>
 	       					<input type="button" value="등록하기" height="100" id="comment_btn"/>
-	       					<!-- jquery로 하는 ajax로 해보자 -->
 	       				</td>
        			</tr>
        		</table>
        	</td>
        	</tr>
-       
-       </table>
-    </div>
-</div>
-
-</body>
-</html>
+    </table>
