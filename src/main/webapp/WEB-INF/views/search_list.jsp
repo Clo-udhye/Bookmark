@@ -104,6 +104,16 @@ function openTab(evt, tabName) {
 
 </script>
 
+<script>
+$(document).ready(function(){	
+	$('.board1').click(function(e){
+		//alert($(this).attr('bseq')+"클릭");
+		//console.log("./view.do?seq=" + $(this).attr('bseq'));
+		$('.modal-content').load("./view.do?seq=" + $(this).attr('bseq'));
+	});
+})
+</script>
+
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">
 	
@@ -202,11 +212,15 @@ tab하나 처리
 		<!-- 탭2 내용 search_nnlist.jsp -->
 		<jsp:include page="search_nnlist.jsp" />
 		</div>
-
-
-
-		
     </div>
+</div>
+
+<!-- 모달창 정보 -->
+<div id="modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content">               
+		</div>
+	</div>
 </div>
 
 </body>
