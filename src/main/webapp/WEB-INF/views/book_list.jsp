@@ -85,9 +85,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <style>
-html{
-	position: fixed;
-}
 #start-button{
 	width: 30px;
 	font-size: 25px;
@@ -179,29 +176,6 @@ table {
 
 <div id="main">
 	<div id="header">
-<<<<<<< HEAD
-		<p>
-		<table>
-		<tr>
-			<td width=5%><span>
-				<button class="sidebar-btn" onclick="sidebarCollapse()">
-					<span><i class="fa fa-bars" aria-hidden="true"></i></span>
-	             </button>
-			</span>
-			</td>
-	        <td width=5%><span><a class="navbar-brand" href="./home.do" > <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span></td>
-	        <% if(userInfo == null){ %>
-	       <td width=85% align="right"><span><a class="button1" href="./login.do" style="color: black; " >start</a></span></td>
-	        <% }else{ %>
-	        <td width=85% align="right"><span><a class="button1" href="./logout_ok.do" style="color: black; " >로그아웃</a></span></td>
-	        <% } %>
-		   <td width=5%><span><a href="./search.do" style="color: black;"><i class="fa fa-search fa-lg" aria-hidden="true"></i></a></span></td>
-			
-		</tr>
-		</table>		
-    	</p>
-    </div>
-=======
 		<div>
 			<table>
 				<tr>
@@ -222,7 +196,6 @@ table {
 			</table>		
     	</div>
 	</div>
->>>>>>> 65ee4bda6c33028b1712dbb23264e1eebe8c62fd
     
     <div id="content" width=100% > 
         <%=SearchResult %>

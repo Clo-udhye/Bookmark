@@ -187,10 +187,7 @@
 <script type="text/javascript" src="./js/sidebar.js"></script>
 
 <!-- ■■ 내가 추가한 부분 ■■ -->
-<style type="text/css">
-	html{
-	position: fixed;
-}
+<style type="text/css">	
 #start-button{
 	width: 30px;
 	font-size: 25px;
