@@ -84,14 +84,14 @@
 				sbHtml.append("</td>");
 
 			} else {
-				sbHtml.append("<td class='board'>");
+				sbHtml.append("<td class='board board1' bseq='"+seq+"' data-bs-toggle='modal' data-bs-target='#modal'>");
 				// 사진 크기 250 250
 				sbHtml.append("	<div class='img'>");
-				sbHtml.append("		<a href='board_view.do'><img src='./upload/"+filename+"' border='0' width=250px height=250px/></a>");
+				sbHtml.append("		<a><img src='./upload/"+filename+"' border='0' width=250px height=250px/></a>");
 				sbHtml.append("	</div>");
 				sbHtml.append("	<div class='text'>");
 				//sbHtml.append("		<a href='board_view.jsp'><p>"+title+"</p></a>");
-				sbHtml.append("		<a href='board_view.jsp'>"+title+"</a>");
+				sbHtml.append("		<a>"+title+"</a>");
 				sbHtml.append("	</div>");
 				sbHtml.append("</td>");
 			}

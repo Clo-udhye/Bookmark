@@ -7,6 +7,12 @@
 <%@ page import="com.exam.boardlist.BoardPagingTO" %>
 
 <%
+	//현재 세션 상태를 체크한다
+	UserTO userInfo = null;
+	if(session.getAttribute("userInfo") != null) {
+		userInfo = (UserTO)session.getAttribute("userInfo");
+		//System.out.println(session.getAttribute("userInfo"));
+	}
 
 	//tlist 검색 결과 개수 처리
 	BoardPagingTO slpagingTO = (BoardPagingTO)request.getAttribute( "slpagingTO" );
@@ -98,6 +104,16 @@ function openTab(evt, tabName) {
 
 </script>
 
+<script>
+$(document).ready(function(){	
+	$('.board1').click(function(e){
+		//alert($(this).attr('bseq')+"클릭");
+		//console.log("./view.do?seq=" + $(this).attr('bseq'));
+		$('.modal-content').load("./view.do?seq=" + $(this).attr('bseq'));
+	});
+})
+</script>
+
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">
 	
@@ -157,18 +173,26 @@ tab하나 처리
 
 <div id="main">
 	<div id="header">
-		<p>
-			<span>
-				<button class="sidebar-btn" onclick="sidebarCollapse()">
-					<span><i class="fa fa-bars" aria-hidden="true"></i></span>
-	             </button>
-			</span>
-	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
-	        <span><a href="./login.do">시작하기</a></span>
-			<span><a href="./search.do"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
-    	</p>
+		<div>
+			<table>
+				<tr>
+					<td width=5%><span>
+						<button class="sidebar-btn" onclick="sidebarCollapse()">
+							<span><i class="fa fa-bars" aria-hidden="true"></i></span>
+			             </button>
+					</span>
+					</td>
+					<td width=5%><span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px; height:50px; "></a></span></td>
+					<% if(userInfo == null){ %>
+						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
+	        		<% }else{ %>
+	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        		<% } %>
+					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+				</tr>
+			</table>		
+    	</div>
     </div>
-    
     <div id="content">
         <!-- <h1>검색 결과 페이지</h1> -->
 		<%=SearchResult %>
@@ -188,11 +212,15 @@ tab하나 처리
 		<!-- 탭2 내용 search_nnlist.jsp -->
 		<jsp:include page="search_nnlist.jsp" />
 		</div>
-
-
-
-		
     </div>
+</div>
+
+<!-- 모달창 정보 -->
+<div id="modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content">               
+		</div>
+	</div>
 </div>
 
 </body>

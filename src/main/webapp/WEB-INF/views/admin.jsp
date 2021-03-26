@@ -18,7 +18,7 @@
     		if(!userInfo.getId().equals("testadmin1")) {
 		    	out.println("<script type='text/javascript'>");
 		    	out.println("alert('관리자만 접근할수있습니다.')");
-		    	out.println("history.back();");
+		    	out.println("location.href='./home.do';");
 		    	out.println("</script>");
     		} else{
     			// 사용자 관리
@@ -47,7 +47,7 @@
     	    	
     	    	//사용자 관리
     	    	//StringBuffer userHtml = new StringBuffer();
-    	    	userHtml.append("<table border=1 width=500 class='table'>");
+    	    	userHtml.append("<table border=1 width=500 class='table table-hover'>");
     	    	userHtml.append("<thead>");
     	    	userHtml.append("<tr>");
     	    	userHtml.append("<td colspan='5'>");
@@ -66,14 +66,14 @@
     	    		userHtml.append("<td>"+to.getNickname()+"</td>");
     	    		userHtml.append("<td>"+to.getBcount()+"</td>");
     	    		userHtml.append("<td>");
-    	    		userHtml.append("<input id='' type='button' class='btn btn-outline-dark btn-sm' value='탈퇴' />");
+    	    		userHtml.append("<input id='"+to.getNickname()+"("+to.getId()+")' useq='"+ to.getUseq() +"' type='button' class='btn btn-outline-dark btn-sm userdel_btn' value='탈퇴' />");
     	    		userHtml.append("</td>");
     	    		userHtml.append("</tr>");
     	    	}
     	    	//마지막페이지 테이블 크기 맞춤 
     	    	for(int i=userList.size(); i<pUto.getRecordPerPage(); i++){
-    	    		userHtml.append("<tr>");
-    	    		userHtml.append("<th>&nbsp;</th>");
+    	    		userHtml.append("<tr height='47.33'>");
+    	    		userHtml.append("<td colspan='5'>&nbsp;</td>");
     	    		userHtml.append("</tr>");
     	    	}
     	    	userHtml.append("</tbody>");
@@ -148,45 +148,48 @@
     	    	
     	    	// 게시글 관리
     	    	//StringBuffer boardHtml = new StringBuffer();
-    	    	boardHtml.append("<table border=1 width=900 class='table'>");
+    	    	boardHtml.append("<table border=1 width=900 class='table table-hover'>");
     	    	boardHtml.append("<thead>");
     	 
     	    	boardHtml.append("<tr>");
-    	    	boardHtml.append("<td colspan=6>");
+    	    	boardHtml.append("<td colspan=7>");
     	    	boardHtml.append("총 게시글 : " + bTotalRecode +"개");
     	    	boardHtml.append("</td>");
     	    	boardHtml.append("</tr>");
     	    	
     	    	boardHtml.append("<tr>");
-    	    	boardHtml.append("<th>#</th><th>제목</th><th>작성자</th><th>조회수</th><th>댓글</th><th>좋아요</th>");
+    	    	boardHtml.append("<th>#</th><th>제목</th><th>작성자</th><th>조회수</th><th>댓글</th><th>좋아요</th><th>&nbsp;</th>");
     	    	boardHtml.append("</tr>");
     	    	boardHtml.append("</thead>");
     	    	boardHtml.append("<tbody>");
     	    	for(AdminBoardListTO to: boardList){
-    	    		boardHtml.append("<tr>");
+    	    		boardHtml.append("<tr id='' bseq='"+to.getBseq()+"' class='board_list' data-bs-toggle='modal' data-bs-target='#modal'>");
     	    		boardHtml.append("<th>"+to.getBseq()+"</th>");
     	    		boardHtml.append("<td>"+to.getTitle()+"</td>");
     	    		boardHtml.append("<td>"+to.getNickname()+"("+to.getId()+")</td>");
     	    		boardHtml.append("<td>"+to.getHit()+"</td>");
     	    		boardHtml.append("<td>"+to.getComment()+"</td>");
     	    		boardHtml.append("<td>"+to.getLikey()+"</td>");
+    	    		boardHtml.append("<td>");
+    	    		boardHtml.append("<input id='' bseq='"+to.getBseq()+"' type='button' class='btn btn-outline-dark btn-sm boarddel_btn' value='게시글삭제' />");
+    	    		boardHtml.append("</td>");
     	    		boardHtml.append("</tr>");
     	    	}
     	    	//마지막페이지 테이블 크기 맞춤 
     	    	for(int i=boardList.size(); i<pBto.getRecordPerPage(); i++){
-    	    		boardHtml.append("<tr>");
-    	    		boardHtml.append("<th>&nbsp;</th>");
+    	    		boardHtml.append("<tr height='47.33'>");
+    	    		boardHtml.append("<td colspan='7'>&nbsp;</td>");
     	    		boardHtml.append("</tr>");
     	    	}
     	    	boardHtml.append("</tbody>");
     	    	boardHtml.append("<tfoot>");
     	    	boardHtml.append("<tr>");
-    	    	boardHtml.append("<td colspan='6'>");
+    	    	boardHtml.append("<td colspan='7'>");
     	    	boardHtml.append("<div>");
     	    	boardHtml.append("<ul class='pagination'>");
     	    	//처음으로
     	    	boardHtml.append("<li class='page-item'>");
-    	    	if(upage == 1) {
+    	    	if(bpage == 1) {
     	    		boardHtml.append("<a class='page-link' aria-label='First'>");
     	    	}else{
     	    		boardHtml.append("<a class='page-link' href='./admin.do?upage="+upage+"&bpage=1' aria-label='First'>");
@@ -197,7 +200,7 @@
     	    	
     	    	//이전 페이지
     	    	boardHtml.append("<li class='page-item'>");
-    	    	if(upage == 1) {
+    	    	if(bpage == 1) {
     	    		boardHtml.append("<a class='page-link' aria-label='Previous'>");
     	    	}else{
     	    		boardHtml.append("<a class='page-link' href='./admin.do?upage="+upage+"&bpage="+(bpage-1)+"' aria-label='Previous'>");
@@ -271,6 +274,37 @@
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.userdel_btn').click(function(e){
+			//alert($(this).attr('id'));
+			let result = confirm($(this).attr('id')+' 을/를 탈퇴하시겠습니까?')
+			if(result){
+				//탈퇴
+				location.href='./user_delete_ok.do?useq='+$(this).attr('useq');
+			}
+		});
+		
+		$('.boarddel_btn').click(function(e){
+			let result = confirm($(this).attr('bseq')+'번 게시글을 삭제하시겠습니까?')
+			if(result){
+				//게시글 삭제
+				location.href='./board_delete_ok.do?bseq='+$(this).attr('bseq');
+			}
+		});
+		
+		$('.board_list').click(function(e){
+			//alert($(this).attr('bseq')+"클릭");
+			//console.log("./view.do?seq=" + $(this).attr('bseq'));
+			$('.modal-content').load("./view.do?seq=" + $(this).attr('bseq'));
+		});
+		
+		$('#write_notice').click(function(e){
+			alert('공지사항 쓰기');
+			//공지사항 쓰기 기능
+		});
+	})
+</script>
 <style>
 html{
 	position: fixed;
@@ -351,5 +385,12 @@ html{
     </div>
 </div>
 
+<!-- 모달창 정보 -->
+<div id="modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content">               
+		</div>
+	</div>
+</div>
 </body>
 </html>
