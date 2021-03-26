@@ -172,7 +172,7 @@ table {
 	        <% if(userInfo == null){ %>
 	       <td width=85% align="right"><span><a class="button1" href="./login.do" style="color: black; " >start</a></span></td>
 	        <% }else{ %>
-	        <td width=85% align="right"><span><a class="button1" href="./login.do" style="color: black; " >로그아웃</a></span></td>
+	        <td width=85% align="right"><span><a class="button1" href="./logout_ok.do" style="color: black; " >로그아웃</a></span></td>
 	        <% } %>
 		   <td width=5%><span><a href="./search.do" style="color: black;"><i class="fa fa-search fa-lg" aria-hidden="true"></i></a></span></td>
 			

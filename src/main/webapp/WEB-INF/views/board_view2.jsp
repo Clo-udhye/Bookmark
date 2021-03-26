@@ -201,6 +201,15 @@ $(function() {
 	});
 });
 
+$(document).ready(function(){
+	$('#modify_btn').click(function(e){
+		//alert($(this).attr('bseq')+"클릭");
+		//console.log("./view.do?seq=" + $(this).attr('bseq'));
+		$('.modal-content').load("./modify.do?seq=" + $(this).attr('bseq'));
+	});
+	
+})
+
 </script>
        <table>
        	<tr>
@@ -216,7 +225,7 @@ $(function() {
 	       				<% if (userInfo == null) {%> <!-- 로그인이 안되어 있을 시, 수정.삭제 버튼 x -->
 	       					<tr><td></td></tr>
 	       				<% } else if (userID != null && userID.equals(boardUserID)) { %> <!-- 로그인 o, Board의 useq랑 같을 때 -> 버튼 생성 -->
-	       					<tr><td><input type="button" value="수정"/></td><td><input type="button" value="삭제"/></td></tr>
+	       					<tr><td><input id='modify_btn' bseq='<%=seq %>' data-bs-toggle='modal' data-bs-target='#modal' type="button" value="수정"/></td><td><input type="button" value="삭제"/></td></tr>
 	       				<% }else {%> <!-- 그 외의 경우 버튼 생성 x -->
 	       					<tr><td></td></tr>
 	       				<% } %>
@@ -238,13 +247,13 @@ $(function() {
        	<tr>
        		<td>
        			<table width="600" height="350">
-       			<tr><td height="10">제목 :  <input type="text" value="<%=title%>" id="board_title" size="69"/></td></tr>
+       			<tr><td height="10">제목 :  <input type="text" value="<%=title%>" id="board_title" size="69" style="border:solid 1px #EAEAEA;" readonly/></td></tr>
        				<tr height="230">
        					<td>
        						<!-- <div id="vertical1">
        							<div class="wrap"> 
        								<table border="1" height="230" width="580" class="wrapTable"> <tr><td>  -->
-       								<textarea cols="78" rows="10" required wrap="hard"><%=content %></textarea>
+       								<textarea cols="78" rows="10" required wrap="hard" style="border:solid 1px #EAEAEA;" readonly><%=content %></textarea>
        								<!-- </td></tr></table>
        							</div>
        						</div>  -->

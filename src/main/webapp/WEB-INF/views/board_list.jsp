@@ -85,7 +85,7 @@
 			sbHtml.append("<td class='board'>");
 			// 사진 크기 250 250
 			sbHtml.append("	<div class='img'>");
-			sbHtml.append("		<a href='board_view.do'><img src='./upload/"+filename+"' border='0' width=250px height=250px/></a>");
+			sbHtml.append("		<a href='view.do'><img src='./upload/"+filename+"' border='0' width=250px height=250px/></a>");
 			sbHtml.append("	</div>");
 			sbHtml.append("	<div class='text'>");
 			//sbHtml.append("		<a href='board_view.jsp'><p>"+title+"</p></a>");
@@ -106,14 +106,14 @@
 
 				//sbHtml.append("<td>"+filename+"</td>");
 			} else {
-				sbHtml.append("<td class='board'>");
+				sbHtml.append("<td class='board board1' bseq='"+seq+"' data-bs-toggle='modal' data-bs-target='#modal'>");
 				// 사진 크기 250 250
 				sbHtml.append("	<div class='img'>");
-				sbHtml.append("		<a href='board_view.do'><img src='./upload/"+filename+"' border='0' width=250px height=250px/></a>");
+				sbHtml.append("		<img src='./upload/"+filename+"' border='0' width=250px height=250px/>");
 				sbHtml.append("	</div>");
 				sbHtml.append("	<div class='text'>");
 				//sbHtml.append("		<a href='board_view.jsp'><p>"+title+"</p></a>");
-				sbHtml.append("		<a href='board_view.jsp'>"+title+"</a>");
+				sbHtml.append("		<a>"+title+"</a>");
 				sbHtml.append("	</div>");
 				sbHtml.append("</td>");
 			}
@@ -218,6 +218,15 @@ id=content 본문 가운데 위치
 
 -->
 <!-- ■■ /내가 추가한 부분 ■■ -->
+<script>
+$(document).ready(function(){	
+	$('.board1').click(function(e){
+		//alert($(this).attr('bseq')+"클릭");
+		//console.log("./view.do?seq=" + $(this).attr('bseq'));
+		$('.modal-content').load("./view.do?seq=" + $(this).attr('bseq'));
+	});
+})
+</script>
 
 </head>
 <body>
@@ -339,6 +348,12 @@ id=content 본문 가운데 위치
 		<!-- ■■ /내가 추가한 부분 ■■ -->
     </div>
 </div>
-
+<!-- 모달창 정보 -->
+<div id="modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content">               
+		</div>
+	</div>
+</div>
 </body>
 </html>
