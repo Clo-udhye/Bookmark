@@ -1,10 +1,18 @@
 package com.exam.BoardAction;
 
 public class CommentTO {
+	private String seq;
 	private String bseq;
 	private String useq;
 	private String content;
 	private String date_time;
+	
+	public String getSeq() {
+		return seq;
+	}
+	public void setSeq(String seq) {
+		this.seq = seq;
+	}
 	public String getBseq() {
 		return bseq;
 	}

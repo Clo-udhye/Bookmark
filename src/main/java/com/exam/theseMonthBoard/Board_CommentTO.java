@@ -1,10 +1,24 @@
 package com.exam.theseMonthBoard;
 
 public class Board_CommentTO {
+	private String useq;
 	private String nickname;
 	private String content;
 	private String date_time;
+	private String seq;
 	
+	public String getSeq() {
+		return seq;
+	}
+	public void setSeq(String seq) {
+		this.seq = seq;
+	}
+	public String getUseq() {
+		return useq;
+	}
+	public void setUseq(String useq) {
+		this.useq = useq;
+	}
 	public String getNickname() {
 		return nickname;
 	}

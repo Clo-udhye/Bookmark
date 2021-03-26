@@ -57,7 +57,7 @@ public class Home_BoardDAO {
 	}
 	
 	public ArrayList<Board_CommentTO> CommentListTemplate(String seq){
-		String sql = "select u.nickname as nickname, c.content as content, c.date_time as date_time from comment as c join user as u on c.useq = u.seq where c.bseq="+seq+" order by c.seq desc";
+		String sql = "select c.seq as seq, u.seq as useq, u.nickname as nickname, c.content as content, c.date_time as date_time from comment as c join user as u on c.useq = u.seq where c.bseq="+seq+" order by c.seq desc";
 		ArrayList<Board_CommentTO> comment_lists = (ArrayList<Board_CommentTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<Board_CommentTO>(Board_CommentTO.class));
 		return comment_lists;
 	}

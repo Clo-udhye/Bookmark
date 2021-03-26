@@ -23,6 +23,7 @@ import com.exam.booklist.BookRelatedTO;
 import com.exam.booklist.BookTO;
 import com.exam.paging.pagingTO;
 import com.exam.theseMonthBoard.Board_CommentTO;
+import com.exam.theseMonthBoard.Board_Modify_Delete_DAO;
 import com.exam.theseMonthBoard.Home_BoardDAO;
 import com.exam.theseMonthBoard.Home_BoardTO;
 import com.exam.user.LoginTO;
@@ -56,6 +57,8 @@ public class HomeController {
 	@Autowired
 	AdminDAO adminDao;
 
+	@Autowired
+	Board_Modify_Delete_DAO board_Modify_Delete_DAO;
 	
 	@RequestMapping(value = "/test.do")
 	public String test() {
@@ -123,6 +126,25 @@ public class HomeController {
 		model.addAttribute("flag", flag);
 		return "comment_ok";
 	}
+	
+	@RequestMapping(value = "/comment_modify.do")
+	public String comment_modify(HttpServletRequest req , Model model) {
+		String value = req.getParameter("value");
+		if(value.equals("modify")) {
+			//System.out.println("comment modify");
+			String comment = req.getParameter("comment");
+			String comment_seq = req.getParameter("comment_seq");
+			int flag = boardActionDAO.comment_modify(comment, comment_seq);
+			model.addAttribute("flag", flag);
+		} else if (value.equals("delete")) {
+			//System.out.println("comment delete");
+			String comment_seq = req.getParameter("comment_seq");
+			int flag = boardActionDAO.comment_delete(comment_seq);
+			model.addAttribute("flag", flag);
+		}
+		return "comment_ok";
+	}
+	
 	@RequestMapping(value = "/comment_check.do")
 	public String comment_check(HttpServletRequest req , Model model) {
 		String seq = req.getParameter("bseq");
@@ -149,6 +171,28 @@ public class HomeController {
 		int flag_like = boardActionDAO.unlikey(writer_seq, board_seq);
 		model.addAttribute("flag_like", flag_like);
 		return "likey_ok";
+	}
+	
+	@RequestMapping(value = "/board_modify.do")
+	public String board_modify(HttpServletRequest req , Model model) {
+		String writer_seq = req.getParameter("user");
+		String board_seq = req.getParameter("bseq");
+		String board_title = req.getParameter("board_title");
+		String board_content = req.getParameter("board_content");
+		int flag = board_Modify_Delete_DAO.Board_Modify(writer_seq, board_seq, board_title, board_content);
+		model.addAttribute("flag", flag);
+		
+		return "modify_ok";
+	}
+	
+	@RequestMapping(value = "/board_delete.do")
+	public String board_delete(HttpServletRequest req , Model model) {
+		String writer_seq = req.getParameter("user");
+		String board_seq = req.getParameter("bseq");
+		int flag = board_Modify_Delete_DAO.Board_Delete(writer_seq, board_seq);
+		model.addAttribute("flag", flag);
+		
+		return "modify_ok";
 	}
 	
 	@RequestMapping(value = "/book_list.do")
