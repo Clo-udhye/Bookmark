@@ -11,8 +11,24 @@ public class Home_BoardTO {
 	private String hit;
 	private String comment;
 	private String book_title;
+	private String userID;
+	private String useq;
 	
 	
+	
+	
+	public String getUseq() {
+		return useq;
+	}
+	public void setUseq(String useq) {
+		this.useq = useq;
+	}
+	public String getUserID() {
+		return userID;
+	}
+	public void setUserID(String userID) {
+		this.userID = userID;
+	}
 	public String getBook_title() {
 		return book_title;
 	}

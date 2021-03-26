@@ -1,3 +1,4 @@
+<%@page import="com.exam.user.UserTO"%>
 <%@page import="com.exam.theseMonthBoard.Home_BoardTO"%>
 <%@page import="com.exam.boardlist.BoardTO"%>
 <%@page import="java.util.ArrayList"%>
@@ -5,14 +6,15 @@
     pageEncoding="UTF-8"%>
     
 <%
-	ArrayList<Home_BoardTO> theseBoards = (ArrayList)request.getAttribute("lists");
+	// 현재 세션 상태를 체크한다
+	UserTO userInfo = null;
+	if(session.getAttribute("userInfo") != null) {
+		userInfo = (UserTO)session.getAttribute("userInfo");
+		//System.out.println(session.getAttribute("userInfo"));
+	}
 	
 
-	// 현재 세션 상태를 체크한다
-	String userID = null;
-	if (session.getAttribute("userID") != null) {
-		userID = (String)session.getAttribute("userID");
-	}
+	ArrayList<Home_BoardTO> theseBoards = (ArrayList)request.getAttribute("lists");
 	
 	Home_BoardTO to1 = theseBoards.get(0);
 	String seq1 = to1.getSeq();
@@ -53,7 +55,8 @@
 <!-- <style>#content {position: absolute; left: 50%; transform: translateX(-50%);}</style>  -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap" rel="stylesheet">
 <!-- sidebar -->
 
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
@@ -63,27 +66,29 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-	     $("#modal-link1").click(function(){
-	         console.log('버튼 클릭'+ $("#modal-link1 #board_seq").val() );
-	         $('.modal-content').load("./view.do" + "?seq=" + $("#modal-link1 #board_seq").val());   
-	     });
+		for ( let i = 1; i <=3; i++){
+		    $("#modal-link"+i).click(function(){
+		        var seq = $("#modal-link"+i+" #board_seq").val().split("/");
+		        $('.modal-content').load("./view.do" + "?seq=" + seq[0]);   
+		    });
+		}
     });
 	
-	$(document).ready(function(){
-	     $("#modal-link2").click(function(){
-	         console.log('버튼 클릭'+ $("#modal-link2 #board_seq").val() );
-	         $('.modal-content').load("./view.do" + "?seq=" + $("#modal-link2 #board_seq").val());   
-	     });
-   });
-	
-	$(document).ready(function(){
-	     $("#modal-link3").click(function(){
-	         console.log('버튼 클릭'+ $("#modal-link3 #board_seq").val() );
-	         $('.modal-content').load("./view.do" + "?seq=" + $("#modal-link3 #board_seq").val());   
-	     });
-   });
 </script>
+<style>
 
+.button1{
+	position: right;
+	width: 30px;
+	font-size: 25px;
+
+}
+.button2{
+	align: right;
+	width: 30px;
+	font-size: 25px;
+}
+</style>
 </head>
 <body>
 
@@ -92,30 +97,46 @@
 		<h3>당신의 책갈피</h3>
 	</div>
 
-	<p>User1님이 로그인 중 입니다.</p>
+	<%if (userInfo != null) {%>
+		<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
+	<%} else {%>
+		<p>로그인해주세요.</p>
+	<%}%>
 	<a href="./home.do">Home</a>
-	<a href="./mypage.do">My Page</a>
+		<%if(userInfo != null){
+		if(userInfo.getId().equals("testadmin1")) {%>
+			<a href="./admin.do">Admin Page</a>
+		<%} else{ %>
+			<a href="./mypage.do">My Page</a>
+		<%}
+	}%>
 	<a href="./list.do">모든 게시글 보기</a>
 	<a href="./book_list.do">책 구경하기</a>
 </div>
 
 <div id="main">
 	<div id="header">
-		<p>
-			<span>
-				<button class="sidebar-btn" onclick="sidebarCollapse()">
-					<span><i class="fa fa-bars" aria-hidden="true"></i></span>
-	             </button>
-			</span>
-	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px;"></a></span>
-	        <% if(userID == null){ %>
-	        <span><a href="./login.do">시작하기</a></span>
-	        <% }else{ %>
-	        <span><a href="./logout_ok.do">로그아웃</a></span>
-	        <% } %>
-			<span><a href="./search.do"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
-    	</p>
+		<div>
+			<table>
+				<tr>
+					<td width=5%><span>
+						<button class="sidebar-btn" onclick="sidebarCollapse()">
+							<span><i class="fa fa-bars" aria-hidden="true"></i></span>
+			             </button>
+					</span>
+					</td>
+					<td width=5%><span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px; height:50px; "></a></span></td>
+					<% if(userInfo == null){ %>
+						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
+	        		<% }else{ %>
+	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        		<% } %>
+					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+				</tr>
+			</table>		
+    	</div>
     </div>
+
 
 	<div id="content">
 		<div class="intro_brunch">
@@ -130,6 +151,7 @@
 					<span class="txt_brunch">나눔 속 당신의 마음을 울림을 위한, 당신의 책갈피. </span>
 				</span>
 			</p>
+		
 
 			<div class="editor_pic">
 				<div class="wrap_slide">
@@ -156,7 +178,7 @@
 								</div>
 
 								<div class="item_pic item_pic_type4 ">														
-									<a id="modal-link1" data-bs-toggle="modal" data-bs-target="#modal" class="link_item #home_discover" > 
+									<a id="modal-link1" data-bs-toggle="modal" data-bs-target="#modal" class="link_item" > 
 										<input type="hidden" id="board_seq" value=<%=seq1 %>/>
 										<!--  hover동작 class(위에 link_item #home_discover)  -->
 										<img
@@ -164,7 +186,7 @@
 										class="img_pic" alt="<%= title1%>">
 										<div class="append_info">
 											<div class="info_g">
-												<div class="inner_g" style="padding-left : 10px;padding-right : 10px; padding-top : 50px;">
+												<div class="inner_g" style="padding-left : 10px;padding-right : 10px; padding-top : 180px;">
 													<em class="cate_pic"></em> 
 													<strong class="tit_pic"><%= title1%></strong> 
 													<span class="txt_pic">&quot;</span> 
@@ -321,7 +343,7 @@
 				</ul>
 			</div>
    			<!-- 모달창 정보 -->
-             <div id="modal" class="modal fade" tabindex="-1">
+             <div id="modal" class="modal fade" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
                    <div class="modal-content">
                    
