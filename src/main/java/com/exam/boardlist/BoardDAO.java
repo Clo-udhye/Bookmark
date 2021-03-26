@@ -11,6 +11,8 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.exam.user.UserTO;
+
 @Repository
 public class BoardDAO {
 
@@ -142,5 +144,34 @@ public class BoardDAO {
 		}
 		//System.out.println(pagingTO.getCpage());
 		return pagingTO;
+	}
+	
+	//boardDelete
+	public int boardDelete(BoardTO to) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		int flag = 0;
+
+		try{
+			conn = dataSource.getConnection();
+
+			String sql = "delete from board where seq = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, to.getBseq());
+			
+			int result = pstmt.executeUpdate();
+			if(result == 1){
+				flag = 1;
+			}
+
+		} catch(SQLException e){
+			System.out.println("[에러] " + e.getMessage());
+		} finally {
+			if(pstmt!=null) try{pstmt.close();}catch(SQLException e) {}
+			if(conn!=null) try{conn.close();}catch(SQLException e) {}
+		}
+
+		return flag;
 	}
 }

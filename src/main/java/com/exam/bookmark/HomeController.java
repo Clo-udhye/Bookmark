@@ -18,6 +18,7 @@ import com.exam.admin.PagingBoardTO;
 import com.exam.admin.PagingUserTO;
 import com.exam.boardlist.BoardDAO;
 import com.exam.boardlist.BoardPagingTO;
+import com.exam.boardlist.BoardTO;
 import com.exam.booklist.BookDAO;
 import com.exam.booklist.BookRelatedTO;
 import com.exam.booklist.BookTO;
@@ -318,5 +319,63 @@ public class HomeController {
 		return "zipsearch";
 	}
 	
-
+	@RequestMapping(value = "/user_delete_ok.do")
+	public String user_delete_ok(HttpServletRequest request, Model model) {
+		
+		UserTO to = new UserTO();
+		to.setSeq(request.getParameter("useq"));
+		int flag = userDao.userDelete(to);
+		model.addAttribute("flag", flag);
+		
+		return "user_delete_ok";
+	}
+	
+	@RequestMapping(value = "/board_delete_ok.do")
+	public String board_delete_ok(HttpServletRequest request, Model model) {
+		
+		BoardTO to = new BoardTO();
+		to.setBseq(request.getParameter("bseq"));
+		int flag = boardDao.boardDelete(to);
+		model.addAttribute("flag", flag);
+		
+		return "board_delete_ok";
+	}
+	
+	@RequestMapping(value = "/view2.do")
+	public String view2(HttpServletRequest req , Model model) {
+		String seq = req.getParameter("seq");
+		HttpSession session = req.getSession();
+		if (session.getAttribute("userInfo") != null) {
+			UserTO userInfo = (UserTO)session.getAttribute("userInfo");
+			String userID = userInfo.getId();
+			int count_check = home_boardDAO.likey_check(seq, userID);
+			model.addAttribute("like_count_check", count_check);
+		}
+		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(seq);
+		model.addAttribute("home_BoardTO", home_BoardTO);
+		ArrayList<Board_CommentTO> board_CommentTO = home_boardDAO.CommentListTemplate(seq);
+		model.addAttribute("board_commentTO", board_CommentTO);
+		int count = home_boardDAO.likey_count(seq);
+		model.addAttribute("likey_count", count);
+		return "board_view2";
+	}
+	
+	@RequestMapping(value = "/modify.do")
+	public String modify(HttpServletRequest req , Model model) {
+		String seq = req.getParameter("seq");
+		HttpSession session = req.getSession();
+		if (session.getAttribute("userInfo") != null) {
+			UserTO userInfo = (UserTO)session.getAttribute("userInfo");
+			String userID = userInfo.getId();
+			int count_check = home_boardDAO.likey_check(seq, userID);
+			model.addAttribute("like_count_check", count_check);
+		}
+		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(seq);
+		model.addAttribute("home_BoardTO", home_BoardTO);
+		ArrayList<Board_CommentTO> board_CommentTO = home_boardDAO.CommentListTemplate(seq);
+		model.addAttribute("board_commentTO", board_CommentTO);
+		int count = home_boardDAO.likey_count(seq);
+		model.addAttribute("likey_count", count);
+		return "board_modify";
+	}
 }
