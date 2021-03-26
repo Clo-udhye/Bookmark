@@ -72,7 +72,7 @@
 			//System.out.println(filename);
 			//System.out.printf("%s, %s, $s, $s, $s, $s",	recordPerPage, totalRecode, totalPage, blockPerPage, startBlock, endBlock);
 			// 수정하기 ★★★
-			if(cnt % blockPerPage == 1) {
+			if(cnt % 5 == 1) {
 				sbHtml.append("</tr>");
 				sbHtml.append("<tr>");
 			}
