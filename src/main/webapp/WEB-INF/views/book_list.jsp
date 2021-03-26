@@ -63,7 +63,7 @@
 			bookHTML.append("<div>");
 			bookHTML.append("<table id=innerlist align='center'>");
 			bookHTML.append("<tr>");
-			bookHTML.append("<td rowspan='4' width='20%'><img width='200px' src='"+img_url+"' alt='이미지 없음'/></td>");
+			bookHTML.append("<td rowspan='4' width='20%'><img width='200px' src='"+img_url+"' alt='이미지 없음' border='1px'/></td>");
 			bookHTML.append("<td width=60% >책 제목 :"+title+"</td>");
 			bookHTML.append("<td rowspan='4' width=40 align='center'>");
 			bookHTML.append("<a type='button' href='./book_info.do?master_seq="+master_seq+"' id='simple_button' class='btn btn-dark' ' >자세히 보기</a>");
@@ -85,6 +85,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <style>
+html{
+	position: fixed;
+}
+#start-button{
+	width: 30px;
+	font-size: 25px;
+	margin-left: 1000px;
+	
+}
+.button2{
+	font-size: 25px;
+}
 #list {
   border: 1px solid black;
   padding: 15px;
@@ -96,19 +108,24 @@
   width:80%;
  
 }
+#logo{
+	size: 24px;
+}
 table {
   border-spacing: 15px;
   padding : "10";
+  table-layout: auto;
   
 }
-.button1{
+.button1, .button2{
 	width: 30px;
 	font-size: 25px;
 
 }
 #simple_button{
 	text-align: center;
-	position: right;
+	height:auto;
+	padding-right: 10px;
 	width: 120px;
 }
 #result {
@@ -117,6 +134,9 @@ table {
 }
 .text1{
 	font-color: white;
+}
+#end-page, #before-page, #next-page{
+	color: black;
 }
 .opener { display:none; }
 .opener:checked ~ .nav_item { display:block; }
@@ -159,27 +179,26 @@ table {
 
 <div id="main">
 	<div id="header">
-		<p>
-		<table>
-		<tr>
-			<td width=5%><span>
-				<button class="sidebar-btn" onclick="sidebarCollapse()">
-					<span><i class="fa fa-bars" aria-hidden="true"></i></span>
-	             </button>
-			</span>
-			</td>
-	        <td width=5%><span><a class="navbar-brand" href="./home.do" > <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span></td>
-	        <% if(userInfo == null){ %>
-	       <td width=85% align="right"><span><a class="button1" href="./login.do" style="color: black; " >start</a></span></td>
-	        <% }else{ %>
-	        <td width=85% align="right"><span><a class="button1" href="./login.do" style="color: black; " >로그아웃</a></span></td>
-	        <% } %>
-		   <td width=5%><span><a href="./search.do" style="color: black;"><i class="fa fa-search fa-lg" aria-hidden="true"></i></a></span></td>
-			
-		</tr>
-		</table>		
-    	</p>
-    </div>
+		<div>
+			<table>
+				<tr>
+					<td width=5%><span>
+						<button class="sidebar-btn" onclick="sidebarCollapse()">
+							<span><i class="fa fa-bars" aria-hidden="true"></i></span>
+			             </button>
+					</span>
+					</td>
+					<td width=5%><span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px; height:50px; "></a></span></td>
+					<% if(userInfo == null){ %>
+						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
+	        		<% }else{ %>
+	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        		<% } %>
+					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+				</tr>
+			</table>		
+    	</div>
+	</div>
     
     <div id="content" width=100% > 
         <%=SearchResult %>
@@ -188,22 +207,22 @@ table {
         	
         	<tr><td width = 80% height="40" > 현재 <%= totalRecord %>개의 책이 등록되어 있습니다.</td></tr>
         		<tr>
-        			<td height="50" width="300" ></td>
+        			<td height="50" width="200" ></td>
         			<td>
         				<table width="550">
         				<form action="./book_list_search.do" type="get" align="left">
         				<tr>
-	        				<td  width="50">
+	        				<td  width="120">
 	        					<select name="search" style="border-radius: 4px">
 								    <option value="제목" selected="selected">제목 검색</option>
 								    <option value="작가">작가 명 검색</option>
 								</select>
 							</td>
         					<td>
-        						<input type="text" name = "bookname" width=50 style="border-radius: 4px"/>
+        						<input type="text" name = "bookname" width=120 style="border-radius: 4px"/>
        						</td>
         					<td width="213" align="left">
-        						<button type="submit" value="검색" width="50" class="btn btn-dark">검색</button>
+        						<button type="submit" value="검색" width="70" class="btn btn-dark" >검색</button>
         						
         						
        						</td>
@@ -232,9 +251,9 @@ table {
 			out.println("&nbsp;");
 			
 			if(cpage == 1){
-				out.println("<span><a href=''>이전 페이지</a></span>");
+				out.println("<span><a href=''><i class='fa fa-arrow-left' aria-hidden='true' color='black'></i></a></span>");
 			} else{
-				out.println("<span><a href='./book_list.do?cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' color='white'></i></a></span>");
+				out.println("<span><a href='./book_list.do?cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' color='black'></i></a></span>");
 			}
 			
 			out.println("&nbsp;&nbsp;");
@@ -249,9 +268,9 @@ table {
 	     	
 	     	out.println("&nbsp;");
 				if(cpage == totalPage){
-					out.println("<span><a href=''>다음 페이지</a></span>");
+					out.println("<span><a href=''><i class='fa fa-arrow-right' aria-hidden='true' color='black;'></i></a></span>");
 				} else{
-					out.println("<span><a href='./book_list.do?cpage="+(cpage+1)+"' ><i class='fa fa-arrow-right' aria-hidden='true'></i></a></span>");
+					out.println("<span><a href='./book_list.do?cpage="+(cpage+1)+"' ><i class='fa fa-arrow-right' aria-hidden='true' color='black;'></i></a></span>");
 				}
 	     	
 			out.println("&nbsp;");
@@ -271,9 +290,9 @@ table {
 			out.println("&nbsp;");
 			
 			if(cpage == 1){
-				out.println("<span><a href=''>이전 페이지</a></span>");
+				out.println("<span><a href=''><i class='fa fa-arrow-left' aria-hidden='true' color='black'></i></a></span>");
 			} else{
-				out.println("<span><a href='./book_list_search.do?search="+search+"&bookname="+bookname+"&cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' color='white'></i></a></span>");
+				out.println("<span><a href='./book_list_search.do?search="+search+"&bookname="+bookname+"&cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' color='black'></i></a></span>");
 			}
 			
 			out.println("&nbsp;&nbsp;");
@@ -288,9 +307,9 @@ table {
 	     	
 	     	out.println("&nbsp;");
      		if(cpage == totalPage){
-				out.println("<span><a href=''>다음 페이지</a></span>");
+				out.println("<span><a href=''><i class='fa fa-arrow-right' aria-hidden='true' color='black;'></i></a></span>");
 			} else{
-				out.println("<span><a href='./book_list_search.do?search="+search+"&bookname="+bookname+"&cpage="+(cpage+1)+"' ><i class='fa fa-arrow-right' aria-hidden='true'></i></a></span>");
+				out.println("<span><a href='./book_list_search.do?search="+search+"&bookname="+bookname+"&cpage="+(cpage+1)+"' ><i class='fa fa-arrow-right' aria-hidden='true' color='black;'></i></a></span>");
 			}
 			
 			out.println("&nbsp;");
@@ -299,8 +318,7 @@ table {
 				} else {
 					out.println("<span><a href='./book_list_search.do?search="+search+"&bookname="+bookname+"&cpage="+totalPage+"'> 끝</a></span>");
 				}
-     }
-     	
+     }    	
      %>
      </div>
      </footer>
