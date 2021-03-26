@@ -32,6 +32,20 @@ public class BoardActionDAO {
 		return flag;
 	}
 	
+	public int comment_modify(String comment,String comment_seq) {
+		String sql = "update comment set content = ? where seq=?";
+		int flag = jdbcTemplate.update(sql, comment, comment_seq);
+		//System.out.println("comment 중, comment_seq :"+ comment_seq+"의 comment가 수정 되었습니다." + flag);
+		return flag;
+	}
+	
+	public int comment_delete(String comment_seq) {
+		String sql = "delete from comment where seq=?";
+		int flag = jdbcTemplate.update(sql, comment_seq);
+		//System.out.println("comment 중, comment_seq :"+ comment_seq+"의 comment가 삭제 되었습니다." + flag);
+		return flag;
+	}
+	
 	public int likey(String writer_seq, String board_seq) {
 		String sql = "select seq from user where id = ?";
 		UserTO user = (UserTO) jdbcTemplate.queryForObject(sql, new Object[]{writer_seq}, new RowMapper<UserTO>() {
