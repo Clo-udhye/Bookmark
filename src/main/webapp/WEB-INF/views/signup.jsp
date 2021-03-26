@@ -34,19 +34,75 @@
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
+<style>
+   .button1, .button2{
+   width: 30px;
+   font-size: 25px;
+   }
+   #start-button{
+	width: 30px;
+	font-size: 25px;
+	margin-left: 1000px;
+	
+}
+.button2{
+	font-size: 25px;
+}
+	
+.jumbotron{
+	width: 700px;
+	height:800px;
+	padding-top: 50px;
+	padding-left: 280px;
+	
+}
+form{
+	width: 480px;
+	height: 100px;
+}
+.text1{
+padding-left: 100px;
+}
+.form-group{
+	height: 60px;
+	
+
+}
+.form-control
+{
+	float: left;
+	width: 320px;
+	height: 38px;
+	
+}
+#id_check, #nickname_check, #modal-button{
+	
+	float: right;
+	width: 110px;
+	
+}
+#signup{
+	width: 220px;
+	text-font: center; 
+	margin-top: 60px;
+	margin-left: 100px;
+}
+   
+</style>
 <script type="text/javascript">
-	window.onload = function(){
+	$(document).ready(function(){
 		//중복확인후 변경시 제출하지못하게 변경
-		document.getElementById('userID').onchange = function(){
+		$('#userID').on('change', function() {
 			$('#id_check_sucess').hide();
 			$('#id_check').show();
 			$('#userID').attr("check_result", "fail");
-		};
-		document.getElementById('nickname').onchange = function(){
+		});
+		
+		$('#nickname').on('change', function() {
 			$('#nickname_check_sucess').hide();
 			$('#nickname_check').show();
 			$('#nickname').attr("check_result", "fail");
-		};
+		});
 		
 		document.getElementById('id_check').onclick = function(){
 			// 아이디 정규표현식, 영어소문자 숫자만 가능, 6~16자
@@ -170,7 +226,7 @@
 			}
 			document.signup_frm.submit();
 		};
-	};
+	});
 </script>
 
 <script type="text/javascript">
@@ -187,14 +243,14 @@
 	  });
 	});
 </script>
-
+	
 </head>
 <body>
 
 <div id="mySidebar" class="sidebar">
-	<div class="sidebar-header">
-		<h3>당신의 책갈피</h3>
-	</div>
+   <div class="sidebar-header">
+      <h3>당신의 책갈피</h3>
+   </div>
 
 	<%if (userInfo != null) {%>
 		<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
@@ -214,67 +270,119 @@
 </div>
 
 <div id="main">
-	<div id="header">
-		<p>
-			<span>
-				<button class="sidebar-btn" onclick="sidebarCollapse()">
-					<span><i class="fa fa-bars" aria-hidden="true"></i></span>
-	             </button>
-			</span>
-	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
-	        <span><a href="./login.do">시작하기</a></span>
-			<span><a href="./search.do"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
-    	</p>
+   <div id="header">
+      <div>
+			<table>
+				<tr>
+					<td width=5%><span>
+						<button class="sidebar-btn" onclick="sidebarCollapse()">
+							<span><i class="fa fa-bars" aria-hidden="true"></i></span>
+			             </button>
+					</span>
+					</td>
+					<td width=5%><span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px; height:50px; "></a></span></td>
+					<% if(userInfo == null){ %>
+						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
+	        		<% }else{ %>
+	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        		<% } %>
+					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+				</tr>
+			</table>		
+    	</div>
     </div>
     
-    <div id="content">
+    <div id="content" >
 			<!-- 회원가입 양식 -->
 			<div class="container">
 				<!-- 하나의 영역 생성 -->
-				<div class="col-lg-4">
+				<div>
 					<!-- 영역 크기 -->
 					<!-- 점보트론은 특정 컨텐츠, 정보를 두드러지게 하기 위한 큰 박스 -->
-					<div class="jumbotron" style="padding-top: 20px;">
+					<div class="jumbotron">
 						<form method="post" action="./signup_ok.do" name="signup_frm">
-							<h3 style="text-align: center;">책갈피 회원가입</h3>
-							<p style="text-align: center;">아래의 양식에 맞게 입력해주십시오</p>
+						<div style="height: 75px;">
+						<img src="./images/login-image.png" alt="login-image" width="65px;" height="65px;" style="float: left;"/>
+						<div class="text1" >
+							<h3><b>책갈피 회원가입</b></h3>
+							<p>아래의 양식에 맞게 입력해주십시오</p>
+						</div>
+						</div>
+						
 							<div class="form-group">
-								<input type="text" class="form-control" placeholder="아이디(*)" id="userID" name="userID" maxlength="20" check_result="fail" required />
-								<input type="button" class="btn btn-dark form-control" value="중복확인" id="id_check">
-								<i class="fa fa-check" id="id_check_sucess" style="display: none;" aria-hidden="true" ></i>	
-							</div>
-							<div class="form-group">
-								<input type="text" class="form-control" placeholder="별명(*)" id="nickname" name="nickname" maxlength="20">
-								<input type="button" class="btn btn-dark form-control" value="중복확인" id="nickname_check">
-								<i class="fa fa-check" id="nickname_check_sucess" style="display: none;" aria-hidden="true" ></i>
-							</div>
-							<div class="form-group">
-								<input type="password" class="form-control" placeholder="비밀번호(*)" name="userPassword" id="userPassword" maxlength="20">
-								<input type="password" class="form-control" placeholder="비밀번호 확인(*)" name="userPasswordCheck" id="userPasswordCheck" maxlength="20">
-							</div>
-							<div class="form-group">
-								<input type="email" class="form-control" placeholder="이메일(*)" name="mail" maxlength="20">
-							</div>
-							<div class="form-group">
-							
-								<input type="text" class="form-control" placeholder="주소" id="address" name="address" maxlength="20"> 
+									<input type="text" class="form-control" id="form-control-id"  placeholder="아이디(*)" id="userID" name="userID" maxlength="20"  check_result="fail" required />							
+								<div class="double-check" >
+									<input type="button" class="btn btn-dark form-control" value="중복확인" id="id_check" >
+									<i class="fa fa-check" id="id_check_sucess" style="display: none;" aria-hidden="true" ></i>
+									</input>
+								</div>
+							</div>	
 								
-								<button id="modal-button" data-bs-toggle="modal" data-bs-target="#modal" type="button" class="btn btn-dark form-control">우편번호 검색</button>
+
+							<div class="form-group">
+									<input type="text" class="form-control" placeholder="별명(*)" id="nickname" name="nickname" maxlength="20"></input>
+								
+								<div class="nickname-button" >
+									<input type="button" class="btn btn-dark form-control"  value="중복확인" id="nickname_check" />
+									<i class="fa fa-check" id="nickname_check_sucess" style="display: none;" aria-hidden="true" ></i>
+									
+								</div>
+							</div>
+							
+							
+							
+							<div class="form-group" >
+								<input type="password" class="form-control" placeholder="비밀번호(*)" name="userPassword" id="userPassword" maxlength="20" />
+							</div>
+							<div class="form-group" >
+								<input type="password" class="form-control" placeholder="비밀번호 확인(*)" name="userPasswordCheck" id="userPasswordCheck" maxlength="20" />
+
+							</div>
+							
+							<div class="form-group" >
+								<input type="email" class="form-control" placeholder="이메일(*)" name="mail" maxlength="20" />
+								
+							</div>
+						
+							<div class="form-group" >
+							<div>
+								<input type="text" class="form-control" placeholder="주소" id="address" name="address" maxlength="20" /> 
+							
+							
+							<div class="address-modal" >
+								<button id="modal-button" data-bs-toggle="modal" data-bs-target="#modal" type="button" class="btn btn-dark form-control" >주소찾기</button>
 								<div id="modal" class="modal fade" tabindex="-1" role="dialog">
 									<div class="modal-dialog">
-										<div class="modal-content">
-										</div>
+										<div class="modal-content"></div>
 									</div>
 								</div>
-
-								<input type="text" class="form-control" placeholder="상세 주소" name="addresses" maxlength="20">
+								</div>
 							</div>
-							<input type="button" class="btn btn-dark form-control" value="회원가입" id="signup">
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
+							</div>
+						
+							<div class="form-group">
+								<input type="text" class="form-control" placeholder="상세 주소" name="addresses" maxlength="20" />
+								
+							</div>
+							<div class="form-group">
+								<input type="text"  id="information" style="float:left; width: 430px; height: 150px; " value="책갈피 정보제공 동의" disabled />
+							</div>
+							
+							
+							<div class="form-group" style="padding-top: 150px; padding-left: 270px;">
+								<input type="checkbox" name="agree" value="동의합니다" />위 상기 사항에 동의합니다.
+							</div>
+							
+							<div class="form-group" >
+								<input type="button" class="btn btn-dark form-control" value="회원가입" id="signup"  />
+							</div>
+
+							
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
 </div>
 
 </body>
