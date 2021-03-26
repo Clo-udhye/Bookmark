@@ -277,6 +277,62 @@ public class HomeController {
 		return "search";
 	}
 	
+	@RequestMapping(value = "/search_list.do")
+	public String search_list(HttpServletRequest request, Model model) {
+		
+		int tpage = 1;   // cpage가 없으면 1
+		if(request.getParameter("tpage") != null && !request.getParameter("tpage").equals("")){   
+			tpage = Integer.parseInt(request.getParameter("tpage"));
+		}
+	    
+		// 입력한 검색어 받아오려고..
+		String searchword = request.getParameter("searchword");
+		
+		BoardPagingTO slpagingTO = new BoardPagingTO();
+		slpagingTO.setCpage(tpage);
+	    
+		// BoardDAO에 searchList에 인자 searchword 추가로 적음. (boardList와 달리)
+		slpagingTO = boardDao.searchTList(slpagingTO, searchword);
+		// ""안에 있는 게 search_list.jsp에서 사용할 이름
+		// , 뒤에 있는 게 가져올 데이터 이름
+		model.addAttribute("slpagingTO", slpagingTO);
+		// searchword도 addAttribute로 가져와야 jsp파일에서 사용할 수 있음
+		model.addAttribute("searchword", searchword);
+		
+		
+		// 작가 검색 결과 게시글 리스트
+		int npage = 1;   // cpage가 없으면 1
+		if(request.getParameter("npage") != null && !request.getParameter("npage").equals("")){   
+			npage = Integer.parseInt(request.getParameter("npage"));
+		}
+		
+		BoardPagingTO snlpagingTO = new BoardPagingTO();
+		snlpagingTO.setCpage(npage);
+		
+		snlpagingTO = boardDao.searchNList(snlpagingTO, searchword);
+		model.addAttribute("snlpagingTO", snlpagingTO);
+		model.addAttribute("searchword", searchword);
+		
+		//System.out.println(slpagingTO.getCpage());
+		//System.out.println(snlpagingTO.getCpage());
+		
+		// 검색 결과 작가 리스트 
+		int nnpage = 1;   // cpage가 없으면 1
+		// getParameter는 url에서 가져오는 키워드라서 nnpage가 아니라 npage를 가져와야 함!!
+		if(request.getParameter("npage") != null && !request.getParameter("npage").equals("")){   
+			nnpage = Integer.parseInt(request.getParameter("npage"));
+		}
+		
+		BoardPagingTO snnlpagingTO = new BoardPagingTO();
+		snnlpagingTO.setCpage(nnpage);
+		
+		snnlpagingTO = boardDao.searchNNList(snnlpagingTO, searchword);
+		model.addAttribute("snnlpagingTO", snnlpagingTO);
+		model.addAttribute("searchword", searchword);
+		
+		return "search_list";
+	}
+	
 	@RequestMapping(value = "/signup.do")
 	public String signup() {
 		return "signup";
