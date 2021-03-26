@@ -14,16 +14,18 @@
 	//현재 세션 상태를 체크한다
 	UserTO userInfo = null;
 	String userID = null;
+	String userSeq = null;
 	if (session.getAttribute("userInfo") != null) {
 		userInfo= (UserTO)session.getAttribute("userInfo");
 		userID = userInfo.getId();
+		userSeq = userInfo.getSeq();
 		like_count_check = (Integer)request.getAttribute("like_count_check");
 		//System.out.println(like_count_check);
 	}
 	
 	StringBuffer likey_button = new StringBuffer();
 	if(like_count_check != 0){
-		likey_button.append("<input type='button' value='like' style='color : gray; background-color : yellow;' id= 'button_likey' />");
+		likey_button.append("<input type='button' value='like' style='color : white; background-color : gray;' id= 'button_likey' />");
 	} else {
 		likey_button.append("<input type='button' value='like' id= 'button_likey' />");
 	}
@@ -40,24 +42,37 @@
 	String hit = to.getHit();
 	String boardUserID = to.getUserID();
 	//String useq = to.getUseq();
+	String UserID_board = to.getUserID();
 	
 	StringBuffer commentHTML = new StringBuffer();
 	ArrayList<Board_CommentTO> comment_lists = (ArrayList)request.getAttribute("board_commentTO");
 	if(comment_lists.size() == 0){
-		commentHTML.append("<tr><td colspan='3'>등록된 댓글이 없습니다. 댓글을 통해 소통해봐요!</td></tr>");
+		commentHTML.append("<tr><td colspan='4'>등록된 댓글이 없습니다. 댓글을 통해 소통해봐요!</td></tr>");
 	} else {
 		for (Board_CommentTO comment_to : comment_lists){
 			String comment_nickname = comment_to.getNickname();
 			String comment_content = comment_to.getContent();
 			String comment_date_time = comment_to.getDate_time();
 			commentHTML.append("<tr>");
-			commentHTML.append("<td>" + comment_nickname + "</td>");
-			commentHTML.append("<td><div>"+comment_content+"</div></td>");
-			commentHTML.append("<td>"+comment_date_time+"</td>");
+			if(comment_to.getUseq().equals(userSeq)){
+				commentHTML.append("<td id='comment_seq' comment_seq_attr = '"+comment_to.getSeq()+"'>" + comment_nickname + "</td>");
+				commentHTML.append("<td><div><textarea cols='55' rows='1' required wrap='hard' style='border:0px;' id='comment_text'>"+comment_content+"</textarea></div></td>");
+				commentHTML.append("<td>"+comment_date_time+"</td>");
+				commentHTML.append("<td><input type='button' id='comment_modify' value='수정' style='CURSOR:hand;' title='내용 수정 후, 버튼을 누르면 수정됩니다.' /><input type='button' id='comment_delete' value='삭제'/></td>");
+			} else {
+				commentHTML.append("<td>" + comment_nickname + "</td>");
+				commentHTML.append("<td><div>"+comment_content+"</div></td>");
+				commentHTML.append("<td colspan='2'>"+comment_date_time+"</td>");
+			}
 			commentHTML.append("</tr>");
 		}
 	}
 	int likey_count = (Integer)request.getAttribute("likey_count");
+	
+	StringBuffer BoardUseq_match = new StringBuffer();
+	if(!UserID_board.equals(userID)){
+		BoardUseq_match.append("readonly");
+	}
 	
 
 %>
@@ -65,6 +80,18 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <style type="text/css">
+	html{
+		position: fixed;
+	}
+	#start-button{
+		width: 30px;
+		font-size: 25px;
+		margin-left: 1000px;
+		
+	}
+	.button2{
+		font-size: 25px;
+	}
 	#comment {
 		width : 520;
 		height : 100;
@@ -93,14 +120,12 @@
 		background-color : ivory;
 		font-color : black; 
 	}
+	#wrapTable {
+		font-size : 8px;
+	}
 </style>
 <script type="text/javascript">
-$(function(){
-	// 세션으로 부터 로그인 정보(useq)랑 현 게시글 useq랑 같으면 input-text 랑 textarea 수정 가능하게 default는 readonly --> 다혜 아직 진행 안된 부분
-	
-	
-	
-});
+
 $(function() {
 	// 등록하기 버튼 클릭 시, 알림창 생성 및 댓글 DB 입력
 	$('#comment_btn').click(function () {
@@ -108,20 +133,20 @@ $(function() {
 		if (userInfo != null) {
 			userID = userInfo.getId();
 		%>
-			let comment = $('#comment_text').val();
+			let comment = $('#comment_text_input').val();
 			console.log(comment);
 			if(comment == ''){
 				alert('댓글을 입력해주세요');
 				$('#comment_text').focus();
-			} else if(comment.length < 10){
-				alert('최소 10자 이상 입력이 필요합니다.');
+			} else if(comment.length < 5){
+				alert('최소 5자 이상 입력이 필요합니다.');
 				$('#comment_text').focus();
 			} else {
 				$.ajax({
 					url : './comment.do',
 					type : 'POST',
 					data : {
-						"user" : "<%=userID %>",
+						"user" : "<%=userSeq %>",
 						"comment" : comment,
 						"bseq" : <%=seq %>
 					},
@@ -200,7 +225,119 @@ $(function() {
 			<% }%>	
 	});
 });
+// 제목 및 게시글 수정
+$(function() {
+	$("#modify").click(function() {
+		//alert("수정 버튼 클락");
+		let board_title = $("#board_title").val();
+		let board_content = $("#board_content").val()
+		console.log(board_title + "\n" + board_content);
+		
+		$.ajax({
+			url : './board_modify.do',
+			type : 'POST',
+			data : {
+				"user" : "<%=userSeq %>",
+				"bseq" : <%=seq %>,
+				"board_title" : board_title,
+				"board_content" : board_content
+			},
+			success : function (data) {
+				alert("게시글 수정 작업이 완료되었습니다.");
+				$('.modal-content').load("./view.do" + "?seq=" + <%=request.getParameter("seq")%>);
+			},
+			error : function (error){
+				console.log('Error');
+			}
+		});
+	});
+});
 
+// 모달창 x 버튼 누르면 페이지 리로드
+$(function (){
+	$("#close_btn").click(function() {
+		location.reload();
+	});
+});
+// 게시글 삭제
+$(function() {
+	$("#delete").click(function() {
+		var delete_confirm = confirm("삭제 하시겠습니까?");
+		if(delete_confirm == true){
+			$.ajax({
+				url : './board_delete.do',
+				type : 'POST',
+				data : {
+					"user" : "<%=userSeq %>",
+					"bseq" : <%=seq %>
+				},
+				success : function (data) {
+					alert("게시글이 삭제 되었습니다.");
+					history.back(-2);
+				},
+				error : function (error){
+					console.log('Error');
+				}
+			});
+		}
+	});
+});
+//comment_modify
+$(function () {
+	$("#comment_modify").click(function() {
+		let comment_text = $("#comment_text").val();
+		//console.log(comment_text);
+		let comment_seq = $("#comment_seq").attr("comment_seq_attr");
+		//console.log(comment_seq);
+		if(comment_text.length < 5){
+			alert('최소 5자 이상 입력이 필요합니다.');
+			$('#comment_text').focus();
+		} else {
+			$.ajax({
+				url : './comment_modify.do',
+				type : 'POST',
+				data : {
+					"value" : "modify",
+					"comment_seq" : comment_seq,
+					"comment" : comment_text
+				},
+				success : function (data) {
+					alert('댓글 수정 완료');
+					$('.modal-content').load("./view.do" + "?seq=" + <%=request.getParameter("seq")%>);
+				},
+				error : function (error){
+					console.log('Error');
+				}
+			});	
+		}
+	});
+});
+//comment_delete
+$(function () {
+	$("#comment_delete").click(function() {
+		let comment_delete_confirm = confirm("댓글을 삭제하시겠습니까?");
+		if(comment_delete_confirm == true){
+			let comment_text = $("#comment_text").val();
+			let comment_seq = $("#comment_seq").attr("comment_seq_attr");
+			$.ajax({
+				url : './comment_modify.do',
+				type : 'POST',
+				data : {
+					"value" : "delete",
+					"comment_seq" : comment_seq,
+					"comment" : comment_text
+				},
+				success : function (data) {
+					alert('댓글 삭제 완료');
+					$('.modal-content').load("./view.do" + "?seq=" + <%=request.getParameter("seq")%>);
+				},
+				error : function (error){
+					console.log('Error');
+				}
+			});	
+		}
+	});
+});
 </script>
        <table>
        	<tr>
@@ -216,7 +353,14 @@ $(function() {
 	       				<% if (userInfo == null) {%> <!-- 로그인이 안되어 있을 시, 수정.삭제 버튼 x -->
 	       					<tr><td></td></tr>
 	       				<% } else if (userID != null && userID.equals(boardUserID)) { %> <!-- 로그인 o, Board의 useq랑 같을 때 -> 버튼 생성 -->
-	       					<tr><td><input type="button" value="수정"/></td><td><input type="button" value="삭제"/></td></tr>
+	       					<tr>
+	       						<td>
+	       							<input type="button" value="수정" id="modify" style="CURSOR:hand;" title="제목과 내용을 수정 후, '수정'버튼을 누르면 수정됩니다."/>
+       							</td>
+       							<td>
+       								<input type="button" value="삭제" id="delete"/>
+   								</td>
+							</tr>
 	       				<% }else {%> <!-- 그 외의 경우 버튼 생성 x -->
 	       					<tr><td></td></tr>
 	       				<% } %>
@@ -225,7 +369,7 @@ $(function() {
 	       				</td >
 	       				<td rowspan="2" align="top" width="30">
 	       					<div align="right">
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button></span>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close_btn"></button></span>
 						    </div>
 	       				</td>
 	       			</tr>
@@ -238,13 +382,13 @@ $(function() {
        	<tr>
        		<td>
        			<table width="600" height="350">
-       			<tr><td height="10">제목 :  <input type="text" value="<%=title%>" id="board_title" size="69"/></td></tr>
+       			<tr><td height="10">제목 :  <input type="text" value="<%=title%>" id="board_title" size="69" <%=BoardUseq_match %>/></td></tr>
        				<tr height="230">
        					<td>
        						<!-- <div id="vertical1">
        							<div class="wrap"> 
        								<table border="1" height="230" width="580" class="wrapTable"> <tr><td>  -->
-       								<textarea cols="78" rows="10" required wrap="hard"><%=content %></textarea>
+       								<textarea cols="78" rows="10" required wrap="hard" id="board_content" <%=BoardUseq_match %>><%=content %></textarea>
        								<!-- </td></tr></table>
        							</div>
        						</div>  -->
@@ -256,7 +400,7 @@ $(function() {
        							<div class="wrap">
        								<table border="1" height="70" width="580" id="wrapTable">
        								<tr>
-       									<th>별명</th><th>내용</th><th>일시</th>
+       									<th width="80" >별명</th><th width="300">내용</th><th>일시</th><th style="padding-left : 5px;">비고</th>
        								</tr>
 			       						<%= commentHTML %>
 			       						
@@ -283,7 +427,7 @@ $(function() {
 	 			</tr>
        			<tr>
 	       				<td colspan="3" width="520">
-       						<input type="text" placeholder="댓글을 입력해주세요." size="60" id="comment_text"/>
+       						<input type="text" placeholder="댓글을 입력해주세요." size="60" id="comment_text_input"/>
 	       				</td>
 	       				<td>
 	       					<input type="button" value="등록하기" height="100" id="comment_btn"/>

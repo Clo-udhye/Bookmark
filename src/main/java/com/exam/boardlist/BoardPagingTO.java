@@ -2,6 +2,8 @@ package com.exam.boardlist;
 
 import java.util.ArrayList;
 
+import com.exam.user.UserTO;
+
 public class BoardPagingTO {
 
 	private int cpage;
@@ -13,13 +15,32 @@ public class BoardPagingTO {
 	private int endBlock;
 	
 	private ArrayList<BoardTO> boardList;
+	
+	// 검색결과페이지에 작가 리스트에 nickname 출력하려고.
+	private ArrayList<UserTO> userList;
+	public ArrayList<UserTO> getUserList() {
+		return userList;
+	}
+	public void setUserList(ArrayList<UserTO> userList) {
+		this.userList = userList;
+	}
+	
+	// 검색결과페이지에 작가 리스트에 좋아요수 출력하려고.
+	private ArrayList<JoinBLUTO> joinbluList;
+	public ArrayList<JoinBLUTO> getJoinbluList() {
+		return joinbluList;
+	}
+	public void setJoinbluList(ArrayList<JoinBLUTO> joinbluList) {
+		this.joinbluList = joinbluList;
+	}
+	
 
 	public BoardPagingTO() {
 		this.cpage = 1;
 		// 한 페이지에 보일 게시글 수
 		this.recordPerPage = 20;
-		// 한 줄에 보일 게시글 수
-		this.blockPerPage = 5;
+		// 페이지탭에 보일 페이지 수 (한 줄에 보일 게시글 수 아님 주의!)
+		this.blockPerPage = 3;
 		this.totalPage = 1;
 		this.totalRecord = 0;
 	}
@@ -74,5 +95,5 @@ public class BoardPagingTO {
 	public void setBoardList(ArrayList<BoardTO> boardList) {
 		this.boardList = boardList;
 	}
-	
+
 }

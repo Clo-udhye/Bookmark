@@ -23,6 +23,10 @@
     overflow:scroll;
     -webkit-overflow-scrolling: touch;
 }
+.button1, .button2{
+	width: 30px;
+	font-size: 25px;
+	}
 </style>
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -58,7 +62,7 @@ $(document).ready(function(){
 
 </script>  
 	<div class="modal-header">
-		<h5 class="modal-title">주소 검색</h5>
+		<h5 class="modal-title">주소 찾기</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	</div>
 	<div class="modal-body">

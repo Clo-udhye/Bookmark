@@ -24,6 +24,7 @@ import com.exam.booklist.BookRelatedTO;
 import com.exam.booklist.BookTO;
 import com.exam.paging.pagingTO;
 import com.exam.theseMonthBoard.Board_CommentTO;
+import com.exam.theseMonthBoard.Board_Modify_Delete_DAO;
 import com.exam.theseMonthBoard.Home_BoardDAO;
 import com.exam.theseMonthBoard.Home_BoardTO;
 import com.exam.user.LoginTO;
@@ -57,6 +58,8 @@ public class HomeController {
 	@Autowired
 	AdminDAO adminDao;
 
+	@Autowired
+	Board_Modify_Delete_DAO board_Modify_Delete_DAO;
 	
 	@RequestMapping(value = "/test.do")
 	public String test() {
@@ -124,6 +127,25 @@ public class HomeController {
 		model.addAttribute("flag", flag);
 		return "comment_ok";
 	}
+	
+	@RequestMapping(value = "/comment_modify.do")
+	public String comment_modify(HttpServletRequest req , Model model) {
+		String value = req.getParameter("value");
+		if(value.equals("modify")) {
+			//System.out.println("comment modify");
+			String comment = req.getParameter("comment");
+			String comment_seq = req.getParameter("comment_seq");
+			int flag = boardActionDAO.comment_modify(comment, comment_seq);
+			model.addAttribute("flag", flag);
+		} else if (value.equals("delete")) {
+			//System.out.println("comment delete");
+			String comment_seq = req.getParameter("comment_seq");
+			int flag = boardActionDAO.comment_delete(comment_seq);
+			model.addAttribute("flag", flag);
+		}
+		return "comment_ok";
+	}
+	
 	@RequestMapping(value = "/comment_check.do")
 	public String comment_check(HttpServletRequest req , Model model) {
 		String seq = req.getParameter("bseq");
@@ -150,6 +172,28 @@ public class HomeController {
 		int flag_like = boardActionDAO.unlikey(writer_seq, board_seq);
 		model.addAttribute("flag_like", flag_like);
 		return "likey_ok";
+	}
+	
+	@RequestMapping(value = "/board_modify.do")
+	public String board_modify(HttpServletRequest req , Model model) {
+		String writer_seq = req.getParameter("user");
+		String board_seq = req.getParameter("bseq");
+		String board_title = req.getParameter("board_title");
+		String board_content = req.getParameter("board_content");
+		int flag = board_Modify_Delete_DAO.Board_Modify(writer_seq, board_seq, board_title, board_content);
+		model.addAttribute("flag", flag);
+		
+		return "modify_ok";
+	}
+	
+	@RequestMapping(value = "/board_delete.do")
+	public String board_delete(HttpServletRequest req , Model model) {
+		String writer_seq = req.getParameter("user");
+		String board_seq = req.getParameter("bseq");
+		int flag = board_Modify_Delete_DAO.Board_Delete(writer_seq, board_seq);
+		model.addAttribute("flag", flag);
+		
+		return "modify_ok";
 	}
 	
 	@RequestMapping(value = "/book_list.do")
@@ -232,6 +276,62 @@ public class HomeController {
 	@RequestMapping(value = "/search.do")
 	public String search() {
 		return "search";
+	}
+	
+	@RequestMapping(value = "/search_list.do")
+	public String search_list(HttpServletRequest request, Model model) {
+		
+		int tpage = 1;   // cpage가 없으면 1
+		if(request.getParameter("tpage") != null && !request.getParameter("tpage").equals("")){   
+			tpage = Integer.parseInt(request.getParameter("tpage"));
+		}
+	    
+		// 입력한 검색어 받아오려고..
+		String searchword = request.getParameter("searchword");
+		
+		BoardPagingTO slpagingTO = new BoardPagingTO();
+		slpagingTO.setCpage(tpage);
+	    
+		// BoardDAO에 searchList에 인자 searchword 추가로 적음. (boardList와 달리)
+		slpagingTO = boardDao.searchTList(slpagingTO, searchword);
+		// ""안에 있는 게 search_list.jsp에서 사용할 이름
+		// , 뒤에 있는 게 가져올 데이터 이름
+		model.addAttribute("slpagingTO", slpagingTO);
+		// searchword도 addAttribute로 가져와야 jsp파일에서 사용할 수 있음
+		model.addAttribute("searchword", searchword);
+		
+		
+		// 작가 검색 결과 게시글 리스트
+		int npage = 1;   // cpage가 없으면 1
+		if(request.getParameter("npage") != null && !request.getParameter("npage").equals("")){   
+			npage = Integer.parseInt(request.getParameter("npage"));
+		}
+		
+		BoardPagingTO snlpagingTO = new BoardPagingTO();
+		snlpagingTO.setCpage(npage);
+		
+		snlpagingTO = boardDao.searchNList(snlpagingTO, searchword);
+		model.addAttribute("snlpagingTO", snlpagingTO);
+		model.addAttribute("searchword", searchword);
+		
+		//System.out.println(slpagingTO.getCpage());
+		//System.out.println(snlpagingTO.getCpage());
+		
+		// 검색 결과 작가 리스트 
+		int nnpage = 1;   // cpage가 없으면 1
+		// getParameter는 url에서 가져오는 키워드라서 nnpage가 아니라 npage를 가져와야 함!!
+		if(request.getParameter("npage") != null && !request.getParameter("npage").equals("")){   
+			nnpage = Integer.parseInt(request.getParameter("npage"));
+		}
+		
+		BoardPagingTO snnlpagingTO = new BoardPagingTO();
+		snnlpagingTO.setCpage(nnpage);
+		
+		snnlpagingTO = boardDao.searchNNList(snnlpagingTO, searchword);
+		model.addAttribute("snnlpagingTO", snnlpagingTO);
+		model.addAttribute("searchword", searchword);
+		
+		return "search_list";
 	}
 	
 	@RequestMapping(value = "/signup.do")
