@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+   <% // 현재 세션 상태를 체크한다
+	String userID = null;
+	if (session.getAttribute("userID") != null) {
+		userID = (String)session.getAttribute("userID");
+	}
+	 %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +23,20 @@
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
+<style>
+	html{
+	position: fixed;
+}
+#start-button{
+	width: 30px;
+	font-size: 25px;
+	margin-left: 1000px;
+	
+}
+.button2{
+	font-size: 25px;
+}
+</style>
 </head>
 <body>
 
@@ -35,16 +55,27 @@
 <div id="main">
 	<div id="header">
 		<p>
-			<span>
+		<table>
+		<tr>
+			<td width=5%><span>
 				<button class="sidebar-btn" onclick="sidebarCollapse()">
 					<span><i class="fa fa-bars" aria-hidden="true"></i></span>
 	             </button>
 			</span>
-	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
-	        <span><a href="./login.do">시작하기</a></span>
-			<span><a href="./search.do"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
+			</td>
+	        <td width=5%><span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px; color:black;"></a></span>
+	       
+	        <% if(userID == null){ %>
+	        <td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
+           <% }else{ %>
+           <td width=85% align="right"><span><a class="button1" href="./logout_ok.do" style="color: black; " >로그아웃</a></span></td> 
+           <% } %>
+			<td width=5%><span><a class="button2" href="./search.do" style="black;"><i class="fa fa-search" aria-hidden="true"></i></a></span>
+			</tr>
+		</table>			
     	</p>
     </div>
+
     
     <div id="content">
         <h1>마이페이지</h1>

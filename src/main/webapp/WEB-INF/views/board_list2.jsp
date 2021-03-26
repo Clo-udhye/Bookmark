@@ -70,7 +70,18 @@
 
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">
+	html{
+	position: fixed;
+}
+#start-button{
+	width: 30px;
+	font-size: 25px;
+	margin-left: 1000px;
 	
+}
+.button2{
+	font-size: 25px;
+}
 	.boardThumb img:hover {opacity:0.5;}
 	.board_pagetab { text-align: center; } 
 	.board_pagetab a { text-decoration: none; font: 15px verdana; color: #000; padding: 0 3px 0 3px; }
@@ -103,16 +114,21 @@
 
 <div id="main">
 	<div id="header">
-		<p>
-			<span>
-				<button class="sidebar-btn" onclick="sidebarCollapse()">
-					<span><i class="fa fa-bars" aria-hidden="true"></i></span>
-	             </button>
-			</span>
-	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
-	        <span><a href="./login.do">시작하기</a></span>
-			<span><a href="./search.do"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
-    	</p>
+		<div>
+			<table>
+				<tr>
+					<td width=5%><span>
+						<button class="sidebar-btn" onclick="sidebarCollapse()">
+							<span><i class="fa fa-bars" aria-hidden="true"></i></span>
+			             </button>
+					</span>
+					</td>
+			        <td width=5%><span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px; height:50px; "></a></span>
+			        <td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span>
+					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span>
+				</tr>
+			</table>		
+    	</div>
     </div>
     
     <div id="content">
@@ -130,15 +146,15 @@
         <!--페이지넘버-->
 		<div class="paginate_regular">
 			<div class="board_pagetab">
-				<span class="off"><a href="#">&lt;처음&gt;</a>&nbsp;</span>
-				<span class="off"><a href="#">&lt;이전&gt;</a>&nbsp;</span>
+				<span class="off"><a href="#">처음</a></span>
+				<span class="off"><a href="#"><i class='fa fa-arrow-left' aria-hidden='true' color='black' ></i></a></span>
 				<span class="on"><a href="#">( 1 )</a></span>
 				<span class="off"><a href="#"> 2 </a></span>
 				<span class="off"><a href="#"> 3 </a></span>
 				<span class="off"><a href="#"> 4 </a></span>
 				<span class="off"><a href="#"> 5 </a></span>
-				<span class="off">&nbsp;<a href="#">&lt;다음&gt;</a></span>
-				<span class="off">&nbsp;<a href="#">&lt;끝&gt;</a></span>
+				<span class="off"><a href="#"><i class='fa fa-arrow-right' aria-hidden='true' color='black;'></i></a></span>
+				<span class="off"><a href="#">끝</a></span>
 			</div>
 		</div>
 		<!--//페이지넘버-->

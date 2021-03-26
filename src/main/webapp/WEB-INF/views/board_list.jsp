@@ -91,7 +91,8 @@
 			*/
 			
 			if(filename == null) {
-				sbHtml.append("<td class='board'  width=250px height=250px>");
+				
+				sbHtml.append("<td class='board'  width=250px height=250px >");
 				// 사진 크기 250 250
 				sbHtml.append("	<div class='img'>");
 				sbHtml.append("	</div>");
@@ -102,6 +103,7 @@
 
 				//sbHtml.append("<td>"+filename+"</td>");
 			} else {
+				
 				sbHtml.append("<td class='board'>");
 				// 사진 크기 250 250
 				sbHtml.append("	<div class='img'>");
@@ -183,7 +185,18 @@
 
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">
+	html{
+	position: fixed;
+}
+#start-button{
+	width: 30px;
+	font-size: 25px;
+	margin-left: 1000px;
 	
+}
+.button2{
+	font-size: 25px;
+}
 	.board:hover .img {filter: brightness(60%);}
 	.text {text-align: center; position: absolute; top: 50%; left: 50%; transform: translate( -50%, -50% ); color: white; opacity: 0;}
 	.text a {text-decoration: none; color: white; font-weight: bold;}
@@ -194,6 +207,7 @@
 	.board_pagetab a:hover { text-decoration: underline; background-color:#f2f2f2; }
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
 	#content {position: absolute; left: 50%; transform: translateX(-50%);}
+	.button1, .button2{width: 30px; font-size: 25px;}
 	
 </style>
 <!--
@@ -232,20 +246,26 @@ id=content 본문 가운데 위치
 
 <div id="main">
 	<div id="header">
-		<p>
-			<span>
-				<button class="sidebar-btn" onclick="sidebarCollapse()">
-					<span><i class="fa fa-bars" aria-hidden="true"></i></span>
-	             </button>
-			</span>
-	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
-	        <span><a href="./login.do">시작하기</a></span>
-			<span><a href="./search.do"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
-    	</p>
+		<div>
+			<table>
+				<tr>
+					<td width=5%><span>
+						<button class="sidebar-btn" onclick="sidebarCollapse()">
+							<span><i class="fa fa-bars" aria-hidden="true"></i></span>
+			             </button>
+					</span>
+					</td>
+			        <td width=5%><span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px; height:50px; "></a></span>
+			        <td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span>
+					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span>
+				</tr>
+			</table>		
+    	</div>
     </div>
     
     <div id="content">
-        <!-- <h1>게시글 리스트</h1> -->
+         <h1 >전체 게시글</h1>
+         <br/> 
         	
         <!-- ■■ 내가 추가한 부분 ■■ -->
         <!-- 게시판 -->
@@ -263,17 +283,17 @@ id=content 본문 가운데 위치
 	// << 표시 설정
 	//if(startBlock == 1) {
 	if(cpage == 1) {
-		out.println("<span class='off'><a>&lt;처음&gt;</a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a>처음</a>&nbsp;&nbsp;</span>");
 	} else {
 		//out.println("<span class='off'><a href='./list.do?cpage="+(startBlock-blockPerPage)+"'>&lt;처음&gt;</a>&nbsp;&nbsp;</span>");
-		out.println("<span class='off'><a href='./list.do?cpage="+1+"'>&lt;처음&gt;</a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a href='./list.do?cpage="+1+"'>처음</a>&nbsp;&nbsp;</span>");
 	}
 
 	// < 표시 설정
 	if (cpage == 1) {
-		out.println("<span class='off'><a>&lt;이전&gt;</a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a><i class='fa fa-arrow-left' aria-hidden='true' color='white'></i></a>&nbsp;&nbsp;</span>");
 	} else {
-		out.println("<span class='off'><a href='./list.do?cpage="+(cpage-1)+"'>&lt;이전&gt;</a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a href='./list.do?cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' ></i></a>&nbsp;&nbsp;</span>");
 	}
 
 	
@@ -291,16 +311,16 @@ id=content 본문 가운데 위치
 	if (cpage == totalPage) {
 		out.println("<span class='off'>&nbsp;&nbsp;<a>&lt;다음&gt;</a></span>");
 	} else {
-		out.println("<span class='off'>&nbsp;&nbsp;<a href='./list.do?cpage="+(cpage+1)+"'>&lt;다음&gt;</a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a href='./list.do?cpage="+(cpage+1)+"'><i class='fa fa-arrow-right' aria-hidden='true' ></i></a></span>");
 	}
 
 	// >> 표시 설정
 	//if(endBlock == totalPage) {
 	if(cpage == totalPage) {
-		out.println("<span class='off'>&nbsp;&nbsp;<a>&lt;끝&gt;</a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a>끝</a></span>");
 	} else {
 		//out.println("<span class='off'>&nbsp;&nbsp;<a href='list.do?cpage="+(startBlock+blockPerPage)+"'>&lt;끝&gt;</a></span>");
-		out.println("<span class='off'>&nbsp;&nbsp;<a href='list.do?cpage="+totalPage+"'>&lt;끝&gt;</a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a href='list.do?cpage="+totalPage+"'>끝</a></span>");
 	}
 		
 %>

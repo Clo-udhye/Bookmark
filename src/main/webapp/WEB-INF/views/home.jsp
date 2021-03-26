@@ -53,7 +53,8 @@
 <!-- <style>#content {position: absolute; left: 50%; transform: translateX(-50%);}</style>  -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap" rel="stylesheet">
 <!-- sidebar -->
 
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
@@ -83,7 +84,20 @@
 	     });
    });
 </script>
+<style>
 
+.button1{
+	position: right;
+	width: 30px;
+	font-size: 25px;
+
+}
+.button2{
+	align: right;
+	width: 30px;
+	font-size: 25px;
+}
+</style>
 </head>
 <body>
 
@@ -102,20 +116,27 @@
 <div id="main">
 	<div id="header">
 		<p>
-			<span>
+		<table>
+		<tr>
+			<td width=5%><span>
 				<button class="sidebar-btn" onclick="sidebarCollapse()">
 					<span><i class="fa fa-bars" aria-hidden="true"></i></span>
 	             </button>
 			</span>
-	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px;"></a></span>
+			</td>
+	        <td width=5%><span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px; color:black;"></a></span>
+	       
 	        <% if(userID == null){ %>
-	        <span><a href="./login.do">시작하기</a></span>
-	        <% }else{ %>
-	        <span><a href="./logout_ok.do">로그아웃</a></span>
-	        <% } %>
-			<span><a href="./search.do"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
+	        <td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
+           <% }else{ %>
+           <td width=85% align="right"><span><a class="button1" href="./logout_ok.do" style="color: black; " >로그아웃</a></span></td> 
+           <% } %>
+			<td width=5%><span><a class="button2" href="./search.do" style="black;"><i class="fa fa-search" aria-hidden="true"></i></a></span>
+			</tr>
+		</table>			
     	</p>
     </div>
+
 
 	<div id="content">
 		<div class="intro_brunch">
@@ -130,6 +151,7 @@
 					<span class="txt_brunch">나눔 속 당신의 마음을 울림을 위한, 당신의 책갈피. </span>
 				</span>
 			</p>
+		
 
 			<div class="editor_pic">
 				<div class="wrap_slide">
