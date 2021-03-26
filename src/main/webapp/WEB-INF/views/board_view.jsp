@@ -134,7 +134,7 @@ $(function() {
 		if (userInfo != null) {
 			userID = userInfo.getId();
 		%>
-			let comment = $('#comment_text').val();
+			let comment = $('#comment_text_input').val();
 			console.log(comment);
 			if(comment == ''){
 				alert('댓글을 입력해주세요');
@@ -147,7 +147,7 @@ $(function() {
 					url : './comment.do',
 					type : 'POST',
 					data : {
-						"user" : "<%=userID %>",
+						"user" : "<%=userSeq %>",
 						"comment" : comment,
 						"bseq" : <%=seq %>
 					},
@@ -428,7 +428,7 @@ $(function () {
 	 			</tr>
        			<tr>
 	       				<td colspan="3" width="520">
-       						<input type="text" placeholder="댓글을 입력해주세요." size="60" id="comment_text"/>
+       						<input type="text" placeholder="댓글을 입력해주세요." size="60" id="comment_text_input"/>
 	       				</td>
 	       				<td>
 	       					<input type="button" value="등록하기" height="100" id="comment_btn"/>
