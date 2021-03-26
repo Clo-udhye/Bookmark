@@ -34,7 +34,16 @@
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
-
+<style>
+	.button1, .button2{
+	width: 30px;
+	font-size: 25px;
+	}
+	.content{
+		margine: center;
+}
+.
+</style>
 <script type="text/javascript">
 	window.onload = function(){
 		document.getElementById('login').onclick = function(){
@@ -57,7 +66,9 @@
 		};
 	};
 </script>
-
+<style>
+	
+</style>
 </head>
 <body>
 
@@ -84,43 +95,106 @@
 	</div>
 
 	<div id="main">
-		<div id="header">
-			<p>
-				<span>
-					<button class="sidebar-btn" onclick="sidebarCollapse()">
-						<span><i class="fa fa-bars" aria-hidden="true"></i></span>
-		             </button>
-				</span>
-		        <span><a class="navbar-brand" href="./home.do"><img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
-		        <span><a href="./login.do">시작하기</a></span>
-				<span><a href="./search.do"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
-	    	</p>
-	    </div>
+	<div id="header">
+		<p>
+		<table>
+		<tr>
+			<td width=5%><span>
+				<button class="sidebar-btn" onclick="sidebarCollapse()">
+					<span><i class="fa fa-bars" aria-hidden="true"></i></span>
+	             </button>
+			</span>
+			</td>
+	        <td width=5%><span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px; color:black;"></a></span>
+	        <% if(userID == null){ %>
+	        <td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
+           <% }else{ %>
+           <td width=85% align="right"><span><a class="button1" href="./logout_ok.do" style="color: black; " >로그아웃</a></span></td> 
+           <% } %>
+			<td width=5%><span><a class="button2" href="./search.do" style="black;"><i class="fa fa-search" aria-hidden="true"></i></a></span>
+			</tr>
+		</table>			
+    	</p>
+    </div>
 
 		<div id="content">
+		
 			<!-- 로그인 양식 -->
 			<div class="container">
 				<!-- 하나의 영역 생성 -->
-				<div class="col-lg-4">
+				
 					<!-- 영역 크기 -->
 					<!-- 점보트론은 특정 컨텐츠, 정보를 두드러지게 하기 위한 큰 박스 -->
-					<div class="jumbotron" style="padding-top: 20px;">
+					<div class="jumbotron" style="padding-top: 45px;">
 						<form method="post" action="./login_ok.do" name="login_frm">
-							<h3 style="text-align: center;">로그인 화면</h3>
-							<div class="form-group">
-								<input type="text" class="form-control" placeholder="아이디" name="userID" maxlength="20">
-							</div>
-							<div class="form-group">
-								<input type="password" class="form-control" placeholder="비밀번호" name="userPassword" maxlength="20">
-							</div>
-							<input type="button" class="btn btn-dark form-control" value="로그인" id="login">
-							<input type="button" class="btn btn-dark" value="회원가입" onclick="location.href='./signup.do'" />
-							<input type="button" class="btn btn-dark" value="카카오로그인" onclick="location.href='#'" />
+						<table align="center">
+							    <tr colspan="2" >
+							        <div align="center">
+							            <h1 >'책갈피' 프로젝트</h1>
+							            <h5>독서 후, 당신의 감성과 생각을 나누기 위한 플랫폼</h5>
+							         </div>
+							         <br/>
+							         <br/>
+							    </tr>
+							    
+							    <tr>
+							        <td width="600px" height="auto">
+							            <div class="main-image">
+							               <img src="./images/login-image.png" width="400px;" height="auto;" />
+							            </div>
+							        </td>
+							        <td >
+							            <table id="table1"  text-align="right" >
+							                <tr>
+							                    <td >
+							                       <div class="form-group"  >
+							                          <input type="text" class="form-control" placeholder="아이디" name="userID" maxlength="20" style="padding-right:100px;">
+							                       </div>
+							                    </td>
+							                </tr>
+							                
+							                <tr height="30px;">
+							                	<td></td>
+							                </tr>
+							                
+							                <tr>
+							                    <td>
+							                       <div class="form-group">
+							                       
+							                          <input type="password" class="form-control" placeholder="비밀번호" name="userPassword" maxlength="20">
+							                       </div>
+							                    </td>
+							                </tr>
+							                
+							                <tr height="30px;">
+							                	<td></td>
+							                </tr>
+							                
+							                <tr>
+							                    <td>
+							                        <input type="button" class="btn btn-dark form-control" value="로그인" id="login">
+							                    </td>
+							                </tr>
+							                
+							                <tr height="30px;">
+							                	<td></td>
+							                </tr>
+							                
+							                <tr>
+							                    <td align="center">
+							                        <input type="button" class="btn btn-dark" value="회원가입" onclick="location.href='./signup.do'" style="margin" />
+							                        <input type="button" class="btn btn-dark" value="카카오로그인" onclick="location.href='#'" />
+							                    </td>
+							                </tr>
+							            </table>
+							        </td>
+							    </tr>
+							</table>
 						</form>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+
 </body>
 </html>

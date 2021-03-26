@@ -26,6 +26,12 @@
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
+<style>
+	.button1, .button2{
+	width: 30px;
+	font-size: 25px;
+	}
+</style>
 </head>
 <body>
 
@@ -53,21 +59,26 @@
 
 <div id="main">
 	<div id="header">
-		<p>
-			<span>
-				<button class="sidebar-btn" onclick="sidebarCollapse()">
-					<span><i class="fa fa-bars" aria-hidden="true"></i></span>
-	             </button>
-			</span>
-	        <span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 100px;"></a></span>
-	        <% if(userInfo == null){ %>
-	        <span><a href="./login.do">시작하기</a></span>
-	        <% }else{ %>
-	        <span><a href="./logout_ok.do">로그아웃</a></span>
-	        <% } %>
-			<span><a href="./search.do"><i class="fa fa-search" aria-hidden="true"></i></a></span>		
-    	</p>
-    </div>
+		<div>
+			<table>
+				<tr>
+					<td width=5%><span>
+						<button class="sidebar-btn" onclick="sidebarCollapse()">
+							<span><i class="fa fa-bars" aria-hidden="true"></i></span>
+			             </button>
+					</span>
+					</td>
+					<td width=5%><span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px; height:50px; "></a></span></td>
+					<% if(userInfo == null){ %>
+						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
+	        		<% }else{ %>
+	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        		<% } %>
+					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+				</tr>
+			</table>		
+    	</div>
+	</div>
     
     <div id="content">
         <h1>검색 페이지</h1>
