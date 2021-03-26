@@ -106,7 +106,7 @@
 			</span>
 			</td>
 	        <td width=5%><span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px; color:black;"></a></span>
-	        <% if(userID == null){ %>
+	        <% if(userInfo == null){ %>
 	        <td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
            <% }else{ %>
            <td width=85% align="right"><span><a class="button1" href="./logout_ok.do" style="color: black; " >로그아웃</a></span></td> 

@@ -90,161 +90,160 @@ padding-left: 100px;
    
 </style>
 <script type="text/javascript">
-   window.onload = function(){
-      //중복확인후 변경시 제출하지못하게 변경
-      document.getElementById('userID').onchange = function(){
-         $('#id_check_sucess').hide();
-         $('#id_check').show();
-         $('#userID').attr("check_result", "fail");
-      };
-      document.getElementById('nickname').onchange = function(){
-         $('#nickname_check_sucess').hide();
-         $('#nickname_check').show();
-         $('#nickname').attr("check_result", "fail");
-      };
-      
-      document.getElementById('id_check').onclick = function(){
-         // 아이디 정규표현식, 영어소문자 숫자만 가능, 6~16자
-         const regexp = /^[a-z0-9]{6,16}$/;
-         if(!regexp.test(document.signup_frm.userID.value.trim())){
-            alert('아이디는 6자이상 16자 이하의 영어소문자, 숫자로 이루어져야합니다.');
-            $('#userID').focus();
-         } else{
-            //아이디 중복확인
-            const request = new XMLHttpRequest();
-            request.onreadystatechange = function(){
-               if(request.readyState == 4){
-                  if(request.status == 200){
-                     const data = request.responseXML;
-                     const flags = data.getElementsByTagName('flag');
-                     let flag = flags[0].childNodes[0].nodeValue;
-                  
-                     if(flag == 0){
-                        alert("이미 존재하는 아이디 입니다.");
-                        $('#userID').focus();
-                        return false 
-                     } else{
-                        alert("사용가능한 아이디 입니다.");
-                        $('#userID').attr("check_result", "success");
-                        $('#id_check_sucess').show();
-                        $('#id_check').hide();
-                        return false;             
-                     }
-                     
-                  } else{
-                     alert('[Error]');
-                  }
-               }
-            };
-            request.open('GET', './duplicationCheck.do?item=id&value=' + document.signup_frm.userID.value.trim(), true);
-            request.send();
-         }
-      };
-      
-      document.getElementById('nickname_check').onclick = function(){
-         // 별명 정규표현식, 한글 숫자만 가능, 2~12자
-         const regexp2 = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]{2,12}$/;
-         if(!regexp2.test(document.signup_frm.nickname.value.trim())){
-            alert('별명은 한글과 숫자로 이루어져야합니다.');
-            $('#nickname').focus();
-            
-         } else{
-            //별명 중복확인
-            const request = new XMLHttpRequest();
-            request.onreadystatechange = function(){
-               if(request.readyState == 4){
-                  if(request.status == 200){
-                     const data = request.responseXML;
-                     const flags = data.getElementsByTagName('flag');
-                     let flag = flags[0].childNodes[0].nodeValue;
-                  
-                     if(flag == 0){
-                        alert("이미 존재하는 별명 입니다.");
-                        $('#nickname').focus();
-                        return false 
-                     } else{
-                        alert("사용가능한 별명 입니다.");
-                        $('#nickname').attr("check_result", "success");
-                        $('#nickname_check_sucess').show();
-                        $('#nickname_check').hide();
-                        return false;             
-                     }
-                     
-                  } else{
-                     alert('[Error]');
-                  }
-               }
-            };
-            request.open('GET', './duplicationCheck.do?item=nickname&value=' + document.signup_frm.nickname.value.trim(), true);
-            request.send();
-         }
-      };
-      
-      document.getElementById('signup').onclick = function(){
-         if(document.signup_frm.userID.value.trim()==''){
-            alert('아이디를 입력하셔야합니다.');
-            $('#userID').focus();
-            return false;
-         }
-         if(document.signup_frm.nickname.value.trim()==''){
-            alert('별명을 입력하셔야합니다.');
-            $('#nickname').focus();
-            return false;
-         }
-         if(document.signup_frm.userPassword.value.trim()==''){
-            alert('비밀번호를 입력하셔야합니다.');
-            $('#userPassword').focus();
-            return false;
-         }
-         if(document.signup_frm.userPasswordCheck.value.trim()==''){
-            alert('비밀번호 확인을 입력하셔야합니다.');
-            $('#userPasswordCheck').focus();
-            return false;
-         }
-         if(document.signup_frm.mail.value.trim()==''){
-            alert('메일을 입력하셔야합니다.');
-            $('#mail').focus();
-            return false;
-         }
-         // 아이디, 별명 중복확인 버튼 눌렀는지 확인
-         if ($('#userID').attr("check_result") == "fail"){
-             alert("아이디 중복체크를 해주시기 바랍니다.");
-             $('#userID').focus();
-             return false;
-          }
-         if ($('#nickname').attr("check_result") == "fail"){
-             alert("별명 중복체크를 해주시기 바랍니다.");
-             $('#nickname').focus();
-             return false;
-           }
-         // 비밀번호와 비밀번호확인이 동일한지 확인
-         if(document.signup_frm.userPasswordCheck.value.trim()!=document.signup_frm.userPassword.value.trim()){
-            alert("비밀번호를 다시 확인해주세요");
-             $('#userPassword').focus();
-             return false;
-         }
-         document.signup_frm.submit();
-      };
-   };
+	$(document).ready(function(){
+		//중복확인후 변경시 제출하지못하게 변경
+		$('#userID').on('change', function() {
+			$('#id_check_sucess').hide();
+			$('#id_check').show();
+			$('#userID').attr("check_result", "fail");
+		});
+		
+		$('#nickname').on('change', function() {
+			$('#nickname_check_sucess').hide();
+			$('#nickname_check').show();
+			$('#nickname').attr("check_result", "fail");
+		});
+		
+		document.getElementById('id_check').onclick = function(){
+			// 아이디 정규표현식, 영어소문자 숫자만 가능, 6~16자
+			const regexp = /^[a-z0-9]{6,16}$/;
+			if(!regexp.test(document.signup_frm.userID.value.trim())){
+				alert('아이디는 6자이상 16자 이하의 영어소문자, 숫자로 이루어져야합니다.');
+				$('#userID').focus();
+			} else{
+				//아이디 중복확인
+				const request = new XMLHttpRequest();
+				request.onreadystatechange = function(){
+					if(request.readyState == 4){
+						if(request.status == 200){
+							const data = request.responseXML;
+							const flags = data.getElementsByTagName('flag');
+							let flag = flags[0].childNodes[0].nodeValue;
+						
+							if(flag == 0){
+								alert("이미 존재하는 아이디 입니다.");
+								$('#userID').focus();
+								return false 
+							} else{
+								alert("사용가능한 아이디 입니다.");
+								$('#userID').attr("check_result", "success");
+								$('#id_check_sucess').show();
+								$('#id_check').hide();
+								return false;	          
+							}
+							
+						} else{
+							alert('[Error]');
+						}
+					}
+				};
+				request.open('GET', './duplicationCheck.do?item=id&value=' + document.signup_frm.userID.value.trim(), true);
+				request.send();
+			}
+		};
+		
+		document.getElementById('nickname_check').onclick = function(){
+			// 별명 정규표현식, 한글 숫자만 가능, 2~12자
+			const regexp2 = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]{2,12}$/;
+			if(!regexp2.test(document.signup_frm.nickname.value.trim())){
+				alert('별명은 한글과 숫자로 이루어져야합니다.');
+				$('#nickname').focus();
+				
+			} else{
+				//별명 중복확인
+				const request = new XMLHttpRequest();
+				request.onreadystatechange = function(){
+					if(request.readyState == 4){
+						if(request.status == 200){
+							const data = request.responseXML;
+							const flags = data.getElementsByTagName('flag');
+							let flag = flags[0].childNodes[0].nodeValue;
+						
+							if(flag == 0){
+								alert("이미 존재하는 별명 입니다.");
+								$('#nickname').focus();
+								return false 
+							} else{
+								alert("사용가능한 별명 입니다.");
+								$('#nickname').attr("check_result", "success");
+								$('#nickname_check_sucess').show();
+								$('#nickname_check').hide();
+								return false;	          
+							}
+							
+						} else{
+							alert('[Error]');
+						}
+					}
+				};
+				request.open('GET', './duplicationCheck.do?item=nickname&value=' + document.signup_frm.nickname.value.trim(), true);
+				request.send();
+			}
+		};
+		
+		document.getElementById('signup').onclick = function(){
+			if(document.signup_frm.userID.value.trim()==''){
+				alert('아이디를 입력하셔야합니다.');
+				$('#userID').focus();
+				return false;
+			}
+			if(document.signup_frm.nickname.value.trim()==''){
+				alert('별명을 입력하셔야합니다.');
+				$('#nickname').focus();
+				return false;
+			}
+			if(document.signup_frm.userPassword.value.trim()==''){
+				alert('비밀번호를 입력하셔야합니다.');
+				$('#userPassword').focus();
+				return false;
+			}
+			if(document.signup_frm.userPasswordCheck.value.trim()==''){
+				alert('비밀번호 확인을 입력하셔야합니다.');
+				$('#userPasswordCheck').focus();
+				return false;
+			}
+			if(document.signup_frm.mail.value.trim()==''){
+				alert('메일을 입력하셔야합니다.');
+				$('#mail').focus();
+				return false;
+			}
+			// 아이디, 별명 중복확인 버튼 눌렀는지 확인
+			if ($('#userID').attr("check_result") == "fail"){
+			    alert("아이디 중복체크를 해주시기 바랍니다.");
+			    $('#userID').focus();
+			    return false;
+			 }
+			if ($('#nickname').attr("check_result") == "fail"){
+			    alert("별명 중복체크를 해주시기 바랍니다.");
+			    $('#nickname').focus();
+			    return false;
+			  }
+			// 비밀번호와 비밀번호확인이 동일한지 확인
+			if(document.signup_frm.userPasswordCheck.value.trim()!=document.signup_frm.userPassword.value.trim()){
+				alert("비밀번호를 다시 확인해주세요");
+			    $('#userPassword').focus();
+			    return false;
+			}
+			document.signup_frm.submit();
+		};
+	});
 </script>
 
 <script type="text/javascript">
-   $(document).ready(function(){
-     $("#modal-button").click(function(){
-           const regexp2 = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]{2,12}$/;
-         if(!regexp2.test($('#address').val().trim())){
-            alert('동이름으로 검색해주세요');
-            $('#address').val('');
-         }
-         
-         $('.modal-content').load("./zipsearch.do?strDong="+$('#address').val());
-         
-     });
-   });
+	$(document).ready(function(){
+	  $("#modal-button").click(function(){
+		  	const regexp2 = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]{2,12}$/;
+			if(!regexp2.test($('#address').val().trim())){
+				alert('동이름으로 검색해주세요');
+				$('#address').val('');
+			}
+			
+			$('.modal-content').load("./zipsearch.do?strDong="+$('#address').val());
+			
+	  });
+	});
 </script>
-<style>
-
-</style>
+	
 </head>
 <body>
 
