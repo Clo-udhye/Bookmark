@@ -34,6 +34,9 @@
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
+
+<script type = "text/javascript" src = "https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+
 <style>
 	.button1, .button2{
 	width: 30px;
@@ -182,8 +185,20 @@
 							                
 							                <tr>
 							                    <td align="center">
-							                        <input type="button" class="btn btn-dark" value="회원가입" onclick="location.href='./signup.do'" style="margin" />
-							                        <input type="button" class="btn btn-dark" value="카카오로그인" onclick="location.href='#'" />
+							                   	<div>
+							                        <input type="button" class="btn btn-dark" value="회원가입" onclick="location.href='./signup.do'" style="margin" style="display: inline-block;"/>
+							                        <div id = "naver_id_login" style="display: inline-block;"></div>
+							                    </div>
+							                        <script type="text/javascript">
+														var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://localhost:8080/bookmark/callback1.do");    // Client ID, CallBack URL 삽입
+														var state = naver_id_login.getUniqState();
+													        
+														naver_id_login.setButton("white", 2, 40);
+														naver_id_login.setDomain("http://localhost:8080/bookmark/login.do");    //  URL
+														naver_id_login.setState(state);
+														naver_id_login.setPopup();
+														naver_id_login.init_naver_id_login();
+													</script>
 							                    </td>
 							                </tr>
 							            </table>

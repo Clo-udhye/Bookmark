@@ -153,4 +153,81 @@ public class UserDAO {
 
 		return flag;
 	}	
+	
+	
+	//sns_user에 아이디가 있는지 확인
+	public UserTO snsUser_check(SnsUserTO to, String sns_nickname) {
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		UserTO userInfo = new UserTO(); 
+
+		try{
+			conn = dataSource.getConnection();
+
+			String sql = "select count(*) as count from sns_user where sns_id = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, to.getSns_id());
+
+			rs = pstmt.executeQuery();		
+			if(rs.next()) {
+				if(rs.getString("count").equals("1")) {// 네이버로 로그인 한적이 있다.
+					sql = "select seq, id, nickname from user where id = ?"; 
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, to.getSns_id());
+				
+					rs = pstmt.executeQuery();
+					if(rs.next()) {
+						userInfo.setSeq(rs.getString("seq"));
+						userInfo.setId(rs.getString("id"));
+						userInfo.setNickname(rs.getString("nickname"));
+					} 
+					
+					//System.out.println("userInfo : "+userInfo.getId());
+					return userInfo; 
+					
+				}else// 없다
+					sql = "insert into user values(0, ?, null, ?, ?, null, null)";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, to.getSns_id());
+					pstmt.setString(2, sns_nickname);
+					pstmt.setString(3, to.getSns_id()+"@naver.com");
+						
+					int result = pstmt.executeUpdate();
+					if(result == 1){ //성공적으로 사용자 레코드 생성시 방금 추가한 레코드 정보 가져오기
+						sql = "select seq, id, nickname from user where id = ?"; 
+						pstmt = conn.prepareStatement(sql);
+						pstmt.setString(1, to.getSns_id());
+						
+						rs = pstmt.executeQuery();
+						if(rs.next()) {
+							sql = "insert into sns_user value(?, ?, ?);";
+							pstmt = conn.prepareStatement(sql);
+							pstmt.setString(1, rs.getString("seq"));
+							pstmt.setString(2, rs.getString("id"));
+							pstmt.setString(3, to.getSns_type());
+							result = pstmt.executeUpdate();
+							if(result == 1) {
+								userInfo.setSeq(rs.getString("seq"));
+								userInfo.setId(rs.getString("id"));
+								userInfo.setNickname(rs.getString("nickname"));
+								
+								return userInfo; 
+							}
+						}						
+					}
+			}					
+
+		} catch(SQLException e){
+			System.out.println("[에러] " + e.getMessage());
+		} finally {
+			if(rs!=null) try{rs.close();}catch(SQLException e) {}
+			if(pstmt!=null) try{pstmt.close();}catch(SQLException e) {}
+			if(conn!=null) try{conn.close();}catch(SQLException e) {}
+		}
+
+		return null;
+	}
 }

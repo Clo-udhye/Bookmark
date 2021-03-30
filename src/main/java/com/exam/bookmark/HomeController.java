@@ -1,17 +1,33 @@
 package com.exam.bookmark;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.net.UnknownHostException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.exam.BoardAction.BoardActionDAO;
 import com.exam.admin.AdminDAO;
 import com.exam.admin.PagingBoardTO;
@@ -29,6 +45,7 @@ import com.exam.theseMonthBoard.Home_BoardDAO;
 import com.exam.theseMonthBoard.Home_BoardTO;
 import com.exam.user.LoginTO;
 import com.exam.user.SHA256;
+import com.exam.user.SnsUserTO;
 import com.exam.user.UserDAO;
 import com.exam.user.UserTO;
 import com.exam.zipcode.ZipcodeDAO;
@@ -60,6 +77,9 @@ public class HomeController {
 
 	@Autowired
 	Board_Modify_Delete_DAO board_Modify_Delete_DAO;
+	
+	private String CLIENT_ID = "M6o3LcZw7WiTxlN_PoKh"; //애플리케이션 클라이언트 아이디값";
+	private String CLI_SECRET = "nQTjAwQVT0"; //애플리케이션 클라이언트 시크릿값";
 	
 	@RequestMapping(value = "/test.do")
 	public String test() {
@@ -478,4 +498,33 @@ public class HomeController {
 		model.addAttribute("likey_count", count);
 		return "board_modify";
 	}
+	
+	@RequestMapping(value="login_test.do", method=RequestMethod.GET)
+    public String naverlogin() {
+        
+        return "login_test";
+    }
+    
+    @RequestMapping(value="callback1.do", method=RequestMethod.GET)
+    public String loginPOSTNaver(HttpSession session) {
+        
+        return "naverlogin_callback";
+    }
+
+    @RequestMapping(value="sns_user.do", method=RequestMethod.GET)
+    public String sns_user(HttpServletRequest request , Model model) {
+    	// 네이버 아이디, 닉네임
+		String sns_nickname = request.getParameter("sns_nickname");
+		SnsUserTO to = new SnsUserTO();
+		to.setSns_id(request.getParameter("sns_id"));
+		to.setSns_type(request.getParameter("sns_type"));
+		
+		UserTO userInfo = userDao.snsUser_check(to, sns_nickname);
+		
+		model.addAttribute("userInfo", userInfo);
+		
+		    	
+        return "sns_user";
+    }
+	
 }

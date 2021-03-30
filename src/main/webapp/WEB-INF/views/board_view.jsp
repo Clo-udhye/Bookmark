@@ -430,7 +430,7 @@ $(function () {
        						<input type="text" placeholder="댓글을 입력해주세요." size="60" id="comment_text_input"/>
 	       				</td>
 	       				<td>
-	       					<input type="button" value="등록하기" height="100" id="comment_btn"/>
+	       					<button class="btn btn-sm" value="등록하기" height="100" id="comment_btn"><i class="fas fa-arrow-circle-up"></i></button>
 	       				</td>
        			</tr>
        		</table>
