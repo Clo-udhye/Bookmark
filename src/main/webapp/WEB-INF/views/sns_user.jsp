@@ -13,7 +13,7 @@
 	
 	//System.out.println("네이버로 로그인 성공");
 	out.println("<script type='text/javascript'>");
-	out.println("opener.history.back()"); 
+	out.println("opener.location.href = opener.document.referrer;"); 
 	out.println("window.close()");
 	out.println("</script>");
 

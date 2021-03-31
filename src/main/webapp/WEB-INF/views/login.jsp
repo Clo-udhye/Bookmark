@@ -65,7 +65,32 @@
 				alert('아이디는 6자이상 16자 이하의 영어소문자, 숫자로 이루어져 있습니다.');
 				return false;
 			}
-			document.login_frm.submit();
+			//document.login_frm.submit();
+			$.ajax({
+	            url : './login_ok.do',
+	            type : 'post',
+	            dataType: 'xml',
+	            data : {
+	               'userID' : $('#userID').val(),
+	               'userPassword' : $('#userPassword').val()
+	            },
+	            success : function(xmlData){	            	
+	            	//console.log('flag : ' + $(xmlData).find("flag").text());
+	            	if($(xmlData).find("flag").text() == 1){
+	            		alert('로그인에 성공했습니다.');
+	            		location.href = document.referrer;
+	            	}else if($(xmlData).find("flag").text() == 0){
+	            		alert('비밀번호가 잘못되었습니다.');
+	            	   	$('#userPassword').focus();
+	            	} else{
+	            		alert('아이디를 확인해주세요.');
+	            		$('#userID').focus();
+	            	}
+	            },
+	            error : function(){
+	            	alert('[서버에러] : 로그인에 실패했습니다.')
+	            }
+	         });      
 		};
 	};
 </script>
@@ -151,7 +176,7 @@
 							                <tr>
 							                    <td >
 							                       <div class="form-group"  >
-							                          <input type="text" class="form-control" placeholder="아이디" name="userID" maxlength="20" style="padding-right:100px;">
+							                          <input type="text" class="form-control" placeholder="아이디" id="userID" name="userID" maxlength="20" style="padding-right:100px;">
 							                       </div>
 							                    </td>
 							                </tr>
@@ -164,7 +189,7 @@
 							                    <td>
 							                       <div class="form-group">
 							                       
-							                          <input type="password" class="form-control" placeholder="비밀번호" name="userPassword" maxlength="20">
+							                          <input type="password" class="form-control" placeholder="비밀번호" id="userPassword" name="userPassword" maxlength="20">
 							                       </div>
 							                    </td>
 							                </tr>
