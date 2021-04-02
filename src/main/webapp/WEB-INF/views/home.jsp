@@ -100,19 +100,20 @@
 		        $('.view-content').load("./view.do" + "?seq=" + seq);   
 		    });
 		}
-		
+
 		$("#write_button").click(function(){
-			<%if(userInfo==null){%>
+			<%if(userInfo!=null){%>
+				$('.write-content').load("./write.do");
+			<%} else{%>
 				var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
 				if(comfirm_login == true){
 					location.href="./login.do";
-				}	
-			<%} else{%>
-	        	$('.write-content').load("./write.do");
+				} else{
+					location.reload();
+				}
 			<%}%>	        	
 	    });
     });
-	
 </script>
 
 <style>
@@ -240,7 +241,7 @@
 
 								<div class="item_pic item_pic_type4 ">														
 									<a id="modal-link1" data-bs-toggle="modal" data-bs-target="#view-modal" class="link_item" > 
-										<input type="hidden" id="board_seq" value=<%=seq1 %>/>
+										<input type="hidden" id="board_seq" value='<%=seq1 %>'/>
 										<!--  hover동작 class(위에 link_item #home_discover)  -->
 										<img
 										src="./upload/<%= filename1%>"
@@ -272,7 +273,7 @@
 
 								<div class="item_pic item_pic_type2">
 									<a id="modal-link2" data-bs-toggle="modal" data-bs-target="#view-modal" class="link_item #home_discover">
-									<input type="hidden" id="board_seq" value=<%=seq2 %>/>
+									<input type="hidden" id="board_seq" value='<%=seq2 %>'/>
 									<img src="./upload/<%=filename2 %>"
 										class="img_pic" alt="<%=title2%>" >
 										
@@ -303,7 +304,7 @@
 
 								<div class="item_pic item_pic_type3">
 									<a id="modal-link3" data-bs-toggle="modal" data-bs-target="#view-modal" class="link_item #home_discover" > 
-									<input type="hidden" id="board_seq" value=<%=seq3 %>/>
+									<input type="hidden" id="board_seq" value='<%=seq3 %>'/>
 									<img
 										src="./upload/<%=filename3 %>"
 										class="img_pic" alt="">

@@ -558,7 +558,7 @@ public class HomeController {
     @RequestMapping(value="/write_ok.do")
     public String write_ok(HttpServletRequest request , Model model) {
     	//String uploadPath = "C:/Project_BM/Project_BM/src/main/webapp/upload";
-    	System.out.println(request.getParameter("title"));
+    	//System.out.println(request.getParameter("title"));
     	
     	String path="/upload";
     	ServletContext context = request.getSession().getServletContext();
