@@ -23,10 +23,6 @@
     overflow:scroll;
     -webkit-overflow-scrolling: touch;
 }
-.button1, .button2{
-	width: 30px;
-	font-size: 25px;
-	}
 </style>
 <script type="text/javascript">
 $(document).ready(function(){ 

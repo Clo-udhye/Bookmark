@@ -27,7 +27,7 @@
     	bookname = (String)request.getAttribute("bookname");
     	SearchResult.append("<div ><h1><span id='result'>"+bookname+"</span> 으로 검색한 결과</h1></div>");
     } else {
-    	SearchResult.append("<div><h1>도서 리스트</h1></div>");
+    	SearchResult.append("<div><h1 style='padding-left: 50px;'>도서 리스트</h1></div>");
     }
     String search = request.getParameter("search");
 	int totalRecord = pagelistTO.getTotalrecord();
@@ -64,7 +64,7 @@
 			bookHTML.append("<table id=innerlist align='center'>");
 			bookHTML.append("<tr>");
 			bookHTML.append("<td rowspan='4' width='20%'><img width='200px' src='"+img_url+"' alt='이미지 없음' border='1px'/></td>");
-			bookHTML.append("<td width=60% >책 제목 :"+title+"</td>");
+			bookHTML.append("<td width=60% style='padding-top: 20px;'>책 제목 :"+title+"</td>");
 			bookHTML.append("<td rowspan='4' width=40 align='center'>");
 			bookHTML.append("<a type='button' href='./book_info.do?master_seq="+master_seq+"' id='simple_button' class='btn btn-dark' ' >자세히 보기</a>");
 			bookHTML.append("</td>");
@@ -85,14 +85,30 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <style>
-#start-button{
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&family=Quicksand:wght@500&display=swap');
+
+.button1{
+	float: right;
+	margin-right: 0px;
 	width: 30px;
-	font-size: 25px;
-	margin-left: 1000px;
-	
+	font-size: 20px;
+
 }
 .button2{
-	font-size: 25px;
+	float: right;
+	margin-right: 50px;
+	width: 30px;
+	font-size: 20px;
+}
+.button3{
+	float: right;
+	width: 30px;
+	font-size: 20px;
+}
+#resist-books{
+	font-family: 'Noto Serif KR', serif;
+	font-family: 'Quicksand', sans-serif;
+	padding-left: 50px;
 }
 #list {
   border: 1px solid black;
@@ -114,11 +130,7 @@ table {
   table-layout: auto;
   
 }
-.button1, .button2{
-	width: 30px;
-	font-size: 25px;
 
-}
 #simple_button{
 	text-align: center;
 	height:auto;
@@ -189,9 +201,9 @@ table {
 					<% if(userInfo == null){ %>
 						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
 	        		<% }else{ %>
-	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        			<td width=75% ><span><a class="button2" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
 	        		<% } %>
-					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+					<td width=5%><span><a class="button3" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
 				</tr>
 			</table>		
     	</div>
@@ -202,7 +214,7 @@ table {
         <div width=100% >
         	<table>
         	
-        	<tr><td width = 80% height="40" > 현재 <%= totalRecord %>개의 책이 등록되어 있습니다.</td></tr>
+        	<tr><td width = 80% height="40" id="resist-books" > 현재 <%= totalRecord %>개의 책이 등록되어 있습니다.</td></tr>
         		<tr>
         			<td height="50" width="200" ></td>
         			<td>
@@ -240,17 +252,17 @@ table {
      <%
      if(request.getAttribute("bookname") == null){
 	     	if (startBlock== 1){
-				out.println("<span><a>처음</a></span>");
+				out.println("<span><a style='color:black'>처음</a></span>");
 			} else {
-				out.println("<span><a href='./book_list.do?cpage=1'>처음</a></span>");
+				out.println("<span><a href='./book_list.do?cpage=1' style='color:black'>처음</a></span>");
 			}
 			
 			out.println("&nbsp;");
 			
 			if(cpage == 1){
-				out.println("<span><a href=''><i class='fa fa-arrow-left' aria-hidden='true' color='black'></i></a></span>");
+				out.println("<span><a href=''><i class='fa fa-arrow-left' aria-hidden='true' style='color:black'></i></a></span>");
 			} else{
-				out.println("<span><a href='./book_list.do?cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' color='black'></i></a></span>");
+				out.println("<span><a href='./book_list.do?cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' style='color:black'></i></a></span>");
 			}
 			
 			out.println("&nbsp;&nbsp;");
@@ -259,7 +271,7 @@ table {
 	     		if(cpage == i){
 	     			out.println("<span>["+i+"]</span>");
 	     		} else {
-	     			out.println("<span><a href ='./book_list.do?cpage="+i+"'>"+i+"</a></span>");
+	     			out.println("<span><a href ='./book_list.do?cpage="+i+"' style='color:black'>"+i+"</a></span>");
 	     		}
 	     	}
 	     	
@@ -267,14 +279,14 @@ table {
 				if(cpage == totalPage){
 					out.println("<span><a href=''><i class='fa fa-arrow-right' aria-hidden='true' color='black;'></i></a></span>");
 				} else{
-					out.println("<span><a href='./book_list.do?cpage="+(cpage+1)+"' ><i class='fa fa-arrow-right' aria-hidden='true' color='black;'></i></a></span>");
+					out.println("<span><a href='./book_list.do?cpage="+(cpage+1)+"' ><i class='fa fa-arrow-right' aria-hidden='true' style='color:black'></i></a></span>");
 				}
 	     	
 			out.println("&nbsp;");
 				if (endBlock== totalPage){
 					out.println("<span><a> 끝</a></span>");
 				} else {
-					out.println("<span><a href='./book_list.do?cpage="+totalPage+"'> 끝</a></span>");
+					out.println("<span><a href='./book_list.do?cpage="+totalPage+"'style='color:black'> 끝</a></span>");
 				}
 			
      } else {
@@ -289,7 +301,7 @@ table {
 			if(cpage == 1){
 				out.println("<span><a href=''><i class='fa fa-arrow-left' aria-hidden='true' color='black'></i></a></span>");
 			} else{
-				out.println("<span><a href='./book_list_search.do?search="+search+"&bookname="+bookname+"&cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' color='black'></i></a></span>");
+				out.println("<span><a href='./book_list_search.do?search="+search+"&bookname="+bookname+"&cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' style='color:black'></i></a></span>");
 			}
 			
 			out.println("&nbsp;&nbsp;");

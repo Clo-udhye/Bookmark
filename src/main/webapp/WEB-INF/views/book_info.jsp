@@ -62,24 +62,37 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&family=Quicksand:wght@500&display=swap" rel="stylesheet">
 <style>
 	html{
 	position: fixed;
 	}
-	#start-button{
-		width: 30px;
-		font-size: 25px;
-		margin-left: 1000px;
-		
-	}
+	.button1{
+	float: right;
+	margin-right: 50px;
+	width: 30px;
+	font-size: 20px;
+
+}
 	.button2{
-		font-size: 25px;
-	}
+	float: right;
+	margin-right: 50px;
+	width: 30px;
+	font-size: 20px;
+}
+	.button3{
+	align: right;
+	width: 30px;
+	font-size: 20px;
+}
+
 	#table {
 		border: 1px solid black;
 		width : 70%;
 		height : 50%;
 		align : center;
+		
 	}
 	#img {
 		padding : 10px;
@@ -174,9 +187,9 @@
 					<% if(userInfo == null){ %>
 						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
 	        		<% }else{ %>
-	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        			<td width=75% ><span><a class="button2" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
 	        		<% } %>
-					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+					<td width=5%><span><a class="button3" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
 				</tr>
 			</table>		
     	</div>
