@@ -101,15 +101,14 @@
 		    });
 		}
 
-		$("#write_button").click(function(){
+		$("#write_button").on('click', function(){
 			<%if(userInfo!=null){%>
+				$("#write-modal").modal("show");
 				$('.write-content').load("./write.do");
-			<%} else{%>
+			<%}else{%>
 				var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
-				if(comfirm_login == true){
+				if(comfirm_login==true){
 					location.href="./login.do";
-				} else{
-					location.reload();
 				}
 			<%}%>	        	
 	    });
@@ -171,7 +170,7 @@
 	<a href="./book_list.do">책 구경하기</a>
 	
 	<div style="padding:8px; position:absolute; bottom:2%; width:100%">
-		<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#write-modal">글쓰기</button>
+		<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
 	</div>
 	
 </div>
@@ -436,20 +435,20 @@
 			</div>
    			<!-- 모달창 정보 -->
              <div id="view-modal" class="modal fade" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
                    <div class="modal-content view-content">
                    
                    </div>
                 </div>
              </div>
              
-             <div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
-                   <div class="modal-content write-content">
-                   
-                   </div>
-                </div>
-             </div>
+			<div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-xl modal-dialog-centered">
+					<div class="modal-content write-content">
+	                 
+	                 </div>
+				</div>
+			</div>
 		</div>
 	</div>	
 </div>

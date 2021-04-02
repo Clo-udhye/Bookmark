@@ -114,6 +114,8 @@ $(document).ready(function(){
 	});
 	
 	$('#book-search').on('click', function(){
+		$('#searchword').attr("bookseq", "-1");
+		//console.log($('#searchword').attr("bookseq"));
 		if($('#searchword').val().trim()==''){
 			alert('검색어를 입력해주세요.');
 		}else{
@@ -158,14 +160,20 @@ $(document).ready(function(){
 	
 	$(document).on('click', '.list-group button',function(e){
 		$('#searchword').val($(this).attr('title'));
-		console.log($(this).attr('title'));
+		$('#searchword').attr("title", $(this).attr('title'));
+		$('#searchword').attr("bookseq", $(this).attr('bookseq'));
+		//console.log($('#searchword').attr("bookseq"));
 		$(this).tab('show')
 	});
 	
 	$('#selected-book').on('click', function(){
-		$('#bookname').val($('#searchword').val());
-		$('input[name="bookseq"]').val($('.list-group button').tab().attr('bookseq'));
-		$("#booklist-modal").modal("hide");
+		if($('#searchword').attr('bookseq')==-1){
+			alert('책을 선택해주세요.');
+		}else{
+			$('#bookname').val($('#searchword').attr('title'));
+			$('input[name="bookseq"]').val($('#searchword').attr('bookseq'));
+			$("#booklist-modal").modal("hide");	
+		}
 	});
 	
 });
@@ -354,7 +362,7 @@ ul, ol, li{ margin:0; padding:0; list-style:none;}
 											  			<label class="form-check-label" for="inlineRadio2">작가</label>
 													</div>
 													<div class="input-group mb-3">
-														<input type="text" class="form-control" placeholder="검색어를 입력하세요." id="searchword">
+														<input type="text" class="form-control" placeholder="검색어를 입력하세요." id="searchword" title="" bookseq="-1">
 														<button class="btn btn-outline-secondary" type="button" id="book-search">검색</button>
 													</div>
 													<div class="list-group">
