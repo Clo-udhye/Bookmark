@@ -218,7 +218,11 @@
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
 	#content {position: absolute; left: 50%; transform: translateX(-50%);}
 	
-	
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+   body {
+ font-family: 'Noto Serif KR', serif;
+  background: #white;
+}	
 </style>
 <!--
 class=board에 마우스 갖다대면 class=img를 filter 적용

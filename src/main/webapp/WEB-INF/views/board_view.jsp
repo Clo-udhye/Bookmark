@@ -48,13 +48,13 @@
 		for (Board_CommentTO comment_to : comment_lists){
 			String comment_nickname = comment_to.getNickname();
 			String comment_content = comment_to.getContent();
-			String comment_date_time = comment_to.getDate_time().substring(0,19);
+			String comment_date_time = comment_to.getDate_time().substring(0,16);
 			commentHTML.append("<tr>");
 			if(comment_to.getUseq().equals(userSeq)){
 				commentHTML.append("<td id='comment_seq' comment_seq_attr = '"+comment_to.getSeq()+"'>" + comment_nickname + "</td>");
-				commentHTML.append("<td><div><textarea cols='55' rows='1' required wrap='hard' style='border:0px;' id='comment_text'>"+comment_content+"</textarea></div></td>");
-				commentHTML.append("<td>"+comment_date_time+"</td>");
-				commentHTML.append("<td><input type='button' id='comment_modify' value='수정' style='CURSOR:hand;' title='내용 수정 후, 버튼을 누르면 수정됩니다.' /><input type='button' id='comment_delete' value='삭제'/></td>");
+				commentHTML.append("<td><div><textarea cols='50' rows='1' required wrap='hard' style='border:0px;' id='comment_text'>"+comment_content+"</textarea></div></td>");
+				commentHTML.append("<td id='commennt_date'>"+comment_date_time+"</td>");
+				commentHTML.append("<td><input type='button' id='comment_modify' value='수정' class='btn btn-dark btn-sm' style='CURSOR:hand;' title='내용 수정 후, 버튼을 누르면 수정됩니다.' /><input type='button' id='comment_delete' class='btn btn-dark btn-sm' value='삭제'/></td>");
 			} else {
 				commentHTML.append("<td>" + comment_nickname + "</td>");
 				commentHTML.append("<td><div>"+comment_content+"</div></td>");
@@ -80,9 +80,7 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <style type="text/css">
-   html{
-      position: fixed;
-   }
+   
    #comment {
       width : 520;
       height : 100;
@@ -121,6 +119,17 @@
     float: right;
     
    }
+   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+   body {
+ font-family: 'Noto Serif KR', serif;
+  background: #white;
+}
+
+#comment_modify, #comment_delete {
+	width : 25px;
+	font-size : 3px;
+	padding : 1px;
+}
 </style>
 <script type="text/javascript">
 // flexslider load
@@ -219,12 +228,13 @@ $(function() {
 						},
 						async : false,
 						success : function (data) {
-							let result = "좋아요 x ";
+							let result = "좋아요 ";
 							result += Number($(data).find('result').text());
 							result += "개";
 							$("#ajax_likey_count").html(result);
 							like_count_check = Number($(data).find('resultcheck').text());
-							$("#button_likey").attr('style', 'color : white; background-color : gray;');
+							$("#button_likey").html("<i class='fas fa-heart' style='font-size: 25px; color: red;'>");
+							//.attr('style', 'font-size: 25px; color: red;');
 							//console.log("like_count_check :" + like_count_check);
 						},
 						error : function (request,status,error){
@@ -249,14 +259,15 @@ $(function() {
 						"bseq" : <%=seq %>
 					},
 					async : false,
-					success : function (data) {
-						let result = "좋아요 x ";
+					success : function (data) {	
+						let result = "좋아요 ";
 						result += $(data).find('result').text();
 						result += "개";
 						
 						$("#ajax_likey_count").html(result);
 						like_count_check = Number($(data).find('resultcheck').text());
-						$("#button_likey").attr('style', '');
+						$("#button_likey").html("<i class='far fa-heart' style='font-size: 25px;'>");
+						//.attr('style', '');
 						//console.log("like_count_check :" + like_count_check);
 					},
 					error : function (request,status,error){
@@ -294,7 +305,7 @@ $(function() {
 					success : function (data_xml) {
 						alert('댓글 입력 완료');
 						let result = "<tr>";
-						result += "<th width='80' >별명</th><th width='300'>내용</th><th>일시</th><th style='padding-left : 5px;'>비고</th>";
+						result += "<th width='80' class='line'>별명</th><th width='300' class='line'>내용</th><th>일시</th><th class='line' style='padding-left : 5px;'>비고</th>";
 						result += "</tr>";
 						$(data_xml).find('comment').each(function(){
 							result += "<tr>";
@@ -304,7 +315,7 @@ $(function() {
 								result += "<td id='comment_seq' comment_seq_attr = '"+$(this).find('seq').text()+"'>" +$(this).find('nickname').text()+"</td>";
 								result += "<td><div><textarea cols='55' rows='1' required wrap='hard' style='border:0px;' id='comment_text'>" +$(this).find('content').text()+"</textarea></div></td>";
 								result += "<td>"+date_time+"</td>";
-								result += "<td><input type='button' id='comment_modify' value='수정' style='CURSOR:hand;' title='내용 수정 후, 버튼을 누르면 수정됩니다.' /><input type='button' id='comment_delete' value='삭제'/></td>";
+								result += "<td><input type='button' id='comment_modify' class='btn btn-dark btn-sm' value='수정' style='CURSOR:hand;' title='내용 수정 후, 버튼을 누르면 수정됩니다.' /><input type='button' id='comment_delete' class='btn btn-dark btn-sm' value='삭제'/></td>";
 							} else {
 								result += "<td id='comment_seq' comment_seq_attr = '"+$(this).find('seq').text()+"'>" +$(this).find('nickname').text()+"</td>";
 								result += "<td><div>" +$(this).find('content').text()+"</div></td>";
@@ -365,7 +376,7 @@ $(document).ready(function () { //$(document).read --> 페이지가 로드되었
 							result += "<td id='comment_seq' comment_seq_attr = '"+$(this).find('seq').text()+"'>" +$(this).find('nickname').text()+"</td>";
 							result += "<td><div><textarea cols='55' rows='1' required wrap='hard' style='border:0px;' id='comment_text'>" +$(this).find('content').text()+"</textarea></div></td>";
 							result += "<td>"+date_time+"</td>";
-							result += "<td><input type='button' id='comment_modify' value='수정' style='CURSOR:hand;' title='내용 수정 후, 버튼을 누르면 수정됩니다.' /><input type='button' id='comment_delete' value='삭제'/></td>";
+							result += "<td><input type='button' id='comment_modify' class='btn btn-dark btn-sm' value='수정' style='CURSOR:hand;' title='내용 수정 후, 버튼을 누르면 수정됩니다.' /><input type='button' id='comment_delete' class='btn btn-dark btn-sm' value='삭제'/></td>";
 						} else {
 							result += "<td id='comment_seq' comment_seq_attr = '"+$(this).find('seq').text()+"'>" +$(this).find('nickname').text()+"</td>";
 							result += "<td><div>" +$(this).find('content').text()+"</div></td>";
@@ -443,9 +454,9 @@ $(function () {
        		<td >
 	       		<table width="620" height="50">
 	       			<tr>
-	       				<td width="150">작성자 : <%=nickname %></td>
-	       				<td width="180">작성 일자 : <%= date %></td>
-	       				<td width="100">조회수 : <%=hit %></td>
+	       				<td width="150" class="line">작성자 : <%=nickname %></td>
+	       				<td width="180" class="line">작성 일자 : <%= date %></td>
+	       				<td width="100" class="line">조회수 : <%=hit %></td>
 	       				<td rowspan="2">
 	       				<table>
 	       				<% if (userInfo == null) {%> <!-- 로그인이 안되어 있을 시, 수정.삭제 버튼 x -->
@@ -479,14 +490,15 @@ $(function () {
        	</tr>
        	<tr>
        		<td>
-       			<table width="600" height="350">
-       			<tr><td height="10">제목 :  <input type="text" value="<%=title%>" id="board_title" size="69" <%=BoardUseq_match %>/></td></tr>
-       				<tr height="230">
+       			 <table width="600" height="350">
+                		<tr class="line"><td  height="10"> <input type="text" value="<%=title%>" id="board_title" size="58 " style="border: none;" <%=BoardUseq_match %>/></td></tr>
+                  		<tr height="230">
+
        					<td>
        						<!-- <div id="vertical1">
        							<div class="wrap"> 
        								<table border="1" height="230" width="580" class="wrapTable"> <tr><td>  -->
-       								<textarea cols="80" rows="10" required wrap="hard" id="board_content" <%=BoardUseq_match %>><%=content %></textarea>
+       								<textarea cols="63" rows="10" required wrap="hard" id="board_content" style="border:none;" <%=BoardUseq_match %>><%=content %></textarea>
        								<!-- </td></tr></table>
        							</div>
        						</div>  -->
@@ -496,9 +508,9 @@ $(function () {
        					<td>
        						<div id="vertical2">
        							<div class="wrap">
-       								<table border="1" height="70" width="580" id="wrapTable">
+       								<table height="70" width="580" id="wrapTable">
        								<tr>
-       									<th width="80" >별명</th><th width="300">내용</th><th>일시</th><th style="padding-left : 5px;">비고</th>
+       									<th class="line" width="80" >별명</th><th class="line" width="300">내용</th><th class="line" >일시</th><th class="line"  width="70" style="padding-left : 5px;">비고</th>
        								</tr>
 			       						<%= commentHTML %>
 			       						
@@ -518,14 +530,14 @@ $(function () {
        			 		<%=likey_button %>
    			 		</td>
    			 		<td width="120" id="ajax_likey_count">
-   			 			좋아요 x <%=likey_count %>개
+   			 			좋아요  <%=likey_count %>개
 		 			</td>
 		 			<td width="200"></td>
 		 			<td width="100"></td>
 	 			</tr>
        			<tr>
 	       				<td colspan="3" width="520">
-       						<input type="text" placeholder="댓글을 입력해주세요." size="70" id="comment_text_input"/>
+       						<input type="text" placeholder="댓글을 입력해주세요." size="53" id="comment_text_input"/>
 	       				</td>
 	       				<td>
                         <button value="등록하기" height="100" id="comment_btn" class="btn"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
