@@ -1,12 +1,15 @@
 @charset "utf-8"; 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+
+
 
 a {
 	color: #333;
-	text-decoration: none
+	
 }
 
 a:active, a:hover {
-	text-decoration: underline
+	text-decoration: underline;
 }
 
 a:active {
@@ -18,7 +21,7 @@ li{
 }
 
 .wrap_brunch {
-	overflow: hidden
+	overflow: hidden;
 }
 
 .cont_brunch {
@@ -71,11 +74,12 @@ li{
 }
 
 .tit_brunch {
+	
 	margin: 150px auto 0
 }
 
 .ico_by {
-	font-family: Georgia, sans-serif;
+	
 	font-style: italic;
 	color: #bfbfbf
 }
@@ -223,7 +227,6 @@ body {
 .info_g .info_by {
 	padding-top: 30px;
 	font-size: 12px;
-	font-family: "Noto Sans Light", sans-serif;
 	color: #fff;
 	opacity: .8;
 	filter: alpha(opacity = 50)
@@ -248,7 +251,7 @@ body {
 }
 
 .info_g .txt_by {
-	font-family: Georgia, sans-serif
+	
 }
 
 .align_g {
@@ -485,7 +488,7 @@ body {
 	margin-top: 0;
 	font-size: 40px;
 	font-weight: 400;
-	font-family: "Nanum Myeongjo", sans-serif;
+	
 	color: #1a1a1a;
 	text-align: left;
 	letter-spacing: -.05em
@@ -496,7 +499,7 @@ body {
 	margin-top: -3px;
 	font-size: 32px;
 	line-height: 46px;
-	font-family: "Nanum Myeongjo", sans-serif;
+	
 	color: #cacaca;
 	letter-spacing: -.05em
 }
@@ -536,7 +539,7 @@ body {
 .intro_brunch .ico_notice, .intro_brunch .ico_update {
 	float: right;
 	font-size: 11px;
-	font-family: Georgia, sans-serif;
+	
 	font-style: italic;
 	color: #00c3bd;
 	padding-top: 2px
@@ -692,7 +695,7 @@ body {
 	display: inline;
 	border-bottom: 1px solid #fff;
 	font-size: 13px;
-	font-family: 'Noto Sans Light', sans-serif
+	
 }
 
 .wrap_pic .tit_pic {
@@ -701,7 +704,7 @@ body {
 	font-weight: 400;
 	font-size: 28px;
 	line-height: 36px;
-	font-family: 'Nanum Myeongjo', sans-serif;
+	
 	letter-spacing: -.025em
 }
 
@@ -709,7 +712,7 @@ body {
 	display: block;
 	padding-top: 9px;
 	line-height: 20px;
-	font-family: 'Noto Sans Light', sans-serif
+	
 }
 
 .wrap_pic .item_pic_color_type .cate_pic, .wrap_pic .item_pic_color_type .info_g .info_by,
@@ -1137,7 +1140,7 @@ body {
 	font-weight: 400;
 	font-size: 32px;
 	line-height: 40px;
-	font-family: "Nanum Myeongjo", sans-serif
+	
 }
 
 .weekly_pic .desc_weekly {
@@ -1419,7 +1422,7 @@ body {
 	font-weight: 400;
 	font-size: 16px;
 	line-height: 26px;
-	font-family: 'Noto Sans Light', sans-serif;
+	
 	color: #fff;
 	letter-spacing: normal
 }
@@ -1489,7 +1492,7 @@ body {
 	padding: 18px 12px 0 12px;
 	font-weight: 400;
 	font-size: 14px;
-	font-family: 'Noto Sans Light', sans-serif;
+	
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis
@@ -1505,7 +1508,7 @@ body {
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	word-break: break-all;
-	font-family: 'Noto Sans Light', sans-serif;
+	
 	color: #000;
 	opacity: .5
 }
@@ -1593,7 +1596,7 @@ body {
 	height: 280px;
 	padding: 40px 30px 0;
 	border-left: 1px solid #f0f3f3;
-	font-family: 'Noto Sans Light', sans-serif
+	
 }
 
 .weekly_magazines .txt_cate {
@@ -1674,7 +1677,7 @@ body {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	font-family: 'Noto Sans Light', sans-serif;
+	
 	color: #959595;
 	letter-spacing: -.025em;
 	background:
@@ -1714,7 +1717,7 @@ body {
 	line-height: 20px;
 	max-height: 120px;
 	overflow: hidden;
-	font-family: 'Noto Sans Light', sans-serif;
+
 	color: #959595;
 	letter-spacing: -.025em;
 	text-align: justify
@@ -1870,7 +1873,7 @@ body {
 	display: inline-block;
 	width: 240px;
 	padding: 0 10px;
-	font-family: 'Noto Sans Light', sans-serif;
+	
 	vertical-align: top;
 	overflow: hidden
 }
@@ -1911,7 +1914,7 @@ body {
 	font-size: 12px;
 	line-height: 20px;
 	word-break: break-all;
-	font-family: 'Noto Sans Light', sans-serif;
+
 	letter-spacing: -.025em;
 	color: #959595;
 	text-align: justify
@@ -1980,7 +1983,7 @@ body {
 	border-right: 0 none;
 	border-top-left-radius: 4px;
 	border-bottom-left-radius: 4px;
-	font-family: Georgia, sans-serif;
+	
 	font-size: 14px;
 	color: #959595
 }
@@ -1991,7 +1994,7 @@ body {
 	height: 42px;
 	border-top-right-radius: 4px;
 	border-bottom-right-radius: 4px;
-	font-family: 'Noto Sans Light', sans-serif;
+	
 	color: #fff;
 	background-color: #333
 }
@@ -2097,7 +2100,7 @@ body {
 
 .brunch_likeit .tit_subject {
 	font-weight: 400;
-	font-family: "Nanum Myeongjo", sans-serif;
+	
 	font-size: 28px;
 	line-height: 36px;
 	color: #fff
@@ -2173,7 +2176,7 @@ body {
 	padding-top: 4px;
 	font-weight: 400;
 	font-size: 16px;
-	font-family: 'Noto Sans Light', sans-serif;
+	
 	letter-spacing: -.025em
 }
 
@@ -2183,7 +2186,7 @@ body {
 
 .brunch_etc .link_share .url_share {
 	float: left;
-	font-family: Georgia, sans-serif;
+	
 	font-style: italic;
 	font-size: 10px;
 	color: #ccc;
@@ -2192,7 +2195,7 @@ body {
 
 .brunch_etc .desc_share {
 	padding-top: 16px;
-	font-family: 'Noto Sans Light', sans-serif;
+	
 	color: #959595;
 	clear: both
 }
@@ -2273,7 +2276,7 @@ body {
 	padding-top: 25px;
 	font-size: 18px;
 	line-height: 28px;
-	font-family: 'Noto Sans Light', sans-serif;
+	
 	color: #000;
 	letter-spacing: -.025em;
 	text-align: center
@@ -2303,7 +2306,7 @@ body {
 	font-weight: 400;
 	font-size: 34px;
 	line-height: 42px;
-	font-family: 'Nanum Myeongjo', sans-serif;
+	
 	letter-spacing: -.05em
 }
 
@@ -2564,12 +2567,14 @@ body {
 }
 
 .writer_type .item_pic_type1 .team_writer {
+	font-family: 'Noto Serif KR', serif;
 	display: block;
 	overflow: hidden;
 	max-height: 36px
 }
 
 .writer_type .item_pic_type1 .tit_writers {
+	font-family: 'Noto Serif KR', serif;
 	display: block;
 	overflow: hidden;
 	max-height: 72px
@@ -2662,6 +2667,7 @@ body {
 }
 
 .brunch_writers .wrap_writers {
+
 	width: 1280px;
 	/*margin: 50px auto 85px*/
 	margin: 50px auto 85px
@@ -2707,7 +2713,7 @@ body {
 	max-height: 57px;
 	padding: 17px 12px 0;
 	font-size: 20px;
-	font-family: 'Nanum Myeongjo', sans-serif;
+	
 	line-height: 28px;
 	letter-spacing: -.02em;
 	white-space: normal;
@@ -2720,7 +2726,7 @@ body {
 	overflow: hidden;
 	margin-top: 4px;
 	font-weight: 300;
-	font-family: 'Noto Sans Light', sans-serif;
+	
 	color: #666;
 	letter-spacing: -.02em;
 	text-overflow: ellipsis;
@@ -2753,7 +2759,7 @@ body {
 	border-color: #ddd;
 	border-radius: 20px;
 	font-size: 12px;
-	font-family: "Noto Sans Light", "Malgun Gothic", sans-serif;
+	
 	letter-spacing: -1px
 }
 
@@ -2983,6 +2989,7 @@ body {
 }
 
 .book_cover .cont_cover {
+	
 	position: relative;
 	z-index: 1;
 	margin: 0 50px;
@@ -3024,13 +3031,14 @@ body {
 }
 
 .book_cover .tit_cover {
+	
 	display: block;
 	display: -webkit-box;
 	overflow: hidden;
 	max-height: 92px;
 	padding: 10px 13px 0 10px;
 	font-weight: 400;
-	font-family: "Nanum Myeongjo", sans-serif;
+	
 	font-size: 18px;
 	line-height: 24px;
 	word-break: keep-all;
@@ -3050,7 +3058,7 @@ body {
 	width: 100%;
 	max-height: 35px;
 	padding: 0 10px;
-	font-family: "Nanum Myeongjo", sans-serif;
+	
 	font-size: 11px;
 	line-height: 16px;
 	color: #666;
@@ -3070,7 +3078,7 @@ body {
 	width: 100%;
 	font-size: 11px;
 	line-height: 18px;
-	font-family: "SF Pro Bold", "Malgun Gothic";
+	
 	letter-spacing: .2px;
 	color: #fff;
 	text-align: center
@@ -3268,6 +3276,7 @@ body {
 		right: 30px
 	}
 	.tit_brunch {
+	
 		width: 768px;
 		margin: 150px auto 0
 	}
@@ -3276,6 +3285,7 @@ body {
 		margin: 0 auto
 	}
 	.intro_brunch {
+	
 		width: 708px;
 		margin: 44px 30px 0
 	}
@@ -3801,7 +3811,7 @@ body {
 	border-radius: 16px;
 	line-height: 28px;
 	font-size: 12px;
-	font-family: 'Noto Sans Light', sans-serif;
+	
 	text-align: center;
 	text-decoration: none
 }
@@ -4038,13 +4048,13 @@ body {
 	font-weight: 400;
 	font-size: 20px;
 	line-height: 22px;
-	font-family: "Noto Sans Light", "Malgun Gothic", sans-serif;
+	
 	display: block;
 	padding-top: 1px;
 	font-weight: 400;
 	ine-height: 22px;
 	min-height: 27px;
-	font-family: "Noto Sans Light", "Malgun Gothic", sans-serif;
+
 	text-overflow: ellipsis;
 	overflow: hidden;
 	max-width: 320px;
@@ -4063,7 +4073,7 @@ body {
 	display: block;
 	overflow: hidden;
 	padding: 10px 0 0;
-	font-family: "Noto Sans Light", "Malgun Gothic", sans-serif;
+
 	color: #909090;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
@@ -4139,7 +4149,7 @@ body {
 	padding: 7px 0 0;
 	font-size: 12px;
 	color: #959595;
-	font-family: "Noto Sans Light", "Malgun Gothic", sans-serif
+
 }
 
 .search_writer .info_append .ico_dot {
@@ -4243,7 +4253,7 @@ body {
 
 .tab_search .inner_tab li {
 	float: left;
-	font-family: "Noto Sans Light"
+	
 }
 
 .tab_search .inner_tab .link_tab {
@@ -4270,7 +4280,7 @@ body {
 .empty_result {
 	color: #666;
 	font-size: 18px;
-	font-family: "Noto Sans Light", "Malgun Gothic", sans-serif;
+	
 	margin-top: 110px;
 	width: 410px
 }
@@ -4295,7 +4305,7 @@ body {
 	padding: 10px 0 0;
 	border: 0;
 	line-height: 14px;
-	font-family: "Noto Sans Light", "Malgun Gothic", sans-serif;
+	
 	background-color: inherit;
 	list-style-image:
 		url(//u1.daumcdn.net/brunch/static/img/help/pc/bg_dot2.png);
@@ -4308,7 +4318,7 @@ body {
 	letter-spacing: -1px;
 	border: 0;
 	width: 940px;
-	font-family: "Noto Sans Light", "Malgun Gothic", sans-serif;
+	
 	outline: 0;
 	-webkit-appearance: textfield;
 	color: #333
@@ -4397,7 +4407,7 @@ body {
 	height: 15px;
 	margin-right: 4px;
 	font-size: 12px;
-	font-family: Georgia;
+	
 	font-style: italic;
 	color: #bfbfbf
 }
@@ -4406,7 +4416,7 @@ body {
 	display: block;
 	margin: -6px 0 0;
 	padding: 0 0 57px;
-	font-family: "Noto Sans Light";
+
 	font-size: 30px;
 	letter-spacing: -1px;
 	background-color: #fff;
@@ -4480,7 +4490,7 @@ body {
 	background-color: #fff;
 	padding: 4px 10px;
 	margin: 0 8px 8px 0;
-	font-family: "Noto Sans Light", "Malgun Gothic", sans-serif
+	
 }
 
 .tab_keywords {
@@ -4632,7 +4642,7 @@ body {
 .writerContainer .tit_recommend {
 	font-weight: 400;
 	font-size: 13px;
-	font-family: "Noto Sans Light", "Malgun Gothic", sans-serif;
+
 	color: #666
 }
 
@@ -4693,7 +4703,7 @@ body {
 	display: block;
 	overflow: hidden;
 	line-height: 1.3;
-	font-family: "Noto Sans Light", "Malgun Gothic", sans-serif;
+
 	white-space: nowrap;
 	text-overflow: ellipsis
 }
@@ -4703,7 +4713,7 @@ body {
 	overflow: hidden;
 	font-size: 12px;
 	line-height: 18px;
-	font-family: "Noto Sans Light", "Malgun Gothic", sans-serif;
+	
 	color: #999
 }
 
@@ -4762,7 +4772,7 @@ body {
 	right: 20px;
 	font-size: 30px;
 	line-height: 30px;
-	font-family: "Noto Sans Light", "Malgun Gothic";
+	
 	color: #fff
 }
 
@@ -4807,7 +4817,7 @@ body {
 	font-weight: lighter;
 	font-size: 20px;
 	line-height: 26px;
-	font-family: "Noto Sans Light", "Malgun Gothic";
+	
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	word-wrap: break-word;
@@ -4990,7 +5000,7 @@ body {
 }
 
 .filter_search .link_filter {
-	font-family: "Noto Sans Light", "Malgun Gothic";
+
 	width: 230px;
 	height: 40px;
 	border: solid 1px #ddd;
@@ -5085,7 +5095,7 @@ body {
 	overflow: hidden;
 	padding: 8px 0;
 	line-height: 1;
-	font-family: "Noto Sans Light", "Malgun Gothic";
+	
 	color: #666
 }
 
@@ -5300,6 +5310,6 @@ body {
 	font-size: 11px;
 	line-height: 15px;
 	color: #959595;
-	font-family: "SF Pro Bold", "Malgun Gothic"
+
 
 }

@@ -18,12 +18,12 @@
 	}
 	
 	//본인 게시글 일 시, 수정/삭제 버튼 생성
-	StringBuffer likey_button = new StringBuffer();
-	if(like_count_check != 0){
-		likey_button.append("<input type='button' value='like' style='color : white; background-color : gray;' id= 'button_likey' />");
-	} else {
-		likey_button.append("<input type='button' value='like' id= 'button_likey' />");
-	}
+   StringBuffer likey_button = new StringBuffer();
+   if(like_count_check != 0){
+      likey_button.append("<button value='like' class='btn' id= 'button_likey' ><i class='fas fa-heart' style='font-size: 25px; color: red;'></i></button>");
+   } else {
+      likey_button.append("<button value='like' class='btn' id= 'button_likey' ><i class='far fa-heart' style='font-size: 25px;'></i></button>");
+   }
 
 	//board 데이터 로드
 	Home_BoardTO to = (Home_BoardTO)request.getAttribute("home_BoardTO");
@@ -78,50 +78,49 @@
 <script type="text/javascript" src="./js/jquery.flexslider-min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <style type="text/css">
-	html{
-		position: fixed;
-	}
-	#start-button{
-		width: 30px;
-		font-size: 25px;
-		margin-left: 1000px;
-		
-	}
-	.button2{
-		font-size: 25px;
-	}
-	#comment {
-		width : 520;
-		height : 100;
-	}
-	#vertical2 {
-		width: max-content;
-		overflow-y: scroll;
-		height : 70px;
-	}
-	#vertical1 {
-		width: max-content;
-		overflow-y: scroll;
-		height : 230px;
-	}
-	.wrap {
-		float: left;
-	}
-	.wrapTable table {
-		border : 1px;
-	}
-	.wrapTable tr,th,td {
-		padding : 5px;
-		margin : 5px;
-	}
-	#wrapTable tr:hover {
-		background-color : ivory;
-		font-color : black; 
-	}
-	#wrapTable {
-		font-size : 8px;
-	}
+   html{
+      position: fixed;
+   }
+   #comment {
+      width : 520;
+      height : 100;
+   }
+   #vertical2 {
+      width: max-content;
+      overflow-y: scroll;
+      height : 70px;
+   }
+   #vertical1 {
+      width: max-content;
+      overflow-y: scroll;
+      height : 230px;
+   }
+   .wrap {
+      float: left;
+   }
+   .wrapTable table {
+     
+   }
+   .wrapTable tr,th,td {
+      padding : 5px;
+      margin : 5px;
+   }
+   #wrapTable tr:hover {
+      background-color : ivory;
+      font-color : black; 
+   }
+   #wrapTable {
+      font-size : 8px;
+   }
+   .line{
+   	border-bottom: 1px solid gray;
+   }
+   #close_btn{
+    float: right;
+    
+   }
 </style>
 <script type="text/javascript">
 // flexslider load
@@ -487,7 +486,7 @@ $(function () {
        						<!-- <div id="vertical1">
        							<div class="wrap"> 
        								<table border="1" height="230" width="580" class="wrapTable"> <tr><td>  -->
-       								<textarea cols="78" rows="10" required wrap="hard" id="board_content" <%=BoardUseq_match %>><%=content %></textarea>
+       								<textarea cols="80" rows="10" required wrap="hard" id="board_content" <%=BoardUseq_match %>><%=content %></textarea>
        								<!-- </td></tr></table>
        							</div>
        						</div>  -->
@@ -526,10 +525,10 @@ $(function () {
 	 			</tr>
        			<tr>
 	       				<td colspan="3" width="520">
-       						<input type="text" placeholder="댓글을 입력해주세요." size="60" id="comment_text_input"/>
+       						<input type="text" placeholder="댓글을 입력해주세요." size="70" id="comment_text_input"/>
 	       				</td>
 	       				<td>
-	       					<input type="button" value="등록하기" height="100" id="comment_btn"/>
+                        <button value="등록하기" height="100" id="comment_btn" class="btn"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
 	       				</td>
        			</tr>
        		</table>

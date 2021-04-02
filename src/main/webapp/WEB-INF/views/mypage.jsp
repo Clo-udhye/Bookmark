@@ -100,14 +100,23 @@
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
 <style>
-#start-button{
+
+.button1{
+	float: right;
+	margin-right:50px;
 	width: 30px;
-	font-size: 25px;
-	margin-left: 1000px;
-	
+	font-size: 20px;
 }
 .button2{
-	font-size: 25px;
+	float: right;
+	margin-right: 70px;
+	width: 30px;
+	font-size: 20px;
+}
+.button3{
+	align: right;
+	width: 30px;
+	font-size: 20px;
 }
 
 .box {
@@ -202,16 +211,16 @@ $(document).ready(function(){
 						<td width=5%><span>
 							<button class="sidebar-btn" onclick="sidebarCollapse()">
 								<span><i class="fa fa-bars" aria-hidden="true"></i></span>
-				             </button>
+							 </button>
 						</span>
 						</td>
 						<td width=5%><span><a class="navbar-brand" href="./home.do"> <img src="./images/logo.png" alt="logo" style="width: 200px; height:50px; "></a></span></td>
 						<% if(userInfo == null){ %>
 							<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
-		        		<% }else{ %>
-		        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
-		        		<% } %>
-						<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+						<% }else{ %>
+							<td width=75% ><span><a class="button2" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+						<% } %>
+						<td width=5%><span><a class="button3" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
 					</tr>
 				</table>		
 	    	</div>

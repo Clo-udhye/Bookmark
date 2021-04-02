@@ -35,25 +35,30 @@
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
 <style>
-   .button1, .button2{
-   width: 30px;
-   font-size: 25px;
-   }
-   #start-button{
+  .button1{
+	float: right;
+	margin-right:0px;
 	width: 30px;
-	font-size: 25px;
-	margin-left: 1000px;
-	
+	font-size: 20px;
+
 }
 .button2{
-	font-size: 25px;
+	float: right;
+	margin-right: 50px;
+	width: 30px;
+	font-size: 20px;
 }
-	
+.button3{
+	float: right;
+	width: 30px;
+	font-size: 20px;
+}
+
 .jumbotron{
 	width: 700px;
 	height:800px;
-	padding-top: 50px;
-	padding-left: 280px;
+	padding-top: 150px;
+	padding-left: 450px;
 	
 }
 form{
@@ -284,9 +289,9 @@ padding-left: 100px;
 					<% if(userInfo == null){ %>
 						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
 	        		<% }else{ %>
-	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        			<td width=75% ><span><a class="button2" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
 	        		<% } %>
-					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+					<td width=5%><span><a class="button3" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
 				</tr>
 			</table>		
     	</div>
@@ -299,7 +304,7 @@ padding-left: 100px;
 				<div>
 					<!-- 영역 크기 -->
 					<!-- 점보트론은 특정 컨텐츠, 정보를 두드러지게 하기 위한 큰 박스 -->
-					<div class="jumbotron">
+					<div class="jumbotron" >
 						<form method="post" action="./signup_ok.do" name="signup_frm">
 						<div style="height: 75px;">
 						<img src="./images/login-image.png" alt="login-image" width="65px;" height="65px;" style="float: left;"/>
@@ -313,7 +318,7 @@ padding-left: 100px;
 									<input type="text" class="form-control" id="form-control-id"  placeholder="아이디(*)" id="userID" name="userID" maxlength="20"  check_result="fail" required />							
 								<div class="double-check" >
 									<input type="button" class="btn btn-dark form-control" value="중복확인" id="id_check" >
-									<i class="fa fa-check" id="id_check_sucess" style="display: none;" aria-hidden="true" ></i>
+									<i class="fa fa-check" id="id_check_sucess" style="display: none; padding-left: 30px;" aria-hidden="true" ></i>
 									</input>
 								</div>
 							</div>	
@@ -324,7 +329,7 @@ padding-left: 100px;
 								
 								<div class="nickname-button" >
 									<input type="button" class="btn btn-dark form-control"  value="중복확인" id="nickname_check" />
-									<i class="fa fa-check" id="nickname_check_sucess" style="display: none;" aria-hidden="true" ></i>
+									<i class="fa fa-check" id="nickname_check_sucess" style="display: none; padding-left: 30px;" aria-hidden="true" ></i>
 									
 								</div>
 							</div>
