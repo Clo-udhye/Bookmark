@@ -34,6 +34,9 @@
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
+
+<script type = "text/javascript" src = "https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+
 <style>
 .button1{
 	float: right;
@@ -72,12 +75,35 @@
 			}
 			
 			// 아이디 정규표현식, 영어소문자 숫자만 가능, 6~16자
-			const regexp = /^[a-z0-9]{6,16}$/;
+			const regexp = /^[a-z0-9-_]{5,20}$/;
 			if(!regexp.test(document.login_frm.userID.value.trim())){
-				alert('아이디는 6자이상 16자 이하의 영어소문자, 숫자로 이루어져 있습니다.');
+				alert('아이디는 5~20자의 영문 소문자, 숫자와 특수기호(_),(-)으로만 이루어져있습니다.');
 				return false;
 			}
-			document.login_frm.submit();
+			//document.login_frm.submit();
+			$.ajax({
+	            url : './login_ok.do',
+	            type : 'post',
+	            dataType: 'xml',
+	            data : {
+	               'userID' : $('#userID').val(),
+	               'userPassword' : $('#userPassword').val()
+	            },
+	            success : function(xmlData){	            	
+	            	//console.log('flag : ' + $(xmlData).find("flag").text());
+	            	if($(xmlData).find("flag").text() == 1){
+	            		alert('로그인에 성공했습니다.');
+	            		location.href = document.referrer;
+	            	}else if($(xmlData).find("flag").text() == 0){
+	            		alert('아이디와 비밀번호를 확인해주세요.');
+	            	} else{
+	            		alert('[DB에러] : 로그인에 실패했습니다.');
+	            	}
+	            },
+	            error : function(){
+	            	alert('[서버에러] : 로그인에 실패했습니다.')
+	            }
+	         });      
 		};
 	};
 </script>
@@ -163,7 +189,7 @@
 							                <tr>
 							                    <td >
 							                       <div class="form-group"  >
-							                          <input type="text" class="form-control" placeholder="아이디" name="userID" maxlength="20" style="padding-right:100px;">
+							                          <input type="text" class="form-control" placeholder="아이디" id="userID" name="userID" maxlength="20" style="padding-right:100px;">
 							                       </div>
 							                    </td>
 							                </tr>
@@ -176,7 +202,7 @@
 							                    <td>
 							                       <div class="form-group">
 							                       
-							                          <input type="password" class="form-control" placeholder="비밀번호" name="userPassword" maxlength="20">
+							                          <input type="password" class="form-control" placeholder="비밀번호" id="userPassword" name="userPassword" maxlength="20">
 							                       </div>
 							                    </td>
 							                </tr>
@@ -197,8 +223,22 @@
 							                
 							                <tr>
 							                    <td align="center">
-							                        <input type="button" class="btn btn-dark" value="회원가입" onclick="location.href='./signup.do'" style="margin" />
-							                        <input type="button" class="btn btn-dark" value="카카오로그인" onclick="location.href='#'" />
+							                   	<div>
+							                        <input type="button" class="btn btn-dark" value="회원가입" onclick="location.href='./signup.do'" style="margin" style="display: inline-block;"/>
+							                        <div id = "naver_id_login" style="display: inline-block;"></div>
+							                    </div>
+							                        <script type="text/javascript">
+														var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://localhost:8080/bookmark/callback1.do");    // Client ID, CallBack URL 삽입
+														//var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://49.50.174.216:8080/Project_BM/callback1.do");    // Client ID, CallBack URL 삽입
+														var state = naver_id_login.getUniqState();
+													        
+														naver_id_login.setButton("white", 2, 40);
+														naver_id_login.setDomain("http://localhost:8080/bookmark/login.do");    //  URL
+														//naver_id_login.setDomain("http://49.50.174.216:8080/Project_BM/login.do");    //  URL
+														naver_id_login.setState(state);
+														naver_id_login.setPopup();
+														naver_id_login.init_naver_id_login();
+													</script>
 							                    </td>
 							                </tr>
 							            </table>

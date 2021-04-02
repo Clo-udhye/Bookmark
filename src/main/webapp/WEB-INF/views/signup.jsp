@@ -110,10 +110,11 @@ padding-left: 100px;
 		});
 		
 		document.getElementById('id_check').onclick = function(){
-			// 아이디 정규표현식, 영어소문자 숫자만 가능, 6~16자
-			const regexp = /^[a-z0-9]{6,16}$/;
+			// 아이디 정규표현식, 5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.(네이버와 동일)
+			const regexp = /^[a-z0-9-_]{5,20}$/;
 			if(!regexp.test(document.signup_frm.userID.value.trim())){
-				alert('아이디는 6자이상 16자 이하의 영어소문자, 숫자로 이루어져야합니다.');
+				alert('아이디는 5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.');
+				
 				$('#userID').focus();
 			} else{
 				//아이디 중복확인
@@ -149,9 +150,9 @@ padding-left: 100px;
 		
 		document.getElementById('nickname_check').onclick = function(){
 			// 별명 정규표현식, 한글 숫자만 가능, 2~12자
-			const regexp2 = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]{2,12}$/;
+			const regexp2 = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9a-zA-Z]{2,20}$/;
 			if(!regexp2.test(document.signup_frm.nickname.value.trim())){
-				alert('별명은 한글과 숫자로 이루어져야합니다.');
+				alert('별명은 20자 이내의 영문, 한글, 숫자만 가능합니다.');
 				$('#nickname').focus();
 				
 			} else{
@@ -315,7 +316,7 @@ padding-left: 100px;
 						</div>
 						
 							<div class="form-group">
-									<input type="text" class="form-control" id="form-control-id"  placeholder="아이디(*)" id="userID" name="userID" maxlength="20"  check_result="fail" required />							
+									<input type="text" class="form-control"  placeholder="아이디(*)" id="userID" name="userID" maxlength="20"  check_result="fail" required />							
 								<div class="double-check" >
 									<input type="button" class="btn btn-dark form-control" value="중복확인" id="id_check" >
 									<i class="fa fa-check" id="id_check_sucess" style="display: none; padding-left: 30px;" aria-hidden="true" ></i>

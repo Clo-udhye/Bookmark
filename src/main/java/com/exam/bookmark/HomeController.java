@@ -1,6 +1,17 @@
 package com.exam.bookmark;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.net.UnknownHostException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -10,12 +21,15 @@ import java.util.UUID;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.exam.BoardAction.BoardActionDAO;
@@ -37,6 +51,7 @@ import com.exam.theseMonthBoard.Home_BoardDAO;
 import com.exam.theseMonthBoard.Home_BoardTO;
 import com.exam.user.LoginTO;
 import com.exam.user.SHA256;
+import com.exam.user.SnsUserTO;
 import com.exam.user.UserDAO;
 import com.exam.user.UserTO;
 import com.exam.zipcode.ZipcodeDAO;
@@ -512,4 +527,131 @@ public class HomeController {
 		model.addAttribute("likey_count", count);
 		return "board_modify";
 	}
+	    
+    @RequestMapping(value="/callback1.do", method=RequestMethod.GET)
+    public String loginPOSTNaver(HttpSession session) {
+        
+        return "naverlogin_callback";
+    }
+
+    @RequestMapping(value="/sns_user.do", method=RequestMethod.GET)
+    public String sns_user(HttpServletRequest request , Model model) {
+    	// 네이버 아이디, 닉네임
+		String sns_nickname = request.getParameter("sns_nickname");
+		SnsUserTO to = new SnsUserTO();
+		to.setSns_id(request.getParameter("sns_id"));
+		to.setSns_type(request.getParameter("sns_type"));
+		
+		UserTO userInfo = userDao.snsUser_check(to, sns_nickname);
+		
+		model.addAttribute("userInfo", userInfo);
+		
+		    	
+        return "sns_user";
+    }
+    
+    @RequestMapping(value="/write.do", method=RequestMethod.GET)
+    public String write() {
+        return "board_write";
+    }
+    
+    @RequestMapping(value="/write_ok.do")
+    public String write_ok(HttpServletRequest request , Model model) {
+    	//String uploadPath = "C:/Project_BM/Project_BM/src/main/webapp/upload";
+    	//System.out.println(request.getParameter("title"));
+    	
+    	String path="/upload";
+    	ServletContext context = request.getSession().getServletContext();
+    	String realPath = context.getRealPath(path);
+    	
+    	int maxFileSize = 1024 *1024 * 2; 
+    	String encType = "utf-8";
+    	
+    	BoardTO to = new BoardTO();
+    	MultipartRequest multi;
+		try {
+			multi = new MultipartRequest(request, realPath, maxFileSize, encType, new DefaultFileRenamePolicy());
+			System.out.println(multi.getParameter("title"));
+	    	System.out.println(multi.getParameter("useq"));
+	    	System.out.println(multi.getParameter("summernote"));
+	    	System.out.println(multi.getParameter("bookseq"));
+	    	System.out.println(multi.getFilesystemName("filename[]"));
+	    	
+	    
+	    	to.setTitle(multi.getParameter("title"));
+	    	to.setUseq(multi.getParameter("useq"));
+	    	to.setContent(multi.getParameter("summernote"));
+	    	to.setBseq(multi.getParameter("bookseq"));
+	    	
+	    	to.setFilename(multi.getFilesystemName("filename[]"));
+	    	File file = multi.getFile("filename[]");
+	    	//to.setFilesize(file.length());
+	    	to.setFilesize("123123");
+	    	
+	    	
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+   	
+		int flag = boardDao.writeOk(to);
+		model.addAttribute("flag", flag);
+        return "board_write_ok";
+    }
+    
+    @RequestMapping(value="/write_ok2.do")
+    public String write_ok2(HttpServletRequest request , Model model) {
+    	//String uploadPath = "C:/Project_BM/Project_BM/src/main/webapp/upload";
+    	
+    	
+    	
+    	String path="/upload";
+    	ServletContext context = request.getSession().getServletContext();
+    	String realPath = context.getRealPath(path);
+    	
+    	int maxFileSize = 1024 *1024 * 2; 
+    	String encType = "utf-8";
+    	
+    	BoardTO to = new BoardTO();
+    	MultipartRequest multi;
+		try {
+			multi = new MultipartRequest(request, realPath, maxFileSize, encType, new DefaultFileRenamePolicy());
+			System.out.println(multi.getParameter("title"));
+	    	System.out.println(multi.getParameter("useq"));
+	    	System.out.println(multi.getParameter("summernote"));
+	    	System.out.println(multi.getParameter("bookseq"));
+	    	System.out.println(multi.getFilesystemName("filename[]"));
+	    	
+	    
+	    	to.setTitle(multi.getParameter("title"));
+	    	to.setUseq(multi.getParameter("useq"));
+	    	to.setContent(multi.getParameter("summernote"));
+	    	to.setBseq(multi.getParameter("bookseq"));
+	    	
+	    	to.setFilename(multi.getFilesystemName("filename[]"));
+	    	File file = multi.getFile("filename[]");
+	    	//to.setFilesize(file.length());
+	    	to.setFilesize("123123");
+	    	
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("[에러] " + e.getMessage());
+		}
+   	
+		int flag = boardDao.writeOk(to);
+		model.addAttribute("flag", flag);
+        return "board_write_ok2";
+    }
+    
+    @RequestMapping(value="/booklist_search.do")
+    public String booklist_search(HttpServletRequest request , Model model) {
+        String option = request.getParameter("option");
+        String searchword = request.getParameter("searchword");
+        
+        ArrayList<BookTO> booklist = bookdao.bookSearch(option, searchword);
+        model.addAttribute("booklist", booklist);
+        
+        return "booklist_search";
+    }
+	
 }
