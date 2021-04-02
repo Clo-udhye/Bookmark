@@ -40,12 +40,16 @@
 	int cnt = 0;
 	if(lists != null){
 		for( JoinBLUTO to : lists ) {
-			// useq, id, nickname, mail, sum(Lcount) Lcount, count(bnltable.useq) Bcount 가져오기.
+			// useq, id, nickname, mail, keywords, introduction, profile_filename, sum(Lcount) Lcount, count(bnltable.useq) Bcount 가져오기.
 			cnt++;
 			String useq = to.getUseq();
 			String id = to.getId();
 			String nickname = to.getNickname();
 			String mail = to.getMail();
+			String keywords = to.getKeywords();
+			// introduction이 길수도 있으니 잘라야할듯
+			String introduction = to.getIntroduction();
+			String profile_filename = to.getProfile_filename();
 			String Lcount = to.getLcount();
 			if(Lcount == null) {
 				Lcount = "0";
@@ -68,18 +72,13 @@
 				sbHtml.append("</td>");
 
 			} else {
+				// nickname에 맞는 페이지로 이동하게 td에 링크 걸기! 수정하기 ★★
 				sbHtml.append("<td class='userboard'>");
 				sbHtml.append("	<div class='userprofile'>");
 				sbHtml.append("		<div class='user_img' align='center'>");
-				// nickname에 맞는 페이지로 이동하게 href 수정하기 ★★
-				if(Integer.parseInt(useq) % 3 == 1) {
-					sbHtml.append("			<a href='list.do'><img src='./profile/profile1.JPG' border='0' width=80px height=80px/></a>");
-				} else if(Integer.parseInt(useq) % 3 == 2) {
-					sbHtml.append("			<a href='list.do'><img src='./profile/profile2.JPG' border='0' width=80px height=80px/></a>");
-				} else {
-					sbHtml.append("			<a href='list.do'><img src='./profile/profile3.JPG' border='0' width=80px height=80px/></a>");
-				}
 				
+				// nickname에 맞는 페이지로 이동하게 href 수정하기 ★★
+				sbHtml.append("			<a href='list.do'><img src='./profile/"+profile_filename+"' border='0' width=80px height=80px/></a>");				
 				//sbHtml.append("			<a href='list.do'><img src='./profile/profile11.JPG' border='0' width=80px height=80px/></a>");
 				sbHtml.append("		</div>");
 				sbHtml.append("		<div class='user_nickname' align='center'>");
@@ -87,13 +86,15 @@
 				sbHtml.append("		</div>");
 				
 				sbHtml.append("		<div class='user_intro' align='center'>");
-				sbHtml.append("			<a href='list.do'>안녕하세요. 반갑습니다 :D</a>");
+				sbHtml.append("			<a href='list.do'>"+introduction+"</a>");
 				sbHtml.append("		</div>");				
 				sbHtml.append("		<div class='user_count' align='center'>");
 				sbHtml.append("			<span> 글 수 "+Bcount+" | 좋아요 수 "+Lcount+" </span>");
 				sbHtml.append("		</div>");				
 				
 				sbHtml.append("		<div class='user_keyword' align='center'>");
+				// keywords
+				// 키워드 처리... 수정하기.
 				sbHtml.append("			<span>키워드</span>&nbsp;");
 				sbHtml.append("			<span>입력해</span>&nbsp;");
 				sbHtml.append("			<span>주세요</span>&nbsp;");

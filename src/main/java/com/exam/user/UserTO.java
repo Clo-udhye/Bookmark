@@ -1,5 +1,7 @@
 package com.exam.user;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class UserTO {
 	private String seq;
 	private String id;
@@ -8,6 +10,17 @@ public class UserTO {
 	private String mail;
 	private String address;
 	private String addresses;
+	private String keywords;
+	private String introduction;
+	private String profile_filename;
+	private MultipartFile uploadFile;
+	
+	public MultipartFile getUploadFile() {
+		return uploadFile;
+	}
+	public void setUploadFile(MultipartFile uploadFile) {
+		this.uploadFile = uploadFile;
+	}
 	
 	public String getSeq() {
 		return seq;
@@ -50,6 +63,24 @@ public class UserTO {
 	}
 	public void setAddresses(String addresses) {
 		this.addresses = addresses;
+	}
+	public String getKeywords() {
+		return keywords;
+	}
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
+	}
+	public String getIntroduction() {
+		return introduction;
+	}
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
+	public String getProfile_filename() {
+		return profile_filename;
+	}
+	public void setProfile_filename(String profile_filename) {
+		this.profile_filename = profile_filename;
 	}
 	
 }
