@@ -26,6 +26,7 @@ import com.exam.boardlist.BoardDAO;
 import com.exam.boardlist.BoardPagingTO;
 import com.exam.boardlist.BoardTO;
 import com.exam.boardlist.JoinBULCTO;
+import com.exam.boardlist.MyPageTO;
 import com.exam.booklist.BookDAO;
 import com.exam.booklist.BookRelatedTO;
 import com.exam.booklist.BookTO;
@@ -118,8 +119,8 @@ public class HomeController {
 		HttpSession session = req.getSession();
 		if (session.getAttribute("userInfo") != null) {
 			UserTO userInfo = (UserTO)session.getAttribute("userInfo");
-			String userID = userInfo.getId();
-			int count_check = home_boardDAO.likey_check(seq, userID);
+			String useq = userInfo.getSeq();
+			int count_check = home_boardDAO.likey_check(seq, useq);
 			model.addAttribute("like_count_check", count_check);
 		}
 		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(seq);
@@ -132,59 +133,49 @@ public class HomeController {
 	}
 	@RequestMapping(value = "/comment.do")
 	public String comment(HttpServletRequest req , Model model) {
-		String writer_seq = req.getParameter("user");
-		String comment = req.getParameter("comment");
-		String board_seq = req.getParameter("bseq");
-		
-		int flag = boardActionDAO.comment(writer_seq, comment, board_seq);
-		model.addAttribute("flag", flag);
-		return "comment_ok";
-	}
-	
-	@RequestMapping(value = "/comment_modify.do")
-	public String comment_modify(HttpServletRequest req , Model model) {
 		String value = req.getParameter("value");
-		if(value.equals("modify")) {
-			//System.out.println("comment modify");
+		String seq = req.getParameter("seq");
+		if(value.equals("create")) {
+			String writer_seq = req.getParameter("user");
+			String comment = req.getParameter("comment");
+			String board_seq = req.getParameter("seq");
+			int flag = boardActionDAO.comment(writer_seq, comment, board_seq);
+			model.addAttribute("flag", flag);
+		} else if(value.equals("modify")) {
 			String comment = req.getParameter("comment");
 			String comment_seq = req.getParameter("comment_seq");
 			int flag = boardActionDAO.comment_modify(comment, comment_seq);
 			model.addAttribute("flag", flag);
 		} else if (value.equals("delete")) {
-			//System.out.println("comment delete");
 			String comment_seq = req.getParameter("comment_seq");
 			int flag = boardActionDAO.comment_delete(comment_seq);
 			model.addAttribute("flag", flag);
 		}
-		return "comment_ok";
-	}
-	
-	@RequestMapping(value = "/comment_check.do")
-	public String comment_check(HttpServletRequest req , Model model) {
-		String seq = req.getParameter("bseq");
+		ArrayList<Board_CommentTO> board_CommentTO = home_boardDAO.CommentListTemplate(seq);
+		model.addAttribute("board_commentTO", board_CommentTO);
 		
-		int count = home_boardDAO.likey_count(seq);
-		model.addAttribute("likey_count", count);
-		return "comment_ok";
+		return "comment_xml";
 	}
-	
+
 	@RequestMapping(value = "/likey.do")
 	public String likey(HttpServletRequest req , Model model) {
-		String writer_seq = req.getParameter("user");
 		String board_seq = req.getParameter("bseq");
+		String writer_seq = req.getParameter("user");			
+
+		if (req.getParameter("value").equals("likey")) {
+			int flag_like = boardActionDAO.likey(writer_seq, board_seq);
+			model.addAttribute("flag_like", flag_like);
+		} else if(req.getParameter("value").equals("unlikey")) {
+			int flag_like = boardActionDAO.unlikey(writer_seq, board_seq);
+			model.addAttribute("flag_like", flag_like);
+		}
+		int count = home_boardDAO.likey_count(board_seq);
+		model.addAttribute("likey_count", count);
 		
-		int flag_like = boardActionDAO.likey(writer_seq, board_seq);
-		model.addAttribute("flag_like", flag_like);
-		return "likey_ok";
-	}
-	@RequestMapping(value = "/unlikey.do")
-	public String unlikey(HttpServletRequest req , Model model) {
-		String writer_seq = req.getParameter("user");
-		String board_seq = req.getParameter("bseq");
-		//System.out.println("unlikey.do controller");
-		int flag_like = boardActionDAO.unlikey(writer_seq, board_seq);
-		model.addAttribute("flag_like", flag_like);
-		return "likey_ok";
+		int count_check = home_boardDAO.likey_check(board_seq, writer_seq);
+		model.addAttribute("like_count_check", count_check);
+		
+		return "likey_xml";
 	}
 	
 	@RequestMapping(value = "/board_modify.do")
@@ -196,6 +187,9 @@ public class HomeController {
 		int flag = board_Modify_Delete_DAO.Board_Modify(writer_seq, board_seq, board_title, board_content);
 		model.addAttribute("flag", flag);
 		
+		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(board_seq);
+		model.addAttribute("home_BoardTO", home_BoardTO);
+		
 		return "modify_ok";
 	}
 	
@@ -206,7 +200,7 @@ public class HomeController {
 		int flag = board_Modify_Delete_DAO.Board_Delete(writer_seq, board_seq);
 		model.addAttribute("flag", flag);
 		
-		return "modify_ok";
+		return "";
 	}
 	
 	@RequestMapping(value = "/book_list.do")
@@ -282,7 +276,15 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/mypage.do")
-	public String mypage() {
+	public String mypage(HttpServletRequest req, Model model) {
+		String vister_useq = req.getParameter("useq");
+		
+		UserTO visiterTO = userDao.myPage_Info_load(vister_useq);
+		model.addAttribute("visiterTO", visiterTO);
+		int board_counts = userDao.user_board_count(vister_useq);
+		model.addAttribute("board_counts", board_counts);
+		ArrayList<MyPageTO> myboard_list = boardDao.boardList_Mypage(vister_useq);
+		model.addAttribute("myboard_list", myboard_list);
 		return "mypage";
 	}
 	

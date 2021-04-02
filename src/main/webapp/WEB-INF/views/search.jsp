@@ -46,11 +46,33 @@
 <style type="text/css">
 	
 	#content {position: absolute; left: 50%; transform: translateX(-50%);}
-	.button1, .button2{
+	.button1{
+	float: right;
+	margin-right:0px;
 	width: 30px;
-	font-size: 25px;
-	}
+	font-size: 20px;
 
+}
+.button2{
+	float: right;
+	margin-right: 50px;
+	width: 30px;
+	font-size: 20px;
+}
+.button3{
+	float: right;
+	width: 30px;
+	font-size: 20px;
+}
+.intro_search{
+	padding-left: 20px;
+}
+.tit_brunch{
+	font-size: 50px;
+}
+.part{
+	font-size: 25px;
+}
 </style>
 
 </head>
@@ -93,9 +115,9 @@
 					<% if(userInfo == null){ %>
 						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
 	        		<% }else{ %>
-	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        			<td width=75% ><span><a class="button2" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
 	        		<% } %>
-					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+					<td width=5%><span><a class="button3" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
 				</tr>
 			</table>		
     	</div>
@@ -107,13 +129,13 @@
 		<table>
 			<tr height="150px"><td></td></tr>
 			<tr>
-				<td><img src="./upload/timage1.JPG" height="480px" /></td>
+				<td><img src="./images/login-image.png" height="480px" /></td>
 				<td>
 					<table width="900px">
 					
 					<tr><td>
 						<div class="intro_search">
-							<h3 class="tit_brunch">'책갈피' 프로젝트</h3>
+							<div class="tit_brunch">'책갈피' 프로젝트</div>
 							<div class="desc_search">
 								<span class="part">독서 후, 당신의 감성과 생각을 나누기 위한 플랫폼<br></span>
 							</div>

@@ -117,7 +117,24 @@ $(document).ready(function(){
 
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">
+	.button1{
+	float: right;
+	margin-right: 0px;
 	
+	font-size: 30px;
+
+}
+	.button2{
+	float: right;
+	margin-right: 50px;
+	width: 30px;
+	font-size: 20px;
+}
+	.button3{
+	align: right;
+	width: 30px;
+	font-size: 40px;
+}
 	.board:hover .img {filter: brightness(60%);}
 	.text {text-align: center; position: absolute; top: 50%; left: 50%; transform: translate( -50%, -50% ); color: white; opacity: 0;}
 	.text {width: 180px;}
@@ -188,9 +205,9 @@ tab하나 처리
 					<% if(userInfo == null){ %>
 						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
 	        		<% }else{ %>
-	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        			<td width=75% ><span><a class="button2" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
 	        		<% } %>
-					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+					<td width=5%><span><a class="button3" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
 				</tr>
 			</table>		
     	</div>

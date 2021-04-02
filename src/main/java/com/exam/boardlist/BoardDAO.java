@@ -458,4 +458,41 @@ public class BoardDAO {
 		return snnlpagingTO;
 	}
 	
+	//마이페이지 보드 리스트 출력 by 예찬
+		public ArrayList<MyPageTO> boardList_Mypage(String useq) {
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			ArrayList<MyPageTO> lists = new ArrayList<MyPageTO>();
+			
+			try{
+				conn = dataSource.getConnection();
+				String sql = "select bl.seq as seq, bl.title as title, bl.filename as filename, bl.likey as likey , count(bseq) as comment from (select b.seq as seq, b.title, b.filename, b.useq as useq, count(l.bseq) as likey from (select seq, title, filename, useq from board where useq=?) as b left outer join likey as l on b.seq = l.bseq group by b.seq) as bl left outer join comment as c on bl.seq = c.bseq group by bl.seq";
+				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				pstmt.setString(1, useq);
+				
+				rs = pstmt.executeQuery();		
+				while( rs.next() ) {
+					MyPageTO to = new MyPageTO();
+					to.setSeq( rs.getString( "seq" ) );
+					to.setTitle( rs.getString( "title" ) );
+					to.setFilename( rs.getString( "filename" ) );
+					to.setLike(rs.getInt("likey"));
+					to.setComment(rs.getInt("comment"));
+
+					lists.add( to );
+				}				
+				
+			} catch(SQLException e){
+				System.out.println("[에러] " + e.getMessage());
+			} finally {
+				if(rs!=null) try{rs.close();}catch(SQLException e) {}
+				if(pstmt!=null) try{pstmt.close();}catch(SQLException e) {}
+				if(conn!=null) try{conn.close();}catch(SQLException e) {}
+			}
+			
+			return lists;
+		}
+	
 }

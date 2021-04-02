@@ -137,15 +137,25 @@
 
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">	
-#start-button{
-	width: 30px;
-	font-size: 25px;
-	margin-left: 1000px;
-	
+.button1{
+	float: right;
+	margin-right:20px;
+	width: 20px;
+	font-size: 20px;
+
 }
 .button2{
-	font-size: 25px;
+	float: right;
+	margin-right: 50px;
+	width: 30px;
+	font-size: 20px;
 }
+.button3{
+	float: right;
+	width: 30px;
+	font-size: 20px;
+}
+
 	.board:hover .img {filter: brightness(60%);}
 	.text {text-align: center; position: absolute; top: 50%; left: 50%; transform: translate( -50%, -50% ); color: white; opacity: 0;}
 	.text {width: 180px;}
@@ -159,8 +169,12 @@
 	.board_pagetab a:hover { text-decoration: underline; background-color:#f2f2f2; }
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
 	#content {position: absolute; left: 50%; transform: translateX(-50%);}
-	.button1, .button2{width: 30px; font-size: 25px;}
 	
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+   body {
+ font-family: 'Noto Serif KR', serif;
+  background: #white;
+}	
 </style>
 <!--
 class=board에 마우스 갖다대면 class=img를 filter 적용
@@ -229,9 +243,9 @@ $(document).ready(function(){
 					<% if(userInfo == null){ %>
 						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
 	        		<% }else{ %>
-	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        			<td width=75% ><span><a class="button2" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
 	        		<% } %>
-					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+					<td width=5%><span><a class="button3" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
 				</tr>
 			</table>		
     	</div>
@@ -257,17 +271,17 @@ $(document).ready(function(){
 	// << 표시 설정
 	//if(startBlock == 1) {
 	if(cpage == 1) {
-		out.println("<span class='off'><a>처음</a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a style='color:black'>처음</a>&nbsp;&nbsp;</span>");
 	} else {
 		//out.println("<span class='off'><a href='./list.do?cpage="+(startBlock-blockPerPage)+"'>&lt;처음&gt;</a>&nbsp;&nbsp;</span>");
-		out.println("<span class='off'><a href='./list.do?cpage="+1+"'>처음</a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a href='./list.do?cpage="+1+"'style='color:black'>처음</a>&nbsp;&nbsp;</span>");
 	}
 
 	// < 표시 설정
 	if (cpage == 1) {
-		out.println("<span class='off'><a><i class='fa fa-arrow-left' aria-hidden='true' color='white'></i></a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a><i class='fa fa-arrow-left' aria-hidden='true' style='color:black'></i></a>&nbsp;&nbsp;</span>");
 	} else {
-		out.println("<span class='off'><a href='./list.do?cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' ></i></a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a href='./list.do?cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' style='color:black'></i></a>&nbsp;&nbsp;</span>");
 	}
 
 
@@ -283,18 +297,18 @@ $(document).ready(function(){
 
 	// > 표시 설정
 	if (cpage == totalPage) {
-		out.println("<span class='off'>&nbsp;&nbsp;<a>&lt;다음&gt;</a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a style='color:black'>&lt;다음&gt;</a></span>");
 	} else {
-		out.println("<span class='off'>&nbsp;&nbsp;<a href='./list.do?cpage="+(cpage+1)+"'><i class='fa fa-arrow-right' aria-hidden='true' ></i></a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a href='./list.do?cpage="+(cpage+1)+"'><i class='fa fa-arrow-right' aria-hidden='true' style='color:black'></i></a></span>");
 	}
 
 	// >> 표시 설정
 	//if(endBlock == totalPage) {
 	if(cpage == totalPage) {
-		out.println("<span class='off'>&nbsp;&nbsp;<a>끝</a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a style='color:black'>끝</a></span>");
 	} else {
 		//out.println("<span class='off'>&nbsp;&nbsp;<a href='list.do?cpage="+(startBlock+blockPerPage)+"'>&lt;끝&gt;</a></span>");
-		out.println("<span class='off'>&nbsp;&nbsp;<a href='list.do?cpage="+totalPage+"'>끝</a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a href='list.do?cpage="+totalPage+"' style='color:black'>끝</a></span>");
 	}
 		
 %>

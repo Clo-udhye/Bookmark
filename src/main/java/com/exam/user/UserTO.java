@@ -13,6 +13,7 @@ public class UserTO {
 	private String keywords;
 	private String introduction;
 	private String profile_filename;
+
 	private MultipartFile uploadFile;
 	
 	public MultipartFile getUploadFile() {
@@ -21,6 +22,7 @@ public class UserTO {
 	public void setUploadFile(MultipartFile uploadFile) {
 		this.uploadFile = uploadFile;
 	}
+	
 	
 	public String getSeq() {
 		return seq;

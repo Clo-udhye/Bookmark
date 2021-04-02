@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -84,13 +85,9 @@ public class Home_BoardDAO {
 		return count;
 	}
 	
-	public int likey_check (String seq, String userID) {
-		String user_sql = "select seq from user where id = ?";
-		String useq = jdbcTemplate.queryForObject(user_sql, new Object[] {userID}, String.class);
-		
+	public int likey_check (String seq, String useq) throws EmptyResultDataAccessException {
 		String sql = "select count(*) from likey where bseq =? and useq =?";
 		int count_check = jdbcTemplate.queryForObject(sql, new Object[] {seq, useq} , Integer.class);
-		//System.out.println(count);
 		return count_check;
 	}
 }
