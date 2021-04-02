@@ -435,7 +435,7 @@ $(function() {
 	</div>
 </div>
 
-<div id="modal" class="modal fade" tabindex="-1" role="dialog" data-bs-backdrop="static">
+<div id="zipsearchmodal" class="modal fade" tabindex="-1" role="dialog" data-bs-backdrop="static">
 	<div class="modal-dialog">
 		<div class="modal-content address-content"></div>
 	</div>

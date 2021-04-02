@@ -388,7 +388,7 @@
     			</td>
     			<td>
     				<span class="form-btn">
-						<button id="modal-button" data-bs-toggle="modal" data-bs-target="#modal" type="button" class="btn btn-dark" >주소찾기</button>
+						<button id="modal-button" data-bs-toggle="modal" data-bs-target="#zipsearchmodal" type="button" class="btn btn-dark" >주소찾기</button>
     				</span>    			
     			</td>
     		</tr>

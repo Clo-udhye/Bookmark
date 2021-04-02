@@ -540,11 +540,7 @@ $(function () {
        						<input type="text" placeholder="댓글을 입력해주세요." size="53" id="comment_text_input"/>
 	       				</td>
 	       				<td>
-<<<<<<< HEAD
-	       					<button class="btn btn-sm" value="등록하기" height="100" id="comment_btn"><i class="fas fa-arrow-circle-up"></i></button>
-=======
                         <button value="등록하기" height="100" id="comment_btn" class="btn"><i class="fas fa-arrow-circle-up" style="font-size: 20px;"></i></button>
->>>>>>> 155e4d6dac34fddadbe8e9da6c3a243c34ed2805
 	       				</td>
        			</tr>
        		</table>

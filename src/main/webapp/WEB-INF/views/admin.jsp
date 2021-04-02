@@ -306,9 +306,6 @@
 	})
 </script>
 <style>
-html{
-	position: fixed;
-}
 .button1{
 	float: right;
 	margin-right:50px;
@@ -326,6 +323,11 @@ html{
 	align: right;
 	width: 30px;
 	font-size: 20px;
+}
+
+.page-link.active {
+  background-color: #999999;
+  border-color: #999999;
 }
 </style>
 </head>
@@ -376,7 +378,7 @@ html{
     	</div>
     </div>
     
-    <div id="content">
+    <div id="content" style="padding: 100px;" align= "center" >
         <table>
         	<tr>
         		<td>
