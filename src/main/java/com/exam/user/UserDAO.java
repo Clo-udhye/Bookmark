@@ -27,24 +27,26 @@ public class UserDAO {
 		try{
 			conn = dataSource.getConnection();
 			
-			String sql = "select seq, id, nickname, password from user where id=?";
+			//String sql = "select seq, id, nickname, password, introduction, profile_filename from user where id=?";
+			String sql = "select seq, id, nickname, introduction, profile_filename from user where id=? and password=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, to.getId());
+			pstmt.setString(2, to.getPassword());
 			
 			UserTO uto = new UserTO();
 			rs = pstmt.executeQuery();		
-			if(rs.next()) {
-				if(rs.getString("password").equals(to.getPassword())) {
-					lto.setFlag(1); //로그인 성공
-					uto.setSeq(rs.getString("seq"));
-					uto.setId(rs.getString("id"));
-					uto.setNickname(rs.getString("nickname"));
-					
-					lto.setUto(uto);
-				}else
-					lto.setFlag(0); //비밀번호 틀림
-			}					
-			
+			if(rs.next()){
+				lto.setFlag(1); //로그인 성공
+				uto.setSeq(rs.getString("seq"));
+				uto.setId(rs.getString("id"));
+				uto.setNickname(rs.getString("nickname"));
+				uto.setIntroduction(rs.getString("introduction"));
+				uto.setProfile_filename(rs.getString("profile_filename"));
+				
+				lto.setUto(uto);
+			}else {
+				lto.setFlag(0); //아이디/비밀번호 틀림
+			}							
 		} catch(SQLException e){
 			System.out.println("[에러] " + e.getMessage());
 		} finally {
@@ -174,7 +176,7 @@ public class UserDAO {
 			rs = pstmt.executeQuery();		
 			if(rs.next()) {
 				if(rs.getString("count").equals("1")) {// 네이버로 로그인 한적이 있다.
-					sql = "select seq, id, nickname from user where id = ?"; 
+					sql = "select seq, id, nickname, introduction, profile_filename from user where id = ?"; 
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, to.getSns_id());
 				
@@ -183,6 +185,8 @@ public class UserDAO {
 						userInfo.setSeq(rs.getString("seq"));
 						userInfo.setId(rs.getString("id"));
 						userInfo.setNickname(rs.getString("nickname"));
+						userInfo.setIntroduction(rs.getString("introduction"));
+						userInfo.setProfile_filename(rs.getString("profile_filename"));
 					} 
 					
 					//System.out.println("userInfo : "+userInfo.getId());
@@ -197,7 +201,7 @@ public class UserDAO {
 						
 					int result = pstmt.executeUpdate();
 					if(result == 1){ //성공적으로 사용자 레코드 생성시 방금 추가한 레코드 정보 가져오기
-						sql = "select seq, id, nickname from user where id = ?"; 
+						sql = "select seq, id, nickname, introduction, profile_filename from user where id = ?"; 
 						pstmt = conn.prepareStatement(sql);
 						pstmt.setString(1, to.getSns_id());
 						
@@ -213,6 +217,8 @@ public class UserDAO {
 								userInfo.setSeq(rs.getString("seq"));
 								userInfo.setId(rs.getString("id"));
 								userInfo.setNickname(rs.getString("nickname"));
+								userInfo.setIntroduction(rs.getString("introduction"));
+								userInfo.setProfile_filename(rs.getString("profile_filename"));
 								
 								return userInfo; 
 							}

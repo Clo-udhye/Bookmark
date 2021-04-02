@@ -60,9 +60,9 @@
 			}
 			
 			// 아이디 정규표현식, 영어소문자 숫자만 가능, 6~16자
-			const regexp = /^[a-z0-9]{6,16}$/;
+			const regexp = /^[a-z0-9-_]{5,20}$/;
 			if(!regexp.test(document.login_frm.userID.value.trim())){
-				alert('아이디는 6자이상 16자 이하의 영어소문자, 숫자로 이루어져 있습니다.');
+				alert('아이디는 5~20자의 영문 소문자, 숫자와 특수기호(_),(-)으로만 이루어져있습니다.');
 				return false;
 			}
 			//document.login_frm.submit();
@@ -80,11 +80,9 @@
 	            		alert('로그인에 성공했습니다.');
 	            		location.href = document.referrer;
 	            	}else if($(xmlData).find("flag").text() == 0){
-	            		alert('비밀번호가 잘못되었습니다.');
-	            	   	$('#userPassword').focus();
+	            		alert('아이디와 비밀번호를 확인해주세요.');
 	            	} else{
-	            		alert('아이디를 확인해주세요.');
-	            		$('#userID').focus();
+	            		alert('[DB에러] : 로그인에 실패했습니다.');
 	            	}
 	            },
 	            error : function(){
