@@ -2,7 +2,6 @@ package com.exam.boardlist;
 
 import java.util.ArrayList;
 
-import com.exam.user.UserTO;
 
 public class BoardPagingTO {
 
@@ -14,18 +13,25 @@ public class BoardPagingTO {
 	private int startBlock;
 	private int endBlock;
 	
+	
 	private ArrayList<BoardTO> boardList;
-	
-	// 검색결과페이지에 작가 리스트에 nickname 출력하려고.
-	private ArrayList<UserTO> userList;
-	public ArrayList<UserTO> getUserList() {
-		return userList;
+	public ArrayList<BoardTO> getBoardList() {
+		return boardList;
 	}
-	public void setUserList(ArrayList<UserTO> userList) {
-		this.userList = userList;
+	public void setBoardList(ArrayList<BoardTO> boardList) {
+		this.boardList = boardList;
 	}
 	
-	// 검색결과페이지에 작가 리스트에 좋아요수 출력하려고.
+	// 전체 게시글 리스트, 검색결과페이지 게시글 리스트에 사용
+	private ArrayList<JoinBULCTO> joinbulcList;
+	public ArrayList<JoinBULCTO> getJoinbulcList() {
+		return joinbulcList;
+	}
+	public void setJoinbulcList(ArrayList<JoinBULCTO> joinbulcList) {
+		this.joinbulcList = joinbulcList;
+	}
+
+	// 검색결과페이지에 작가 리스트에 사용
 	private ArrayList<JoinBLUTO> joinbluList;
 	public ArrayList<JoinBLUTO> getJoinbluList() {
 		return joinbluList;
@@ -33,8 +39,7 @@ public class BoardPagingTO {
 	public void setJoinbluList(ArrayList<JoinBLUTO> joinbluList) {
 		this.joinbluList = joinbluList;
 	}
-	
-
+		
 	public BoardPagingTO() {
 		this.cpage = 1;
 		// 한 페이지에 보일 게시글 수
@@ -88,12 +93,6 @@ public class BoardPagingTO {
 		this.endBlock = endBlock;
 	}
 	
-	public ArrayList<BoardTO> getBoardList() {
-		return boardList;
-	}
 
-	public void setBoardList(ArrayList<BoardTO> boardList) {
-		this.boardList = boardList;
-	}
 
 }

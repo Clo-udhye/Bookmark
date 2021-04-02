@@ -1,5 +1,6 @@
 <%@page import="com.exam.user.UserTO"%>
 <%@page import="com.exam.theseMonthBoard.Home_BoardTO"%>
+<%@page import="com.exam.boardlist.JoinBULCTO"%>
 <%@page import="com.exam.boardlist.BoardTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -14,24 +15,41 @@
 	}
 	
 
-	ArrayList<Home_BoardTO> theseBoards = (ArrayList)request.getAttribute("lists");
+	//ArrayList<Home_BoardTO> theseBoards = (ArrayList)request.getAttribute("lists");
+	ArrayList<JoinBULCTO> theseBoards = (ArrayList)request.getAttribute("lists");
 	
-	Home_BoardTO to1 = theseBoards.get(0);
+	//seq, date, filename, title, useq, nickname, Lcount, Ccount
+	JoinBULCTO to1 = theseBoards.get(0);
 	String seq1 = to1.getSeq();
-	String title1 = to1.getTitle();
 	String date1 = to1.getDate();
-	String bseq1 = to1.getBseq();
-	String nickname1 = to1.getNickname();
 	String filename1 = to1.getFilename();
-	
-	Home_BoardTO to2 = theseBoards.get(1);
+	String title1 = to1.getTitle();
+	String useq1 = to1.getUseq();
+	String nickname1 = to1.getNickname();
+	String Lcount1 = to1.getLcount();
+	String Ccount1 = to1.getCcount();
+
+	JoinBULCTO to2 = theseBoards.get(1);
 	String seq2 = to2.getSeq();
-	String title2 = to2.getTitle();
 	String date2 = to2.getDate();
-	String bseq2 = to2.getBseq();
-	String nickname2 = to2.getNickname();
 	String filename2 = to2.getFilename();
+	String title2 = to2.getTitle();
+	String useq2 = to2.getUseq();
+	String nickname2 = to2.getNickname();
+	String Lcount2 = to2.getLcount();
+	String Ccount2 = to2.getCcount();	
 	
+	JoinBULCTO to3 = theseBoards.get(2);
+	String seq3 = to3.getSeq();
+	String date3 = to3.getDate();
+	String filename3 = to3.getFilename();
+	String title3 = to3.getTitle();
+	String useq3 = to3.getUseq();
+	String nickname3 = to3.getNickname();
+	String Lcount3 = to3.getLcount();
+	String Ccount3 = to3.getCcount();	
+	
+	/*
 	Home_BoardTO to3 = theseBoards.get(2);
 	String seq3 = to3.getSeq();
 	String title3 = to3.getTitle();
@@ -39,7 +57,7 @@
 	String bseq3 = to3.getBseq();
 	String nickname3 = to3.getNickname();
 	String filename3 = to3.getFilename();
-	
+	*/
 %>
 
 <!DOCTYPE html>
@@ -51,18 +69,22 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <!-- <style>#content {position: absolute; left: 50%; transform: translateX(-50%);}</style>  -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap" rel="stylesheet">
+
+
 <!-- sidebar -->
 
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
 <!-- home -->
-<link rel="stylesheet" type="text/css" href="./css/home.css">
+ <link rel="stylesheet" type="text/css" href="./css/home.css"> 
 
 <!-- 글쓰기 Summernote -->
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
@@ -72,8 +94,10 @@
 	$(document).ready(function(){
 		for ( let i = 1; i <=3; i++){
 		    $("#modal-link"+i).click(function(){
-		        var seq = $("#modal-link"+i+" #board_seq").val().split("/");
-		        $('.view-content').load("./view.do" + "?seq=" + seq[0]);   
+		    	// *******************seq 이상하게 잡히는 거 수정 by 정예찬*******************
+		    	//console.log($("#modal-link"+i+" #board_seq").val());
+		        var seq = $("#modal-link"+i+" #board_seq").val();
+		        $('.view-content').load("./view.do" + "?seq=" + seq);   
 		    });
 		}
 		
@@ -94,16 +118,32 @@
 <style>
 
 .button1{
-	position: right;
+	float: right;
+	margin-right:0px;
 	width: 30px;
-	font-size: 25px;
+	font-size: 20px;
 
 }
 .button2{
-	align: right;
+	float: right;
+	margin-right: 50px;
 	width: 30px;
-	font-size: 25px;
+	font-size: 20px;
+	text-decoration: underline;
 }
+.button3{
+	float: right;
+	width: 30px;
+	font-size: 20px;
+}
+#content{
+	font-family: 'Noto Serif KR', serif;
+	
+}
+.intro_brunch{
+	padding-top: 100px;
+}
+
 </style>
 </head>
 <body>
@@ -123,7 +163,7 @@
 		if(userInfo.getId().equals("testadmin1")) {%>
 			<a href="./admin.do">Admin Page</a>
 		<%} else{ %>
-			<a href="./mypage.do">My Page</a>
+			<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
 		<%}
 	}%>
 	<a href="./list.do">모든 게시글 보기</a>
@@ -150,9 +190,9 @@
 					<% if(userInfo == null){ %>
 						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
 	        		<% }else{ %>
-	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        			<td width=75% ><span><a class="button2" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
 	        		<% } %>
-					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+					<td width=5%><span><a class="button3" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
 				</tr>
 			</table>		
     	</div>
@@ -161,7 +201,7 @@
 
 	<div id="content">
 		<div class="intro_brunch">
-			<h3 class="tit_brunch" style="padding-left : 30px">생각을 보고, 나눔에 감동하다. 책갈피
+			<h3 class="tit_brunch" id="tit_brunch" style="padding-left : 30px ">생각을 보고, 나눔에 감동하다. 책갈피
 					<span class="ico_brunch ico_logo"></span>
 			</h3>
 			<br>
@@ -211,7 +251,17 @@
 													<em class="cate_pic"></em> 
 													<strong class="tit_pic"><%= title1%></strong> 
 													<span class="txt_pic">&quot;</span> 
-														<span class="info_by"><span class="ico_by">by</span>&nbsp;<%= nickname1 %></span>
+														<span class="info_by" style="font-size: 14px;"><span class="ico_by">by</span>&nbsp;<%= nickname1 %></span>
+														
+													<!-- 추가 (위에 nickname부분 글씨 크기 조절도)-->
+													<br/>
+													<!-- <div id="text_count" align="right"> -->
+													<div id="text_count" align="right" style="padding-right: 10px; font-size: 14px;">
+													<span id="text_likey"><i class="fas fa-heart"></i>&nbsp;<%= Lcount1 %></span>
+													&nbsp;
+													<span id="text_comment"><i class="fas fa-comment-dots"></i>&nbsp;<%= Ccount1 %></span>
+													</div>
+
 												</div>
 											</div>
 											<div class="align_g"></div>
@@ -230,8 +280,18 @@
 											<div class="info_g">
 												<div class="inner_g">
 													<em class="cate_pic"></em> <strong class="tit_pic" style="padding-left : 20px ;padding-right : 20px;"><%=title2%></strong> 
-													<span class="txt_pic"></span> <span class="info_by"><span
-														class="ico_brunch ico_by">by</span> <%= nickname2 %></span>
+													<span class="txt_pic"></span>
+														<span class="info_by" style="font-size: 14px;"><span class="ico_brunch ico_by">by</span> <%= nickname2 %></span>
+														
+													<!-- 추가 (위에 nickname부분 글씨 크기 조절도)-->
+													<br/>
+													<!-- <div id="text_count" align="right"> -->
+													<div id="text_count" align="right" style="padding-right: 10px; font-size: 14px;">
+													<span id="text_likey"><i class="fas fa-heart"></i>&nbsp;<%= Lcount2 %></span>
+													&nbsp;
+													<span id="text_comment"><i class="fas fa-comment-dots"></i>&nbsp;<%= Ccount2 %></span>
+													</div>
+													
 												</div>
 											</div>
 											<div class="align_g"></div>
@@ -252,8 +312,18 @@
 											<div class="info_g">
 												<div class="inner_g">
 													<em class="cate_pic"></em> <strong class="tit_pic" style="padding-left : 20px ;padding-right : 20px;"><%=title3%></strong> 
-													<span class="txt_pic"></span> <span class="info_by"><span
-														class="ico_brunch ico_by">by</span> <%= nickname3 %></span>
+													<span class="txt_pic">
+														</span> <span class="info_by"><span class="ico_brunch ico_by">by</span> <%= nickname3 %></span>
+														
+													<!-- 추가 (위에 nickname부분 글씨 크기 조절도)-->
+													<br/>
+													<!-- <div id="text_count" align="right"> -->
+													<div id="text_count" align="right" style="padding-right: 10px; font-size: 14px;">
+													<span id="text_likey"><i class="fas fa-heart"></i>&nbsp;<%= Lcount3 %></span>
+													&nbsp;
+													<span id="text_comment"><i class="fas fa-comment-dots"></i>&nbsp;<%= Ccount3 %></span>
+													</div>
+													
 												</div>
 											</div>
 											<div class="align_g"></div>
@@ -272,9 +342,9 @@
 			<p>
 				<span ><h5 align='center'>책갈피 개발자들</h5></span> <!-- class="txt_brunch" -->
 			</p>
-			<div class="wrap_writers">
+			<div class="wrap_writers" >
 				<ul class="list_writers list_writers_group writer_52">
-					<li><a class="link_writers #home_writers "> 
+					<li><a class="link_writers #home_writers "  id="writers"> 
 						<img
 							src="./images/profile_Yechan.png"
 							width="80" height="80" class="img_brunch thumb_img"
@@ -296,7 +366,7 @@
 							
 						</div>
 					</li>
-					<li><a class="link_writers #home_writers "> 
+					<li><a class="link_writers #home_writers " id="writers"> 
 						<img
 							src="./images/profile_Dahye.jpg"
 							width="80" height="80" class="img_brunch thumb_img"
@@ -317,7 +387,7 @@
 								data-keyword="재테크">Java</button>
 						</div>
 					</li>
-					<li><a class="link_writers #home_writers "> 
+					<li><a class="link_writers #home_writers " id="writers"> 
 						<img
 							src="./images/profile_JIwon.jpg"
 							width="80" height="80" class="img_brunch thumb_img"
@@ -338,7 +408,7 @@
 								data-keyword="재테크">독서</button>
 						</div>
 					</li>
-					<li  style="padding-left:15px"><a class="link_writers #home_writers "> 
+					<li  style="padding-left:15px"><a class="link_writers #home_writers " id="writers"> 
 						<img
 							src="./images/profile_Minji.jpg"
 							width="80" height="80" class="img_brunch thumb_img"

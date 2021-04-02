@@ -52,6 +52,7 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
@@ -116,10 +117,30 @@ $(document).ready(function(){
 
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">
+	.button1{
+	float: right;
+	margin-right: 0px;
 	
+	font-size: 30px;
+
+}
+	.button2{
+	float: right;
+	margin-right: 50px;
+	width: 30px;
+	font-size: 20px;
+}
+	.button3{
+	align: right;
+	width: 30px;
+	font-size: 40px;
+}
 	.board:hover .img {filter: brightness(60%);}
 	.text {text-align: center; position: absolute; top: 50%; left: 50%; transform: translate( -50%, -50% ); color: white; opacity: 0;}
-	.text a {text-decoration: none; color: white; font-weight: bold;}
+	.text {width: 180px;}
+	#text_title p {font-size: 16px;}
+	#text_nickname p {font-size: 12px;}
+	#text_count span {font-size: 12px;}
 	.board:hover .text {opacity: 1;}
 	.board {position: relative;}
 	.board_pagetab { text-align: center; } 
@@ -138,7 +159,7 @@ $(document).ready(function(){
 
 class=board에 마우스 갖다대면 class=img를 filter 적용
 class=text 사진 정가운데에 위치시키고, opacity(불투명도)를 0으로 줘서 안보이게 함
-class=text의 a인 링크부분 밑줄에 파란글씨 아니고, 그냥 하얀 글자로 보이게. 그리고 굵게
+text부분 길이 조절
 class=board에 마우스 갖다대면 class-text opacity(불투명도)를 1로 줘서 보이게 함
 이미지 위에 텍스트 갖다 놓으려면 이미지와 텍스트를 묶고있는 class에 position을 relative로 해야한다고 해서 함
 class=board_pagetab 페이지탭 가운데 위치
@@ -151,8 +172,6 @@ tab내용부분 회색배경, 테두리
 tab메뉴 전체 크기 조절
 tab하나 처리
 클릭한tab의 색 처리
-
-
 -->
 <!-- ■■ /내가 추가한 부분 ■■ -->
 
@@ -186,9 +205,9 @@ tab하나 처리
 					<% if(userInfo == null){ %>
 						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
 	        		<% }else{ %>
-	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        			<td width=75% ><span><a class="button2" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
 	        		<% } %>
-					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+					<td width=5%><span><a class="button3" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
 				</tr>
 			</table>		
     	</div>

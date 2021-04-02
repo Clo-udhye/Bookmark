@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <%@ page import="com.exam.boardlist.BoardDAO" %>
-<%@ page import="com.exam.boardlist.BoardTO" %>
+<%@ page import="com.exam.boardlist.JoinBULCTO" %>
 <%@ page import="com.exam.boardlist.BoardPagingTO" %>
 <%@ page import="java.util.ArrayList" %>
 
@@ -10,7 +10,7 @@
 
 	
 	//npage처리하려고..
-	BoardPagingTO snlpagingTO = (BoardPagingTO)request.getAttribute( "snlpagingTO" );
+	BoardPagingTO snlpagingTO = (BoardPagingTO)request.getAttribute( "snnlpagingTO" );
 	int npage = snlpagingTO.getCpage();
 
 	
@@ -32,7 +32,8 @@
 	int startBlock = slpagingTO.getStartBlock();
 	int endBlock = slpagingTO.getEndBlock();
 	
-	ArrayList<BoardTO> lists = slpagingTO.getBoardList();
+	ArrayList<JoinBULCTO> lists = slpagingTO.getJoinbulcList();
+	//ArrayList<BoardTO> lists = slpagingTO.getBoardList();
 
 	
 	String searchword = (String)request.getAttribute("searchword");
@@ -40,22 +41,24 @@
 
 	StringBuffer sbHtml = new StringBuffer();
 	
+	//seq, date, filename, title, useq, nickname, Lcount, Ccount 
 	int cnt = 0;
 	if(lists != null){
-		for( BoardTO to : lists ) {
+		for( JoinBULCTO to : lists ) {
 			cnt++;
 			String seq = to.getSeq();
 			String date = to.getDate();
-			String title = to.getTitle();
-			String useq = to.getUseq();
 			String filename = to.getFilename();
-			String filesize = to.getFilesize();
-			String content = to.getContent();
-			String bseq = to.getBseq();
-			String hit = to.getHit();
-			String comment = to.getComment();
+			String title = to.getTitle();
+			// title 처리랑, css에 text width 설정함.
+			if (title != null && title.length() > 25) {
+				title = title.substring(0, 24)+"...";
+			}
+			String useq = to.getUseq();
+			String nickname = to.getNickname();
+			String Lcount = to.getLcount();
+			String Ccount = to.getCcount();
 			
-			// 수정하기 ★★★
 			if(cnt % 5 == 1) {
 				sbHtml.append("</tr>");
 				sbHtml.append("<tr>");
@@ -90,8 +93,19 @@
 				sbHtml.append("		<a><img src='./upload/"+filename+"' border='0' width=250px height=250px/></a>");
 				sbHtml.append("	</div>");
 				sbHtml.append("	<div class='text'>");
+
 				//sbHtml.append("		<a href='board_view.jsp'><p>"+title+"</p></a>");
-				sbHtml.append("		<a>"+title+"</a>");
+				sbHtml.append("		<div id='text_title'><p>"+title+"</p></div>");
+				sbHtml.append("		<div id='text_nickname'><p>by "+nickname+"</p></div>");
+				sbHtml.append("		</br>");
+				//sbHtml.append("		<span id='text_likey'><i class='fas fa-heart'></i>"+Lcount+"</span>");
+				sbHtml.append("		<div id='text_count' align='right'>");
+				sbHtml.append("			<span id='text_likey'><i class='fas fa-heart'></i>&nbsp;"+Lcount+"</span>");
+				sbHtml.append("			&nbsp;");
+				sbHtml.append("			<span id='text_comment'><i class='fas fa-comment-dots'></i>&nbsp;"+Ccount+"</span>");
+				sbHtml.append("		</div>");
+				
+				
 				sbHtml.append("	</div>");
 				sbHtml.append("</td>");
 			}

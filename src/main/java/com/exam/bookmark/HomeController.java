@@ -16,19 +16,21 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
-import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.exam.BoardAction.BoardActionDAO;
 import com.exam.admin.AdminDAO;
@@ -37,6 +39,8 @@ import com.exam.admin.PagingUserTO;
 import com.exam.boardlist.BoardDAO;
 import com.exam.boardlist.BoardPagingTO;
 import com.exam.boardlist.BoardTO;
+import com.exam.boardlist.JoinBULCTO;
+import com.exam.boardlist.MyPageTO;
 import com.exam.booklist.BookDAO;
 import com.exam.booklist.BookRelatedTO;
 import com.exam.booklist.BookTO;
@@ -55,6 +59,8 @@ import com.exam.zipcode.ZipcodeTO;
 
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.oreilly.servlet.MultipartRequest;
+import java.io.File;
+import java.io.IOException;
 
 @Controller
 public class HomeController {
@@ -90,7 +96,8 @@ public class HomeController {
 	
 	@RequestMapping(value = "/home.do")
 	public String home(HttpServletRequest req , Model model) {
-		ArrayList<Home_BoardTO> lists = home_boardDAO.BoardlistTemplate();
+		//ArrayList<Home_BoardTO> lists = home_boardDAO.BoardlistTemplate();
+		ArrayList<JoinBULCTO> lists = home_boardDAO.BoardlistTemplate();
 		model.addAttribute("lists", lists);
 		return "home";
 	}
@@ -127,8 +134,8 @@ public class HomeController {
 		HttpSession session = req.getSession();
 		if (session.getAttribute("userInfo") != null) {
 			UserTO userInfo = (UserTO)session.getAttribute("userInfo");
-			String userID = userInfo.getId();
-			int count_check = home_boardDAO.likey_check(seq, userID);
+			String useq = userInfo.getSeq();
+			int count_check = home_boardDAO.likey_check(seq, useq);
 			model.addAttribute("like_count_check", count_check);
 		}
 		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(seq);
@@ -141,59 +148,49 @@ public class HomeController {
 	}
 	@RequestMapping(value = "/comment.do")
 	public String comment(HttpServletRequest req , Model model) {
-		String writer_seq = req.getParameter("user");
-		String comment = req.getParameter("comment");
-		String board_seq = req.getParameter("bseq");
-		
-		int flag = boardActionDAO.comment(writer_seq, comment, board_seq);
-		model.addAttribute("flag", flag);
-		return "comment_ok";
-	}
-	
-	@RequestMapping(value = "/comment_modify.do")
-	public String comment_modify(HttpServletRequest req , Model model) {
 		String value = req.getParameter("value");
-		if(value.equals("modify")) {
-			//System.out.println("comment modify");
+		String seq = req.getParameter("seq");
+		if(value.equals("create")) {
+			String writer_seq = req.getParameter("user");
+			String comment = req.getParameter("comment");
+			String board_seq = req.getParameter("seq");
+			int flag = boardActionDAO.comment(writer_seq, comment, board_seq);
+			model.addAttribute("flag", flag);
+		} else if(value.equals("modify")) {
 			String comment = req.getParameter("comment");
 			String comment_seq = req.getParameter("comment_seq");
 			int flag = boardActionDAO.comment_modify(comment, comment_seq);
 			model.addAttribute("flag", flag);
 		} else if (value.equals("delete")) {
-			//System.out.println("comment delete");
 			String comment_seq = req.getParameter("comment_seq");
 			int flag = boardActionDAO.comment_delete(comment_seq);
 			model.addAttribute("flag", flag);
 		}
-		return "comment_ok";
-	}
-	
-	@RequestMapping(value = "/comment_check.do")
-	public String comment_check(HttpServletRequest req , Model model) {
-		String seq = req.getParameter("bseq");
+		ArrayList<Board_CommentTO> board_CommentTO = home_boardDAO.CommentListTemplate(seq);
+		model.addAttribute("board_commentTO", board_CommentTO);
 		
-		int count = home_boardDAO.likey_count(seq);
-		model.addAttribute("likey_count", count);
-		return "comment_ok";
+		return "comment_xml";
 	}
-	
+
 	@RequestMapping(value = "/likey.do")
 	public String likey(HttpServletRequest req , Model model) {
-		String writer_seq = req.getParameter("user");
 		String board_seq = req.getParameter("bseq");
+		String writer_seq = req.getParameter("user");			
+
+		if (req.getParameter("value").equals("likey")) {
+			int flag_like = boardActionDAO.likey(writer_seq, board_seq);
+			model.addAttribute("flag_like", flag_like);
+		} else if(req.getParameter("value").equals("unlikey")) {
+			int flag_like = boardActionDAO.unlikey(writer_seq, board_seq);
+			model.addAttribute("flag_like", flag_like);
+		}
+		int count = home_boardDAO.likey_count(board_seq);
+		model.addAttribute("likey_count", count);
 		
-		int flag_like = boardActionDAO.likey(writer_seq, board_seq);
-		model.addAttribute("flag_like", flag_like);
-		return "likey_ok";
-	}
-	@RequestMapping(value = "/unlikey.do")
-	public String unlikey(HttpServletRequest req , Model model) {
-		String writer_seq = req.getParameter("user");
-		String board_seq = req.getParameter("bseq");
-		//System.out.println("unlikey.do controller");
-		int flag_like = boardActionDAO.unlikey(writer_seq, board_seq);
-		model.addAttribute("flag_like", flag_like);
-		return "likey_ok";
+		int count_check = home_boardDAO.likey_check(board_seq, writer_seq);
+		model.addAttribute("like_count_check", count_check);
+		
+		return "likey_xml";
 	}
 	
 	@RequestMapping(value = "/board_modify.do")
@@ -205,6 +202,9 @@ public class HomeController {
 		int flag = board_Modify_Delete_DAO.Board_Modify(writer_seq, board_seq, board_title, board_content);
 		model.addAttribute("flag", flag);
 		
+		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(board_seq);
+		model.addAttribute("home_BoardTO", home_BoardTO);
+		
 		return "modify_ok";
 	}
 	
@@ -215,7 +215,7 @@ public class HomeController {
 		int flag = board_Modify_Delete_DAO.Board_Delete(writer_seq, board_seq);
 		model.addAttribute("flag", flag);
 		
-		return "modify_ok";
+		return "";
 	}
 	
 	@RequestMapping(value = "/book_list.do")
@@ -291,9 +291,50 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/mypage.do")
-	public String mypage() {
+	public String mypage(HttpServletRequest req, Model model) {
+		String vister_useq = req.getParameter("useq");
+		
+		UserTO visiterTO = userDao.myPage_Info_load(vister_useq);
+		model.addAttribute("visiterTO", visiterTO);
+		int board_counts = userDao.user_board_count(vister_useq);
+		model.addAttribute("board_counts", board_counts);
+		ArrayList<MyPageTO> myboard_list = boardDao.boardList_Mypage(vister_useq);
+		model.addAttribute("myboard_list", myboard_list);
 		return "mypage";
 	}
+	
+	@RequestMapping(value = "/mypage_modify.do")
+	public String mypage_modify(HttpServletRequest request, Model model) {
+		
+		ArrayList<UserTO> lists = userDao.userinfoList(request.getParameter("seq"));
+		model.addAttribute("lists", lists);
+		return "mypage_modify";
+	}
+	
+	
+	@RequestMapping(value = "/mypage_modify_ok.do")
+	public String mypage_modify_ok(HttpServletRequest request, Model model) {
+		UserTO to = new UserTO();
+		to.setSeq(request.getParameter("seq"));
+		to.setId(request.getParameter("id"));
+		to.setNickname(request.getParameter("nickname"));
+		to.setMail(request.getParameter("mail"));
+		if(!request.getParameter("address").trim().equals("")) {
+			to.setAddress(request.getParameter("address"));
+			to.setAddresses(request.getParameter("addresses"));
+		}
+		to.setKeywords(request.getParameter("keywords"));
+		to.setIntroduction(request.getParameter("introduction"));
+		to.setProfile_filename(request.getParameter("profile_filename"));
+
+		int flag = userDao.mypagemodifyOk(to) ;
+		model.addAttribute("flag", flag);
+		
+		//System.out.println(to.getMail()+" / "+to.getNickname());
+		//System.out.println(flag);
+		return "mypage_modify_ok";
+	}
+	
 	
 	@RequestMapping(value = "/search.do")
 	public String search() {
@@ -322,22 +363,8 @@ public class HomeController {
 		// searchword도 addAttribute로 가져와야 jsp파일에서 사용할 수 있음
 		model.addAttribute("searchword", searchword);
 		
-		
-		// 작가 검색 결과 게시글 리스트
-		int npage = 1;   // cpage가 없으면 1
-		if(request.getParameter("npage") != null && !request.getParameter("npage").equals("")){   
-			npage = Integer.parseInt(request.getParameter("npage"));
-		}
-		
-		BoardPagingTO snlpagingTO = new BoardPagingTO();
-		snlpagingTO.setCpage(npage);
-		
-		snlpagingTO = boardDao.searchNList(snlpagingTO, searchword);
-		model.addAttribute("snlpagingTO", snlpagingTO);
-		model.addAttribute("searchword", searchword);
-		
 		//System.out.println(slpagingTO.getCpage());
-		//System.out.println(snlpagingTO.getCpage());
+
 		
 		// 검색 결과 작가 리스트 
 		int nnpage = 1;   // cpage가 없으면 1

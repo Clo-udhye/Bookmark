@@ -6,9 +6,6 @@
     pageEncoding="UTF-8"%>
 <%
 
-		// 댓글 작성 및 좋아요 누를 시 --> 조회수도 같이 증가 --> 좋아요, 댓글 관련 ajax 처리
-		// 모달 반복 클릭 시, --> 배경계속 까매짐 --> 
-
 	//로그인 시, 해당 게시글 좋아요 유무
 	int like_count_check = 0;
 	//현재 세션 상태를 체크한다
@@ -95,12 +92,7 @@
 	}
 </style>
 <script type="text/javascript">
-$(function(){
-	// 세션으로 부터 로그인 정보(useq)랑 현 게시글 useq랑 같으면 input-text 랑 textarea 수정 가능하게 default는 readonly --> 다혜 아직 진행 안된 부분
-	
-	
-	
-});
+
 $(function() {
 	// 등록하기 버튼 클릭 시, 알림창 생성 및 댓글 DB 입력
 	$('#comment_btn').click(function () {

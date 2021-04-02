@@ -1,5 +1,7 @@
 package com.exam.user;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class UserTO {
 	private String seq;
 	private String id;
@@ -11,6 +13,16 @@ public class UserTO {
 	private String keywords;
 	private String introduction;
 	private String profile_filename;
+
+	private MultipartFile uploadFile;
+	
+	public MultipartFile getUploadFile() {
+		return uploadFile;
+	}
+	public void setUploadFile(MultipartFile uploadFile) {
+		this.uploadFile = uploadFile;
+	}
+	
 	
 	public String getSeq() {
 		return seq;

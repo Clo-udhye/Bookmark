@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
     
 <%@ page import="com.exam.boardlist.BoardDAO" %>
-<%@ page import="com.exam.boardlist.BoardTO" %>
+<%@ page import="com.exam.boardlist.JoinBULCTO" %>
 <%@ page import="com.exam.boardlist.BoardPagingTO" %>
 <%@ page import="java.util.ArrayList" %>
 
@@ -14,28 +14,10 @@
 		userInfo = (UserTO)session.getAttribute("userInfo");
 		//System.out.println(session.getAttribute("userInfo"));
 	}
-	/*
-	// BoardListTO = BoardPagingTO
-	// listTO = pagingTO
 
-	BoardPagingTO pagingTO = (BoardPagingTO)request.getAttribute( "pagingTO" );
-	ArrayList<BoardTO> booklists = pagingTO.getBoardList();
-	//pagingTO pagelistTO = (pagingTO)request.getAttribute("paginglist");
-    //ArrayList<BookTO> booklists = pagelistTO.getBookList();
-	
-	int cpage = 1;	// cpage가 없으면 1
-	
-	//if(pagelistTO.getCpage()!= 0){
-    //	cpage = pagelistTO.getCpage();
-    //}
-	if(request.getParameter("cpage") != null && !request.getParameter("cpage").equals("")){	
-		cpage = Integer.parseInt(request.getParameter("cpage"));
-	}
-	*/
 	
 	BoardPagingTO pagingTO = (BoardPagingTO)request.getAttribute( "pagingTO" );
-	//BoardPagingTO pagingTO = new BoardPagingTO();
-	//pagingTO.setCpage(cpage);
+
 	int cpage = pagingTO.getCpage();
 	
 	//BoardDAO dao = new BoardDAO();
@@ -51,31 +33,29 @@
 	int startBlock = pagingTO.getStartBlock();
 	int endBlock = pagingTO.getEndBlock();
 	
-	ArrayList<BoardTO> lists = pagingTO.getBoardList();
-
+	ArrayList<JoinBULCTO> lists = pagingTO.getJoinbulcList();
 	//ArrayList<BoardTO> lists = (ArrayList)request.getAttribute( "lists" );
-	
 	
 	StringBuffer sbHtml = new StringBuffer();
 	
+	//seq, date, filename, title, useq, nickname, Lcount, Ccount 
 	int cnt = 0;
 	if(lists != null){
-		for( BoardTO to : lists ) {
+		for( JoinBULCTO to : lists ) {
 			cnt++;
 			String seq = to.getSeq();
 			String date = to.getDate();
-			String title = to.getTitle();
-			String useq = to.getUseq();
 			String filename = to.getFilename();
-			String filesize = to.getFilesize();
-			String content = to.getContent();
-			String bseq = to.getBseq();
-			String hit = to.getHit();
-			String comment = to.getComment();
+			String title = to.getTitle();
+			// title 처리랑, css에 text width 설정함.
+			if (title != null && title.length() > 25) {
+				title = title.substring(0, 24)+"...";
+			}
+			String useq = to.getUseq();
+			String nickname = to.getNickname();
+			String Lcount = to.getLcount();
+			String Ccount = to.getCcount();
 			
-			//System.out.println(filename);
-			//System.out.printf("%s, %s, $s, $s, $s, $s",	recordPerPage, totalRecode, totalPage, blockPerPage, startBlock, endBlock);
-			// 수정하기 ★★★
 			if(cnt % 5 == 1) {
 				sbHtml.append("</tr>");
 				sbHtml.append("<tr>");
@@ -113,59 +93,27 @@
 				sbHtml.append("		<img src='./upload/"+filename+"' border='0' width=250px height=250px/>");
 				sbHtml.append("	</div>");
 				sbHtml.append("	<div class='text'>");
+				
+				// 여기 레이아웃 수정 후 search_tlist.jsp도 수정 ★★★
 				//sbHtml.append("		<a href='board_view.jsp'><p>"+title+"</p></a>");
-				sbHtml.append("		<a>"+title+"</a>");
+				// 수정하기 ★★
+				//sbHtml.append("		<div id='text_title'><p>"+title+title.length()+"</p></div>");
+				sbHtml.append("		<div id='text_title'><p>"+title+"</p></div>");
+				sbHtml.append("		<div id='text_nickname'><p>by "+nickname+"</p></div>");
+				sbHtml.append("		</br>");
+				//sbHtml.append("		<span id='text_likey'><i class='fas fa-heart'></i>"+Lcount+"</span>");
+				sbHtml.append("		<div id='text_count' align='right'>");
+				sbHtml.append("			<span id='text_likey'><i class='fas fa-heart'></i>&nbsp;"+Lcount+"</span>");
+				sbHtml.append("			&nbsp;");
+				sbHtml.append("			<span id='text_comment'><i class='fas fa-comment-dots'></i>&nbsp;"+Ccount+"</span>");
+				sbHtml.append("		</div>");
+				
 				sbHtml.append("	</div>");
 				sbHtml.append("</td>");
-			}
-				
-			/* 완성된 코드 ★★★
-			sbHtml.append("<td class='board'>");
-			// 사진 크기 250 250
-			sbHtml.append("					<a href='board_view.jsp'><img src='./upload/"+filename+"' border='0' width=250px height=250px/></a>");
-			sbHtml.append("</td>");
-			*/
-			
-			/*
-			//sbHtml.append("<tr>");
-			//sbHtml.append("<td width='20%' class='last2'>");
-			//sbHtml.append("<td width=250px height=250px class='last2'>");
-			sbHtml.append("<td class='last2'>");
-			sbHtml.append("	<div class='board'>");
-			sbHtml.append("		<table class='boardT'>");
-			sbHtml.append("		<tr>");
-			sbHtml.append("			<td class='boardThumbWrap'>");
-			sbHtml.append("				<div class='boardThumb'>");
-			
-			//sbHtml.append("					<a href='board_view.jsp'><img src='./upload/"+filename+"' border='0' width='100%' /></a>");
-			sbHtml.append("					<a href='board_view.jsp'><img src='./upload/"+filename+"' border='0' width=250px height=250px/></a>");
-			
-			//sbHtml.append("						<div class='transbox'>");
-		  	//sbHtml.append("							<p>"+title+"</p>");
-		  	//sbHtml.append("						</div>");
-			
-		  	sbHtml.append("				</div>");
-			sbHtml.append("			</td>");
-			sbHtml.append("		</tr>");
-			sbHtml.append("		</table>");
-			sbHtml.append("	</div>");
-			sbHtml.append("</td>");
-			//sbHtml.append("</tr>");
-			*/
-			
+			}		
 		}		
 	}
 	
-	//System.out.println(totalRecode);
-	/*
-	int addcol = recordPerPage - (totalRecode % recordPerPage);
-	System.out.println(addcol);
-	if(totalRecode % recordPerPage != 0) {
-		for(int add=1; add<=addcol; add++) {
-			sbHtml.append("<td></td>");
-		}
-	}
-	*/
 %>
 
 <!DOCTYPE html>
@@ -178,6 +126,7 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
@@ -188,18 +137,31 @@
 
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">	
-#start-button{
-	width: 30px;
-	font-size: 25px;
-	margin-left: 1000px;
-	
+.button1{
+	float: right;
+	margin-right:20px;
+	width: 20px;
+	font-size: 20px;
+
 }
 .button2{
-	font-size: 25px;
+	float: right;
+	margin-right: 50px;
+	width: 30px;
+	font-size: 20px;
 }
+.button3{
+	float: right;
+	width: 30px;
+	font-size: 20px;
+}
+
 	.board:hover .img {filter: brightness(60%);}
 	.text {text-align: center; position: absolute; top: 50%; left: 50%; transform: translate( -50%, -50% ); color: white; opacity: 0;}
-	.text a {text-decoration: none; color: white; font-weight: bold;}
+	.text {width: 180px;}
+	#text_title p {font-size: 16px;}
+	#text_nickname p {font-size: 12px;}
+	#text_count span {font-size: 12px;}
 	.board:hover .text {opacity: 1;}
 	.board {position: relative;}
 	.board_pagetab { text-align: center; } 
@@ -207,13 +169,20 @@
 	.board_pagetab a:hover { text-decoration: underline; background-color:#f2f2f2; }
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
 	#content {position: absolute; left: 50%; transform: translateX(-50%);}
-	.button1, .button2{width: 30px; font-size: 25px;}
 	
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+   body {
+ font-family: 'Noto Serif KR', serif;
+  background: #white;
+}	
 </style>
 <!--
 class=board에 마우스 갖다대면 class=img를 filter 적용
 class=text 사진 정가운데에 위치시키고, opacity(불투명도)를 0으로 줘서 안보이게 함
-class=text의 a인 링크부분 밑줄에 파란글씨 아니고, 그냥 하얀 글자로 보이게. 그리고 굵게
+text부분 길이 조절
+title 글씨 크기 조절
+nicckname 글씨 크기 조절
+count 글씨 크기 조절
 class=board에 마우스 갖다대면 class-text opacity(불투명도)를 1로 줘서 보이게 함
 이미지 위에 텍스트 갖다 놓으려면 이미지와 텍스트를 묶고있는 class에 position을 relative로 해야한다고 해서 함
 class=board_pagetab 페이지탭 가운데 위치
@@ -221,10 +190,6 @@ class=board_pagetab의 a인 링크부분  링크지만 글자색 검은색
 class=board_pagetab의 a 페이지탭에 마우스 갖다대면 밑줄 & 회색 배경
 class=board 각 사진마다 padding 여백
 id=content 본문 가운데 위치
-
-## 다른 방법.
-#content {padding-left: 350px;}
-#content {position: absolute; left: 50%; transform: translateX(-50%);}
 
 -->
 <!-- ■■ /내가 추가한 부분 ■■ -->
@@ -278,9 +243,9 @@ $(document).ready(function(){
 					<% if(userInfo == null){ %>
 						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
 	        		<% }else{ %>
-	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        			<td width=75% ><span><a class="button2" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
 	        		<% } %>
-					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+					<td width=5%><span><a class="button3" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
 				</tr>
 			</table>		
     	</div>
@@ -306,20 +271,20 @@ $(document).ready(function(){
 	// << 표시 설정
 	//if(startBlock == 1) {
 	if(cpage == 1) {
-		out.println("<span class='off'><a>처음</a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a style='color:black'>처음</a>&nbsp;&nbsp;</span>");
 	} else {
 		//out.println("<span class='off'><a href='./list.do?cpage="+(startBlock-blockPerPage)+"'>&lt;처음&gt;</a>&nbsp;&nbsp;</span>");
-		out.println("<span class='off'><a href='./list.do?cpage="+1+"'>처음</a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a href='./list.do?cpage="+1+"'style='color:black'>처음</a>&nbsp;&nbsp;</span>");
 	}
 
 	// < 표시 설정
 	if (cpage == 1) {
-		out.println("<span class='off'><a><i class='fa fa-arrow-left' aria-hidden='true' color='white'></i></a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a><i class='fa fa-arrow-left' aria-hidden='true' style='color:black'></i></a>&nbsp;&nbsp;</span>");
 	} else {
-		out.println("<span class='off'><a href='./list.do?cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' ></i></a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a href='./list.do?cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' style='color:black'></i></a>&nbsp;&nbsp;</span>");
 	}
 
-	
+
 	for(int i=startBlock; i<=endBlock; i++) {
 		
 		if(cpage == i) {
@@ -332,18 +297,18 @@ $(document).ready(function(){
 
 	// > 표시 설정
 	if (cpage == totalPage) {
-		out.println("<span class='off'>&nbsp;&nbsp;<a>&lt;다음&gt;</a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a style='color:black'>&lt;다음&gt;</a></span>");
 	} else {
-		out.println("<span class='off'>&nbsp;&nbsp;<a href='./list.do?cpage="+(cpage+1)+"'><i class='fa fa-arrow-right' aria-hidden='true' ></i></a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a href='./list.do?cpage="+(cpage+1)+"'><i class='fa fa-arrow-right' aria-hidden='true' style='color:black'></i></a></span>");
 	}
 
 	// >> 표시 설정
 	//if(endBlock == totalPage) {
 	if(cpage == totalPage) {
-		out.println("<span class='off'>&nbsp;&nbsp;<a>끝</a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a style='color:black'>끝</a></span>");
 	} else {
 		//out.println("<span class='off'>&nbsp;&nbsp;<a href='list.do?cpage="+(startBlock+blockPerPage)+"'>&lt;끝&gt;</a></span>");
-		out.println("<span class='off'>&nbsp;&nbsp;<a href='list.do?cpage="+totalPage+"'>끝</a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a href='list.do?cpage="+totalPage+"' style='color:black'>끝</a></span>");
 	}
 		
 %>

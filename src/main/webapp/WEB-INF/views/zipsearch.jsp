@@ -23,10 +23,6 @@
     overflow:scroll;
     -webkit-overflow-scrolling: touch;
 }
-.button1, .button2{
-	width: 30px;
-	font-size: 25px;
-	}
 </style>
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -50,7 +46,7 @@ $(document).ready(function(){
 			return;
 		}else{
 			//console.log($('#address_select').val());
-			$('.modal-content').load("./zipsearch.do?strDong="+$('#address_select').val());	
+			$('.address-content').load("./zipsearch.do?strDong="+$('#address_select').val());	
 		}
 		
   });
