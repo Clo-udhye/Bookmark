@@ -80,9 +80,9 @@
 
 
 <!-- sidebar -->
-
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
+
 <!-- home -->
  <link rel="stylesheet" type="text/css" href="./css/home.css"> 
 
@@ -112,6 +112,10 @@
 				}
 			<%}%>	        	
 	    });
+		
+		$('#view-modal').on('hidden.bs.modal', function(){
+			location.reload();
+		});
     });
 </script>
 

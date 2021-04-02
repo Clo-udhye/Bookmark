@@ -48,7 +48,7 @@
 		int likey = myboard_list.getLike();
 		int comment = myboard_list.getComment();
 		
-		sbHtml.append("<td class='board board1' bseq='"+bseq+"' data-bs-toggle='modal' data-bs-target='#modal'>");
+		sbHtml.append("<td class='board board1' bseq='"+bseq+"' data-bs-toggle='modal' data-bs-target='#view-modal'>");
 		// 사진 크기 250 250
 		sbHtml.append("	<div class='img'>");
 		sbHtml.append("		<img src='./upload/"+filename+"' border='0' width=200px height=200px/>");
@@ -99,8 +99,12 @@
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
-<style>
 
+<!-- 글쓰기 Summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
+<style>
 .button1{
 	float: right;
 	margin-right:50px;
@@ -138,11 +142,6 @@
 	float: left;
 }
 
-.wrapTable3 tr,th,td {
-	padding : 5px;
-	margin : 5px;
-}
-
 #wrapTable3 {
 	height :300px;
 	width : 100%;
@@ -168,36 +167,43 @@
 #text_nickname p {font-size: 12px;}
 #text_count span {font-size: 12px;}
 
+#modifymodal1 {width: 650px;}
+	
+.filebox label { display: inline-block; padding: .5em .75em; color: #999; font-size: inherit; line-height: normal; vertical-align: middle; background-color: #fdfdfd; cursor: pointer; border: 1px solid #ebebeb; border-bottom-color: #e2e2e2; border-radius: .25em; }
+.filebox input[type="file"] { /* 파일 필드 숨기기 */ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip:rect(0,0,0,0); border: 0; }
 
 </style>
 
 <script>
-$(document).ready(function(){	
-	$('.board1').click(function(e){
-		$('.modal-content').load("./view.do?seq=" + $(this).attr('bseq'));
-	});
-})
-</script>
-
-<script type="text/javascript">
-	$(document).ready(function(){
+	$(document).ready(function(){	
+		$('.board1').click(function(e){
+			$('.view-content').load("./view.do?seq=" + $(this).attr('bseq'));
+		});
+		
+		$("#write_button").on('click', function(){
+			<%if(userInfo!=null){%>
+				$("#write-modal").modal("show");
+				$('.write-content').load("./write.do");
+			<%}else{%>
+				var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
+				if(comfirm_login==true){
+					location.href="./login.do";
+				}
+			<%}%>	        	
+		});
+		
 		$("#modify_userInfo").click(function(){
 		  	// seq=뒤에 1 대신 받아온 값 넣어야 함.
 			$('.modify-content').load("./mypage_modify.do?seq="+<%=visit_seq%>);
 
 		});
+		
+		$('#view-modal').on('hidden.bs.modal', function(){
+			location.reload();
+		});
 
 	});
 </script>
-<style type="text/css">
-	
-	#modifymodal1 {width: 650px;}
-	
-	.filebox label { display: inline-block; padding: .5em .75em; color: #999; font-size: inherit; line-height: normal; vertical-align: middle; background-color: #fdfdfd; cursor: pointer; border: 1px solid #ebebeb; border-bottom-color: #e2e2e2; border-radius: .25em; }
-	.filebox input[type="file"] { /* 파일 필드 숨기기 */ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip:rect(0,0,0,0); border: 0; }
-
-</style>
-
 </head>
 <body style="overflow-y:scroll;">
 
@@ -216,11 +222,15 @@ $(document).ready(function(){
 			if(userInfo.getId().equals("testadmin1")) {%>
 				<a href="./admin.do">Admin Page</a>
 			<%} else{ %>
-				<a href="./mypage.do">My Page</a>
+				<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
 			<%}
 		}%>
 		<a href="./list.do">모든 게시글 보기</a>
 		<a href="./book_list.do">책 구경하기</a>
+		
+		<div style="padding:8px; position:absolute; bottom:2%; width:100%">
+			<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
+		</div>
 	</div>
 
 	<div id="main">
@@ -420,15 +430,9 @@ $(function() {
 	        
 	        </div>
 	    </div>
-	    <!-- 모달창 정보 -->
-		<div id="modal" class="modal fade" tabindex="-1" role="dialog">
-			<div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
-				<div class="modal-content">               
-				</div>
-			</div>
-		</div>
 	</div>
 
+<!-- 모달창 정보 -->
 <div id="modifymodal" class="modal fade" tabindex="-1" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content modify-content" id="modifymodal1"></div>
@@ -438,6 +442,20 @@ $(function() {
 <div id="zipsearchmodal" class="modal fade" tabindex="-1" role="dialog" data-bs-backdrop="static">
 	<div class="modal-dialog">
 		<div class="modal-content address-content"></div>
+	</div>
+</div>
+
+<div id="view-modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content view-content">                   
+		</div>
+	</div>
+</div>
+		             
+<div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content write-content">
+		</div>
 	</div>
 </div>
 

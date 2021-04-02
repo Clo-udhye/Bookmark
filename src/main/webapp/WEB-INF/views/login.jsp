@@ -35,7 +35,12 @@
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
 
+<!-- 네이버 로그인 -->
 <script type = "text/javascript" src = "https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+
+<!-- 글쓰기 Summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
 <style>
 .button1{
@@ -60,23 +65,22 @@
 	.content{
 		margine: center;
 }
-.
 </style>
 <script type="text/javascript">
-	window.onload = function(){
-		document.getElementById('login').onclick = function(){
-			if(document.login_frm.userID.value.trim()==''){
+	$(document).ready(function(){
+		$(document).on('click', '#login', function(){
+			if($('#userID').val().trim()==''){
 				alert('아이디를 입력하셔야합니다.');
 				return false;
 			}
-			if(document.login_frm.userPassword.value.trim()==''){
+			if($('#userPassword').val().trim()==''){
 				alert('비밀번호를 입력하셔야합니다.');
 				return false;
 			}
 			
 			// 아이디 정규표현식, 영어소문자 숫자만 가능, 6~16자
 			const regexp = /^[a-z0-9-_]{5,20}$/;
-			if(!regexp.test(document.login_frm.userID.value.trim())){
+			if(!regexp.test($('#userID').val().trim())){
 				alert('아이디는 5~20자의 영문 소문자, 숫자와 특수기호(_),(-)으로만 이루어져있습니다.');
 				return false;
 			}
@@ -104,12 +108,21 @@
 	            	alert('[서버에러] : 로그인에 실패했습니다.')
 	            }
 	         });      
-		};
-	};
+		});
+		
+		$("#write_button").on('click', function(){
+			<%if(userInfo!=null){%>
+				$("#write-modal").modal("show");
+				$('.write-content').load("./write.do");
+			<%}else{%>
+				var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
+				if(comfirm_login==true){
+					location.href="./login.do";
+				}
+			<%}%>	        	
+		});
+	});
 </script>
-<style>
-	
-</style>
 </head>
 <body>
 
@@ -128,11 +141,15 @@
 			if(userInfo.getId().equals("testadmin1")) {%>
 				<a href="./admin.do">Admin Page</a>
 			<%} else{ %>
-				<a href="./mypage.do">My Page</a>
+				<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
 			<%}
 		}%>
 		<a href="./list.do">모든 게시글 보기</a>
 		<a href="./book_list.do">책 구경하기</a>
+		
+		<div style="padding:8px; position:absolute; bottom:2%; width:100%">
+			<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
+		</div>
 	</div>
 
 	<div id="main">
@@ -250,6 +267,12 @@
 				</div>
 			</div>
 		</div>
-
+<!-- 모달창 정보 -->		             
+<div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content write-content">
+		</div>
+	</div>
+</div>
 </body>
 </html>

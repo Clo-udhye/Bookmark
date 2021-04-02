@@ -87,7 +87,7 @@
 				sbHtml.append("</td>");
 
 			} else {
-				sbHtml.append("<td class='board board1' bseq='"+seq+"' data-bs-toggle='modal' data-bs-target='#modal'>");
+				sbHtml.append("<td class='board board1' bseq='"+seq+"' data-bs-toggle='modal' data-bs-target='#view-modal'>");
 				// 사진 크기 250 250
 				sbHtml.append("	<div class='img'>");
 				sbHtml.append("		<a><img src='./upload/"+filename+"' border='0' width=250px height=250px/></a>");

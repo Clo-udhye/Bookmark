@@ -40,7 +40,7 @@
 			board_related.append("<td>"+board_title+"</td>");
 			board_related.append("<td>"+board_date+"</td>");
 			board_related.append("<td>"+user_nickname+"</td>");
-			board_related.append("<td><input type='button' value='보러가기' id='modal-link"+i+"' data-bs-toggle='modal' data-bs-target='#modal' board_seq='"+board_seq+"'/>");
+			board_related.append("<td><input type='button' value='보러가기' id='modal-link"+i+"' data-bs-toggle='modal' data-bs-target='#view-modal' board_seq='"+board_seq+"'/>");
 			board_related.append("</tr> \n");
 			i += 1;
 		}
@@ -64,10 +64,18 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+<!-- sidebar -->
+<link rel="stylesheet" type="text/css" href="./css/sidebar.css">
+<script type="text/javascript" src="./js/sidebar.js"></script>
+
+<!-- 글쓰기 Summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
 <style>
-	html{
-	position: fixed;
-	}
 	.button1{
 	float: right;
 	margin-right: 50px;
@@ -123,30 +131,34 @@
 	font-size: 25px;
 
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 
-<!-- 모달창 생성 -->
 <script type="text/javascript">
-		
-		$(document).ready(function(){
-			for(var index=0; index<<%=lists.size()%>; index++){
-			    $("#modal-link"+index).click(function(){
-			    	//console.log($(this).attr('id')); //  $("#modal-link"+index) 클릭은 잘 되는 중
-			    	// 각 hidden의 value값을 읽어 오지 못하고 있다. --> hidden 말고 input 태그 내 attr을 임의로 생성해서 받아올 수 있음 
-			    	var seq = $(this).attr('board_seq');
-		    		//console.log(seq);
-			        $('.modal-content').load("./view.do"+"?seq=" + seq);   
-			    });
-			}
-		});
-	
+$(document).ready(function(){
+    for(var index=0; index<<%=lists.size()%>; index++){
+       $("#modal-link"+index).click(function(){
+          //console.log($(this).attr('id')); //  $("#modal-link"+index) 클릭은 잘 되는 중
+          // 각 hidden의 value값을 읽어 오지 못하고 있다. --> hidden 말고 input 태그 내 attr을 임의로 생성해서 받아올 수 있음 
+          var seq = $(this).attr('board_seq');
+          //console.log(seq);
+          $('.view-content').load("./view.do"+"?seq=" + seq);   
+       });
+    }
+    
+    $("#write_button").on('click', function(){
+       <%if(userInfo!=null){%>
+       console.log("123");
+          $("#write-modal").modal("show");
+          $('.write-content').load("./write.do");
+       <%}else{%>
+          var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
+          if(comfirm_login==true){
+             location.href="./login.do";
+          }
+       <%}%>              
+    });
+ });
 </script>
 
-
-<!-- sidebar -->
-<link rel="stylesheet" type="text/css" href="./css/sidebar.css">
-<script type="text/javascript" src="./js/sidebar.js"></script>
 </head>
 <body>
 
@@ -165,11 +177,15 @@
 		if(userInfo.getId().equals("testadmin1")) {%>
 			<a href="./admin.do">Admin Page</a>
 		<%} else{ %>
-			<a href="./mypage.do">My Page</a>
+			<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
 		<%}
 	}%>
 	<a href="./list.do">모든 게시글 보기</a>
 	<a href="./book_list.do">책 구경하기</a>
+	
+	<div style="padding:8px; position:absolute; bottom:2%; width:100%">
+		<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
+	</div>
 </div>
 
 <div id="main">
@@ -255,17 +271,21 @@
         </table>
         
     </div>
-    <div>
-    	<!-- 모달창 정보 -->
-             <div id="modal" class="modal fade" tabindex="-1">
-                <div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
-                   <div class="modal-content">
-                   
-                   </div>
-                </div>
-             </div>
-    </div>
 </div>
 
+<!-- 모달창 정보 -->
+<div id="view-modal" class="modal fade" tabindex="-1" role="dialog">
+   <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content view-content">                   
+      </div>
+   </div>
+</div>
+                   
+<div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
+   <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content write-content">
+      </div>
+   </div>
+</div>
 </body>
 </html>

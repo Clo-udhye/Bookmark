@@ -163,7 +163,7 @@
     	    	boardHtml.append("</thead>");
     	    	boardHtml.append("<tbody>");
     	    	for(AdminBoardListTO to: boardList){
-    	    		boardHtml.append("<tr id='' bseq='"+to.getBseq()+"' class='board_list' data-bs-toggle='modal' data-bs-target='#modal'>");
+    	    		boardHtml.append("<tr id='' bseq='"+to.getBseq()+"' class='board_list' data-bs-toggle='modal' data-bs-target='#view-modal'>");
     	    		boardHtml.append("<th>"+to.getBseq()+"</th>");
     	    		boardHtml.append("<td>"+to.getTitle()+"</td>");
     	    		boardHtml.append("<td>"+to.getNickname()+"("+to.getId()+")</td>");
@@ -274,6 +274,11 @@
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
+
+<!-- 글쓰기 Summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('.userdel_btn').click(function(e){
@@ -296,14 +301,30 @@
 		$('.board_list').click(function(e){
 			//alert($(this).attr('bseq')+"클릭");
 			//console.log("./view.do?seq=" + $(this).attr('bseq'));
-			$('.modal-content').load("./view.do?seq=" + $(this).attr('bseq'));
+			$('.view-content').load("./view.do?seq=" + $(this).attr('bseq'));
 		});
 		
 		$('#write_notice').click(function(e){
 			alert('공지사항 쓰기');
 			//공지사항 쓰기 기능
 		});
-	})
+		
+		$("#write_button").on('click', function(){
+			<%if(userInfo!=null){%>
+				$("#write-modal").modal("show");
+				$('.write-content').load("./write.do");
+			<%}else{%>
+				var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
+				if(comfirm_login==true){
+					location.href="./login.do";
+				}
+			<%}%>	        	
+	    });
+		
+		$('#view-modal').on('hidden.bs.modal', function(){
+			location.reload();
+		});
+	});
 </script>
 <style>
 .button1{
@@ -325,10 +346,6 @@
 	font-size: 20px;
 }
 
-.page-link.active {
-  background-color: #999999;
-  border-color: #999999;
-}
 </style>
 </head>
 <body>
@@ -348,11 +365,15 @@
 		if(userInfo.getId().equals("testadmin1")) {%>
 			<a href="./admin.do">Admin Page</a>
 		<%} else{ %>
-			<a href="./mypage.do">My Page</a>
+			<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
 		<%}
 	}%>
 	<a href="./list.do">모든 게시글 보기</a>
 	<a href="./book_list.do">책 구경하기</a>
+	
+	<div style="padding:8px; position:absolute; bottom:2%; width:100%">
+		<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
+	</div>
 </div>
 
 <div id="main">
@@ -397,10 +418,17 @@
 </div>
 
 <!-- 모달창 정보 -->
-<div id="modal" class="modal fade" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
-		<div class="modal-content">               
+<div id="view-modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content view-content">                   
 		</div>
+	</div>
+</div>
+             
+<div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content write-content">
+	    </div>
 	</div>
 </div>
 </body>
