@@ -1,5 +1,6 @@
 <%@page import="com.exam.user.UserTO"%>
 <%@page import="com.exam.theseMonthBoard.Home_BoardTO"%>
+<%@page import="com.exam.boardlist.JoinBULCTO"%>
 <%@page import="com.exam.boardlist.BoardTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -14,24 +15,41 @@
 	}
 	
 
-	ArrayList<Home_BoardTO> theseBoards = (ArrayList)request.getAttribute("lists");
+	//ArrayList<Home_BoardTO> theseBoards = (ArrayList)request.getAttribute("lists");
+	ArrayList<JoinBULCTO> theseBoards = (ArrayList)request.getAttribute("lists");
 	
-	Home_BoardTO to1 = theseBoards.get(0);
+	//seq, date, filename, title, useq, nickname, Lcount, Ccount
+	JoinBULCTO to1 = theseBoards.get(0);
 	String seq1 = to1.getSeq();
-	String title1 = to1.getTitle();
 	String date1 = to1.getDate();
-	String bseq1 = to1.getBseq();
-	String nickname1 = to1.getNickname();
 	String filename1 = to1.getFilename();
-	
-	Home_BoardTO to2 = theseBoards.get(1);
+	String title1 = to1.getTitle();
+	String useq1 = to1.getUseq();
+	String nickname1 = to1.getNickname();
+	String Lcount1 = to1.getLcount();
+	String Ccount1 = to1.getCcount();
+
+	JoinBULCTO to2 = theseBoards.get(1);
 	String seq2 = to2.getSeq();
-	String title2 = to2.getTitle();
 	String date2 = to2.getDate();
-	String bseq2 = to2.getBseq();
-	String nickname2 = to2.getNickname();
 	String filename2 = to2.getFilename();
+	String title2 = to2.getTitle();
+	String useq2 = to2.getUseq();
+	String nickname2 = to2.getNickname();
+	String Lcount2 = to2.getLcount();
+	String Ccount2 = to2.getCcount();	
 	
+	JoinBULCTO to3 = theseBoards.get(2);
+	String seq3 = to3.getSeq();
+	String date3 = to3.getDate();
+	String filename3 = to3.getFilename();
+	String title3 = to3.getTitle();
+	String useq3 = to3.getUseq();
+	String nickname3 = to3.getNickname();
+	String Lcount3 = to3.getLcount();
+	String Ccount3 = to3.getCcount();	
+	
+	/*
 	Home_BoardTO to3 = theseBoards.get(2);
 	String seq3 = to3.getSeq();
 	String title3 = to3.getTitle();
@@ -39,7 +57,7 @@
 	String bseq3 = to3.getBseq();
 	String nickname3 = to3.getNickname();
 	String filename3 = to3.getFilename();
-	
+	*/
 %>
 
 <!DOCTYPE html>
@@ -51,6 +69,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <!-- <style>#content {position: absolute; left: 50%; transform: translateX(-50%);}</style>  -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -210,7 +230,17 @@
 													<em class="cate_pic"></em> 
 													<strong class="tit_pic"><%= title1%></strong> 
 													<span class="txt_pic">&quot;</span> 
-														<span class="info_by"><span class="ico_by">by</span>&nbsp;<%= nickname1 %></span>
+														<span class="info_by" style="font-size: 14px;"><span class="ico_by">by</span>&nbsp;<%= nickname1 %></span>
+														
+													<!-- 추가 (위에 nickname부분 글씨 크기 조절도)-->
+													<br/>
+													<!-- <div id="text_count" align="right"> -->
+													<div id="text_count" align="right" style="padding-right: 10px; font-size: 14px;">
+													<span id="text_likey"><i class="fas fa-heart"></i>&nbsp;<%= Lcount1 %></span>
+													&nbsp;
+													<span id="text_comment"><i class="fas fa-comment-dots"></i>&nbsp;<%= Ccount1 %></span>
+													</div>
+
 												</div>
 											</div>
 											<div class="align_g"></div>
@@ -229,8 +259,18 @@
 											<div class="info_g">
 												<div class="inner_g">
 													<em class="cate_pic"></em> <strong class="tit_pic" style="padding-left : 20px ;padding-right : 20px;"><%=title2%></strong> 
-													<span class="txt_pic"></span> <span class="info_by"><span
-														class="ico_brunch ico_by">by</span> <%= nickname2 %></span>
+													<span class="txt_pic"></span>
+														<span class="info_by" style="font-size: 14px;"><span class="ico_brunch ico_by">by</span> <%= nickname2 %></span>
+														
+													<!-- 추가 (위에 nickname부분 글씨 크기 조절도)-->
+													<br/>
+													<!-- <div id="text_count" align="right"> -->
+													<div id="text_count" align="right" style="padding-right: 10px; font-size: 14px;">
+													<span id="text_likey"><i class="fas fa-heart"></i>&nbsp;<%= Lcount2 %></span>
+													&nbsp;
+													<span id="text_comment"><i class="fas fa-comment-dots"></i>&nbsp;<%= Ccount2 %></span>
+													</div>
+													
 												</div>
 											</div>
 											<div class="align_g"></div>
@@ -251,8 +291,18 @@
 											<div class="info_g">
 												<div class="inner_g">
 													<em class="cate_pic"></em> <strong class="tit_pic" style="padding-left : 20px ;padding-right : 20px;"><%=title3%></strong> 
-													<span class="txt_pic"></span> <span class="info_by"><span
-														class="ico_brunch ico_by">by</span> <%= nickname3 %></span>
+													<span class="txt_pic">
+														</span> <span class="info_by"><span class="ico_brunch ico_by">by</span> <%= nickname3 %></span>
+														
+													<!-- 추가 (위에 nickname부분 글씨 크기 조절도)-->
+													<br/>
+													<!-- <div id="text_count" align="right"> -->
+													<div id="text_count" align="right" style="padding-right: 10px; font-size: 14px;">
+													<span id="text_likey"><i class="fas fa-heart"></i>&nbsp;<%= Lcount3 %></span>
+													&nbsp;
+													<span id="text_comment"><i class="fas fa-comment-dots"></i>&nbsp;<%= Ccount3 %></span>
+													</div>
+													
 												</div>
 											</div>
 											<div class="align_g"></div>

@@ -358,7 +358,7 @@ padding-left: 100px;
 								<button id="modal-button" data-bs-toggle="modal" data-bs-target="#modal" type="button" class="btn btn-dark form-control" >주소찾기</button>
 								<div id="modal" class="modal fade" tabindex="-1" role="dialog">
 									<div class="modal-dialog">
-										<div class="modal-content"></div>
+										<div class="modal-content address-content"></div>
 									</div>
 								</div>
 								</div>

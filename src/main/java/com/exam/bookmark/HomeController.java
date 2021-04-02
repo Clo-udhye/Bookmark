@@ -5,13 +5,19 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
+import java.util.UUID;
+
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.exam.BoardAction.BoardActionDAO;
 import com.exam.admin.AdminDAO;
 import com.exam.admin.PagingBoardTO;
@@ -19,6 +25,7 @@ import com.exam.admin.PagingUserTO;
 import com.exam.boardlist.BoardDAO;
 import com.exam.boardlist.BoardPagingTO;
 import com.exam.boardlist.BoardTO;
+import com.exam.boardlist.JoinBULCTO;
 import com.exam.boardlist.MyPageTO;
 import com.exam.booklist.BookDAO;
 import com.exam.booklist.BookRelatedTO;
@@ -34,6 +41,11 @@ import com.exam.user.UserDAO;
 import com.exam.user.UserTO;
 import com.exam.zipcode.ZipcodeDAO;
 import com.exam.zipcode.ZipcodeTO;
+
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.oreilly.servlet.MultipartRequest;
+import java.io.File;
+import java.io.IOException;
 
 @Controller
 public class HomeController {
@@ -69,7 +81,8 @@ public class HomeController {
 	
 	@RequestMapping(value = "/home.do")
 	public String home(HttpServletRequest req , Model model) {
-		ArrayList<Home_BoardTO> lists = home_boardDAO.BoardlistTemplate();
+		//ArrayList<Home_BoardTO> lists = home_boardDAO.BoardlistTemplate();
+		ArrayList<JoinBULCTO> lists = home_boardDAO.BoardlistTemplate();
 		model.addAttribute("lists", lists);
 		return "home";
 	}
@@ -275,6 +288,39 @@ public class HomeController {
 		return "mypage";
 	}
 	
+	@RequestMapping(value = "/mypage_modify.do")
+	public String mypage_modify(HttpServletRequest request, Model model) {
+		
+		ArrayList<UserTO> lists = userDao.userinfoList(request.getParameter("seq"));
+		model.addAttribute("lists", lists);
+		return "mypage_modify";
+	}
+	
+	
+	@RequestMapping(value = "/mypage_modify_ok.do")
+	public String mypage_modify_ok(HttpServletRequest request, Model model) {
+		UserTO to = new UserTO();
+		to.setSeq(request.getParameter("seq"));
+		to.setId(request.getParameter("id"));
+		to.setNickname(request.getParameter("nickname"));
+		to.setMail(request.getParameter("mail"));
+		if(!request.getParameter("address").trim().equals("")) {
+			to.setAddress(request.getParameter("address"));
+			to.setAddresses(request.getParameter("addresses"));
+		}
+		to.setKeywords(request.getParameter("keywords"));
+		to.setIntroduction(request.getParameter("introduction"));
+		to.setProfile_filename(request.getParameter("profile_filename"));
+
+		int flag = userDao.mypagemodifyOk(to) ;
+		model.addAttribute("flag", flag);
+		
+		//System.out.println(to.getMail()+" / "+to.getNickname());
+		//System.out.println(flag);
+		return "mypage_modify_ok";
+	}
+	
+	
 	@RequestMapping(value = "/search.do")
 	public String search() {
 		return "search";
@@ -302,22 +348,8 @@ public class HomeController {
 		// searchword도 addAttribute로 가져와야 jsp파일에서 사용할 수 있음
 		model.addAttribute("searchword", searchword);
 		
-		
-		// 작가 검색 결과 게시글 리스트
-		int npage = 1;   // cpage가 없으면 1
-		if(request.getParameter("npage") != null && !request.getParameter("npage").equals("")){   
-			npage = Integer.parseInt(request.getParameter("npage"));
-		}
-		
-		BoardPagingTO snlpagingTO = new BoardPagingTO();
-		snlpagingTO.setCpage(npage);
-		
-		snlpagingTO = boardDao.searchNList(snlpagingTO, searchword);
-		model.addAttribute("snlpagingTO", snlpagingTO);
-		model.addAttribute("searchword", searchword);
-		
 		//System.out.println(slpagingTO.getCpage());
-		//System.out.println(snlpagingTO.getCpage());
+
 		
 		// 검색 결과 작가 리스트 
 		int nnpage = 1;   // cpage가 없으면 1

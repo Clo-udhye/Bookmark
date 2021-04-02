@@ -178,6 +178,26 @@ $(document).ready(function(){
 	});
 })
 </script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#modify_userInfo").click(function(){
+		  	// seq=뒤에 1 대신 받아온 값 넣어야 함.
+			$('.modify-content').load("./mypage_modify.do?seq="+<%=visit_seq%>);
+
+		});
+
+	});
+</script>
+<style type="text/css">
+	
+	#modifymodal1 {width: 650px;}
+	
+	.filebox label { display: inline-block; padding: .5em .75em; color: #999; font-size: inherit; line-height: normal; vertical-align: middle; background-color: #fdfdfd; cursor: pointer; border: 1px solid #ebebeb; border-bottom-color: #e2e2e2; border-radius: .25em; }
+	.filebox input[type="file"] { /* 파일 필드 숨기기 */ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip:rect(0,0,0,0); border: 0; }
+
+</style>
+
 </head>
 <body style="overflow-y:scroll;">
 
@@ -226,7 +246,7 @@ $(document).ready(function(){
 	    	</div>
 	    </div>
 		
-	    <div id="content">
+	    <div id="content"  style="padding-top : 100px;">
 		    <%if (mypage_flag == 1) { %>
 		    	<div><h1>MY PAGE</h1></div>
 		    <%} %>
@@ -239,7 +259,7 @@ $(document).ready(function(){
 			    	<td align="right" style="padding-right : 5%;">
 			    		<span>
 			    		<%if (mypage_flag == 1) { %>
-			    			<button id="modify_userInfo">수정하기</button>
+			    			<button id="modify_userInfo" data-bs-toggle="modal" data-bs-target="#modifymodal" type="button" class="btn btn-dark" >수정하기</button>
 		    			<%} %>
 		    			</span>
 			    	</td>
@@ -409,6 +429,17 @@ $(function() {
 		</div>
 	</div>
 
+<div id="modifymodal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content modify-content" id="modifymodal1"></div>
+	</div>
+</div>
+
+<div id="modal" class="modal fade" tabindex="-1" role="dialog" data-bs-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content address-content"></div>
+	</div>
+</div>
 
 </body>
 </html>

@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.exam.boardlist.BoardTO;
+import com.exam.boardlist.JoinBULCTO;
 import com.exam.booklist.BookTO;
 
 @Repository
@@ -19,11 +20,25 @@ public class Home_BoardDAO {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
+	/*
 	public ArrayList<Home_BoardTO> BoardlistTemplate(){
 		String sql = "select b.seq as seq, b.date as date, b.title as title, u.id as userID, u.nickname as nickname, b.filename as filename, b.content as content, b.bseq as bseq, b.hit as hit, b.comment as comment from board as b join user as u on b.useq = u.seq order by b.date desc limit 3 offset 5";
 		ArrayList<Home_BoardTO> lists = (ArrayList<Home_BoardTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<Home_BoardTO>(Home_BoardTO.class));
 		return lists;
 	}
+	*/
+	// 이달의 게시글 출력 항목 수정
+	public ArrayList<JoinBULCTO> BoardlistTemplate() {
+		//String sql = "select b.seq as seq, b.date as date, b.title as title, u.id as userID, u.nickname as nickname, b.filename as filename, b.content as content, b.bseq as bseq, b.hit as hit, b.comment as comment from board as b join user as u on b.useq = u.seq order by b.date desc limit 3 offset 5";
+		String sql = "select bnunltable.seq, date, filename, title, bnunltable.useq, nickname, Lcount, count(comment.bseq) Ccount " + 
+				"from (select bnutable.seq, date, filename, title, bnutable.useq, nickname, count(likey.bseq) Lcount " + 
+				"from (select board.seq, date, board.filename, title, useq, nickname from board inner join user on board.useq = user.seq) bnutable " + 
+				"left outer join likey on bnutable.seq = likey.bseq group by bnutable.seq) bnunltable " + 
+				"left outer join comment on bnunltable.seq = comment.bseq group by bnunltable.seq order by date desc limit 3 offset 4";
+		ArrayList<JoinBULCTO> lists = (ArrayList<JoinBULCTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<JoinBULCTO>(JoinBULCTO.class));
+		return lists;
+	}
+	
 	
 	public Home_BoardTO Book_infoTemplate(String seq){
 		String hit_sql = "update board set hit = hit + 1 where seq =?";
