@@ -5,13 +5,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-
-		// 댓글 작성 및 좋아요 누를 시 --> 조회수도 같이 증가 --> 좋아요, 댓글 관련 ajax 처리
-		// 모달 반복 클릭 시, --> 배경계속 까매짐 --> 
-
 	//로그인 시, 해당 게시글 좋아요 유무
 	int like_count_check = 0;
-	//현재 세션 상태를 체크한다
 	UserTO userInfo = null;
 	String userID = null;
 	String userSeq = null;
@@ -20,9 +15,9 @@
 		userID = userInfo.getId();
 		userSeq = userInfo.getSeq();
 		like_count_check = (Integer)request.getAttribute("like_count_check");
-		//System.out.println(like_count_check);
 	}
 	
+	//본인 게시글 일 시, 수정/삭제 버튼 생성
 	StringBuffer likey_button = new StringBuffer();
 	if(like_count_check != 0){
 		likey_button.append("<input type='button' value='like' style='color : white; background-color : gray;' id= 'button_likey' />");
@@ -30,6 +25,7 @@
 		likey_button.append("<input type='button' value='like' id= 'button_likey' />");
 	}
 
+	//board 데이터 로드
 	Home_BoardTO to = (Home_BoardTO)request.getAttribute("home_BoardTO");
 	String seq = to.getSeq();
 	String date = to.getDate().substring(0, 11);
@@ -41,9 +37,9 @@
 	String comment = to.getComment();
 	String hit = to.getHit();
 	String boardUserID = to.getUserID();
-	//String useq = to.getUseq();
 	String UserID_board = to.getUserID();
 	
+	// StringBuffer를 통한 board데이터 
 	StringBuffer commentHTML = new StringBuffer();
 	ArrayList<Board_CommentTO> comment_lists = (ArrayList)request.getAttribute("board_commentTO");
 	if(comment_lists.size() == 0){
@@ -52,7 +48,7 @@
 		for (Board_CommentTO comment_to : comment_lists){
 			String comment_nickname = comment_to.getNickname();
 			String comment_content = comment_to.getContent();
-			String comment_date_time = comment_to.getDate_time();
+			String comment_date_time = comment_to.getDate_time().substring(0,19);
 			commentHTML.append("<tr>");
 			if(comment_to.getUseq().equals(userSeq)){
 				commentHTML.append("<td id='comment_seq' comment_seq_attr = '"+comment_to.getSeq()+"'>" + comment_nickname + "</td>");
@@ -67,8 +63,10 @@
 			commentHTML.append("</tr>");
 		}
 	}
+	// 좋아요 갯수 표시 --> viewpage open에
 	int likey_count = (Integer)request.getAttribute("likey_count");
-	
+
+	// BOard의 작성자 id 와 세션의 id가 불일치 일때 -->readonly
 	StringBuffer BoardUseq_match = new StringBuffer();
 	if(!UserID_board.equals(userID)){
 		BoardUseq_match.append("readonly");
@@ -76,7 +74,8 @@
 	
 
 %>
-
+<link rel="stylesheet" type="text/css" href="./css/flexslider.css">
+<script type="text/javascript" src="./js/jquery.flexslider-min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <style type="text/css">
@@ -125,149 +124,69 @@
 	}
 </style>
 <script type="text/javascript">
-
-$(function() {
-	// 등록하기 버튼 클릭 시, 알림창 생성 및 댓글 DB 입력
-	$('#comment_btn').click(function () {
-		<%
-		if (userInfo != null) {
-			userID = userInfo.getId();
-		%>
-			let comment = $('#comment_text_input').val();
-			console.log(comment);
-			if(comment == ''){
-				alert('댓글을 입력해주세요');
-				$('#comment_text').focus();
-			} else if(comment.length < 5){
-				alert('최소 5자 이상 입력이 필요합니다.');
-				$('#comment_text').focus();
-			} else {
-				$.ajax({
-					url : './comment.do',
-					type : 'POST',
-					data : {
-						"user" : "<%=userSeq %>",
-						"comment" : comment,
-						"bseq" : <%=seq %>
-					},
-					success : function (data) {
-						alert('댓글 입력 완료');
-						//location.reload();
-						$('.modal-content').load("./view.do" + "?seq=" + <%=request.getParameter("seq")%>);
-						
-					},
-					error : function (error){
-						console.log('Error');
-					}
-				});	
-			}
-		<%
-		} else {
-		%>
-			var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
-			if(comfirm_login == true){
-				location.href="login.do";
-			}	
-		<% } %>
-	});
-});
-// 좋아요 버튼
-$(function() {
-	$('#button_likey').click(function () {
-		<%
-			//System.out.println("like_count_check :"+ like_count_check );
-			if( like_count_check == 0){ // like한 기록이 없는 경우
-				if (userInfo != null) { //로그인 되어있는 경우
-					userID = userInfo.getId();
-			%>
-					$.ajax({
-						url : './likey.do',
-						type : 'POST',
-						data : {
-							"user" : "<%=userID %>",
-							"bseq" : <%=seq %>
-						},
-						success : function (data) {
-							$('.modal-content').load("./view.do" + "?seq=" + <%=request.getParameter("seq")%>);
-						},
-						error : function (error){
-							console.log('Error');
-						}
-					});
-				<%
-				} else { // 로그인이 안되어 있는 경우 --> 로그인 창 --> 로그인 후 현 페이지로 돌아오는 거 필요
-				%>
-					var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
-						if(comfirm_login == true){
-							location.href="login.do";
-						}	
-			<% 
-				}
-			} else if (like_count_check >= 1){ // 좋아요 누는 기록이 있는 경우 
-				userID = userInfo.getId();
-				%>
-				$.ajax({
-					url : './unlikey.do',
-					type : 'POST',
-					data : {
-						"user" : "<%=userID %>",
-						"bseq" : <%=seq %>
-					},
-					success : function (data) {
-						$('.modal-content').load("./view.do" + "?seq=" + <%=request.getParameter("seq")%>);
-						//console.log('좋아요 기록 삭제 성공');
-					},
-					error : function (error){
-						console.log('Error');
-					}
-				});
-				
-			<% }%>	
-	});
-});
-// 제목 및 게시글 수정
-$(function() {
-	$("#modify").click(function() {
-		//alert("수정 버튼 클락");
-		let board_title = $("#board_title").val();
-		let board_content = $("#board_content").val()
-		console.log(board_title + "\n" + board_content);
-		
-		$.ajax({
-			url : './board_modify.do',
-			type : 'POST',
-			data : {
-				"user" : "<%=userSeq %>",
-				"bseq" : <%=seq %>,
-				"board_title" : board_title,
-				"board_content" : board_content
-			},
-			success : function (data) {
-				alert("게시글 수정 작업이 완료되었습니다.");
-				$('.modal-content').load("./view.do" + "?seq=" + <%=request.getParameter("seq")%>);
-			},
-			error : function (error){
-				console.log('Error');
-			}
-		});
-	});
-});
-
+// flexslider load
+$(document).ready(function() {
+	$('.flexslider').flexslider({
+	    animation: "slide"
+	  });
+})
 // 모달창 x 버튼 누르면 페이지 리로드
 $(function (){
 	$("#close_btn").click(function() {
 		location.reload();
 	});
 });
+
+//게시글 modify 페이지 --> 이미지 수정 및 책 수정 미포함으로 인해서 --> 일시 중단 by 정예찬
+//$(document).ready(function(){
+//		    $("#modify").click(function(){
+//		    	alert('수정 버튼 클릭');
+//		        $('.modal-content').load("./modify.do" + "?seq=" +seq);
+//		    });
+// });
+
+//제목 및 게시글 수정
+$(function() {
+   $("#modify").click(function() {
+      //alert("수정 버튼 클락");
+      let board_title = $("#board_title").val();
+      let board_content = $("#board_content").val()
+      //console.log(board_title + "\n" + board_content);
+      $.ajax({
+         url : './board_modify.do',
+         type : 'POST',
+         data : {
+            "value" : "modify",
+            "user" : "<%=userSeq %>",
+            "bseq" : <%=seq %>,
+            "board_title" : board_title,
+            "board_content" : board_content
+         },
+         success : function (data) {
+            // ************* 계속 콜백 200 에러뜸 --> invalid xml 로 에러 생성 ***** 왜냐면 제목에 <> 가 있어서 인식오류
+            alert("게시글 수정 작업이 완료되었습니다.");
+            let board_title1 = $(data).find('title').text();
+            let board_content1 = $(data).find('content').text();
+            $("#board_title").val(board_title1);
+            $("#board_content").html(board_content1);
+         },
+         error : function (request,status,error){
+            console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+         }
+      });
+   });
+});
+
 // 게시글 삭제
 $(function() {
 	$("#delete").click(function() {
 		var delete_confirm = confirm("삭제 하시겠습니까?");
 		if(delete_confirm == true){
 			$.ajax({
-				url : './board_delete.do',
+				url : './board_modify.do',
 				type : 'POST',
 				data : {
+					"value" : "delete",
 					"user" : "<%=userSeq %>",
 					"bseq" : <%=seq %>
 				},
@@ -282,28 +201,180 @@ $(function() {
 		}
 	});
 });
+
+// like && unlikey
+$(function() {
+	let like_count_check = <%=like_count_check%>;
+	$(document).on("click","#button_likey",function(){
+		if(like_count_check == 0){
+			<% 
+				if (userInfo != null) { //로그인 되어있는 경우
+			%>
+					$.ajax({
+						url : './likey.do',
+						type : 'POST',
+						data : {
+							"value" : "likey",
+							"user" : "<%=userSeq %>",
+							"bseq" : <%=seq %>
+						},
+						async : false,
+						success : function (data) {
+							let result = "좋아요 x ";
+							result += Number($(data).find('result').text());
+							result += "개";
+							$("#ajax_likey_count").html(result);
+							like_count_check = Number($(data).find('resultcheck').text());
+							$("#button_likey").attr('style', 'color : white; background-color : gray;');
+							//console.log("like_count_check :" + like_count_check);
+						},
+						error : function (request,status,error){
+							console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+						}
+					});
+				<%
+				} else { // 로그인이 안되어 있는 경우 --> 로그인 창 --> 로그인 후 현 페이지로 돌아오는 거 필요
+				%>
+					var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
+						if(comfirm_login == true){
+							location.href="login.do";
+						}
+				<% } %>
+			} else if(like_count_check >= 1){	
+				$.ajax({
+					url : './likey.do',
+					type : 'POST',
+					data : {
+						"value" : "unlikey",
+						"user" : "<%=userSeq %>",
+						"bseq" : <%=seq %>
+					},
+					async : false,
+					success : function (data) {
+						let result = "좋아요 x ";
+						result += $(data).find('result').text();
+						result += "개";
+						
+						$("#ajax_likey_count").html(result);
+						like_count_check = Number($(data).find('resultcheck').text());
+						$("#button_likey").attr('style', '');
+						//console.log("like_count_check :" + like_count_check);
+					},
+					error : function (request,status,error){
+						console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+					}
+				});
+			}
+	});
+});
+
+// comment create 
+$(function() {
+	$(document).on("click","#comment_btn",function(){
+		<%
+		if (userInfo != null) {
+			userID = userInfo.getId();
+		%>
+			let comment = $('#comment_text_input').val();
+			if(comment == ''){
+				alert('댓글을 입력해주세요');
+				$('#comment_text').focus();
+			} else if(comment.length < 5){
+				alert('최소 5자 이상 입력이 필요합니다.');
+				$('#comment_text').focus();
+			} else {
+				$.ajax({
+					url : './comment.do',
+					type : 'POST',
+					data : {
+						"value" : "create",
+						"user" : "<%=userSeq %>",
+						"comment" : comment,
+						"seq" : <%=seq %>
+					},
+					success : function (data_xml) {
+						alert('댓글 입력 완료');
+						let result = "<tr>";
+						result += "<th width='80' >별명</th><th width='300'>내용</th><th>일시</th><th style='padding-left : 5px;'>비고</th>";
+						result += "</tr>";
+						$(data_xml).find('comment').each(function(){
+							result += "<tr>";
+							let useq = $(this).find('useq').text();
+							let date_time = $(this).find('date_time').text().substring(0,19);
+							if (useq === '<%= userSeq%>') {
+								result += "<td id='comment_seq' comment_seq_attr = '"+$(this).find('seq').text()+"'>" +$(this).find('nickname').text()+"</td>";
+								result += "<td><div><textarea cols='55' rows='1' required wrap='hard' style='border:0px;' id='comment_text'>" +$(this).find('content').text()+"</textarea></div></td>";
+								result += "<td>"+date_time+"</td>";
+								result += "<td><input type='button' id='comment_modify' value='수정' style='CURSOR:hand;' title='내용 수정 후, 버튼을 누르면 수정됩니다.' /><input type='button' id='comment_delete' value='삭제'/></td>";
+							} else {
+								result += "<td id='comment_seq' comment_seq_attr = '"+$(this).find('seq').text()+"'>" +$(this).find('nickname').text()+"</td>";
+								result += "<td><div>" +$(this).find('content').text()+"</div></td>";
+								result += "<td colspan='2'>"+date_time+"</td>";
+							}
+							result += "</tr>";
+						});
+						$('#wrapTable').html(result);
+						$('#comment_text_input').val('');
+					},
+					error : function (error){
+						console.log('Error');
+					}
+				});	
+				
+			}
+			
+			
+		<%
+		} else {
+		%>
+			var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
+			if(comfirm_login == true){
+				location.href="login.do";
+			}	
+		<% } %>
+	});
+});
+
 //comment_modify
-$(function () {
-	$("#comment_modify").click(function() {
+$(document).ready(function () { //$(document).read --> 페이지가 로드되었을 때, // $(document).on("click","#comment_modify",function(){
+	$(document).on("click","#comment_modify",function(){
 		let comment_text = $("#comment_text").val();
-		//console.log(comment_text);
 		let comment_seq = $("#comment_seq").attr("comment_seq_attr");
-		//console.log(comment_seq);
 		if(comment_text.length < 5){
 			alert('최소 5자 이상 입력이 필요합니다.');
 			$('#comment_text').focus();
 		} else {
 			$.ajax({
-				url : './comment_modify.do',
+				url : './comment.do',
 				type : 'POST',
 				data : {
 					"value" : "modify",
 					"comment_seq" : comment_seq,
-					"comment" : comment_text
+					"comment" : comment_text,
+					"seq" : <%=seq%>
 				},
-				success : function (data) {
+				success : function (data_xml) {
 					alert('댓글 수정 완료');
-					$('.modal-content').load("./view.do" + "?seq=" + <%=request.getParameter("seq")%>);
+					let result = "<tr>";
+					result += "<th width='80' >별명</th><th width='300'>내용</th><th>일시</th><th style='padding-left : 5px;'>비고</th>";
+					result += "</tr>";
+					$(data_xml).find('comment').each(function(){
+						result += "<tr>";
+						let useq = $(this).find('useq').text();
+						let date_time = $(this).find('date_time').text().substring(0,19);
+						if (useq === '<%= userSeq%>') {
+							result += "<td id='comment_seq' comment_seq_attr = '"+$(this).find('seq').text()+"'>" +$(this).find('nickname').text()+"</td>";
+							result += "<td><div><textarea cols='55' rows='1' required wrap='hard' style='border:0px;' id='comment_text'>" +$(this).find('content').text()+"</textarea></div></td>";
+							result += "<td>"+date_time+"</td>";
+							result += "<td><input type='button' id='comment_modify' value='수정' style='CURSOR:hand;' title='내용 수정 후, 버튼을 누르면 수정됩니다.' /><input type='button' id='comment_delete' value='삭제'/></td>";
+						} else {
+							result += "<td id='comment_seq' comment_seq_attr = '"+$(this).find('seq').text()+"'>" +$(this).find('nickname').text()+"</td>";
+							result += "<td><div>" +$(this).find('content').text()+"</div></td>";
+							result += "<td colspan='2'>"+date_time+"</td>";
+						}
+						result += "</tr>";
+					});
+					$('#wrapTable').html(result);
 				},
 				error : function (error){
 					console.log('Error');
@@ -312,24 +383,44 @@ $(function () {
 		}
 	});
 });
+
 //comment_delete
 $(function () {
-	$("#comment_delete").click(function() {
+	$(document).on("click","#comment_delete",function(){
 		let comment_delete_confirm = confirm("댓글을 삭제하시겠습니까?");
 		if(comment_delete_confirm == true){
 			let comment_text = $("#comment_text").val();
 			let comment_seq = $("#comment_seq").attr("comment_seq_attr");
 			$.ajax({
-				url : './comment_modify.do',
+				url : './comment.do',
 				type : 'POST',
 				data : {
 					"value" : "delete",
 					"comment_seq" : comment_seq,
-					"comment" : comment_text
+					"comment" : comment_text,
+					"seq" : <%=seq %>
 				},
-				success : function (data) {
-					alert('댓글 삭제 완료');
-					$('.modal-content').load("./view.do" + "?seq=" + <%=request.getParameter("seq")%>);
+				success : function (data_xml){
+					let result = "<tr>";
+					result += "<th width='80' >별명</th><th width='300'>내용</th><th>일시</th><th style='padding-left : 5px;'>비고</th>";
+					result += "</tr>";
+					$(data_xml).find('comment').each(function(){
+						result += "<tr>";
+						let useq = $(this).find('useq').text();
+						let date_time = $(this).find('date_time').text().substring(0,19);
+						if (useq === '<%= userSeq%>') {
+							result += "<td id='comment_seq' comment_seq_attr = '"+$(this).find('seq').text()+"'>" +$(this).find('nickname').text()+"</td>";
+							result += "<td><div><textarea cols='55' rows='1' required wrap='hard' style='border:0px;' id='comment_text'>" +$(this).find('content').text()+"</textarea></div></td>";
+							result += "<td>"+date_time+"</td>";
+							result += "<td><input type='button' id='comment_modify' value='수정' style='CURSOR:hand;' title='내용 수정 후, 버튼을 누르면 수정됩니다.' /><input type='button' id='comment_delete' value='삭제'/></td>";
+						} else {
+							result += "<td id='comment_seq' comment_seq_attr = '"+$(this).find('seq').text()+"'>" +$(this).find('nickname').text()+"</td>";
+							result += "<td><div>" +$(this).find('content').text()+"</div></td>";
+							result += "<td colspan='2'>"+date_time+"</td>";
+						}
+						result += "</tr>";
+					});
+					$('#wrapTable').html(result);
 				},
 				error : function (error){
 					console.log('Error');
@@ -341,7 +432,15 @@ $(function () {
 </script>
        <table>
        	<tr>
-       		<td rowspan="3" border="1"> <img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></td>
+       		<td rowspan="3" border="1" style="padding-top : 40px;"> 
+       			<div class="flexslider" style="width : 500px; height : 500px;">
+       				<ul class="slides">
+       					<li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
+       					<li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
+       					<li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
+       				</ul>
+       			</div>
+   			</td>
        		<td >
 	       		<table width="620" height="50">
 	       			<tr>
@@ -419,7 +518,7 @@ $(function () {
        				<td width="80">
        			 		<%=likey_button %>
    			 		</td>
-   			 		<td width="120">
+   			 		<td width="120" id="ajax_likey_count">
    			 			좋아요 x <%=likey_count %>개
 		 			</td>
 		 			<td width="200"></td>
@@ -437,3 +536,12 @@ $(function () {
        	</td>
        	</tr>
     </table>
+    <!-- 모달창 정보
+    <div id="modal" class="modal fade" tabindex="-1" role="dialog">
+       <div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
+          <div class="modal-content">
+          
+          </div>
+       </div>
+    </div>
+     -->
