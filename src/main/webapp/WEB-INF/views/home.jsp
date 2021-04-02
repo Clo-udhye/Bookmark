@@ -57,12 +57,14 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap" rel="stylesheet">
+
+
 <!-- sidebar -->
 
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
 <!-- home -->
-<link rel="stylesheet" type="text/css" href="./css/home.css">
+ <link rel="stylesheet" type="text/css" href="./css/home.css"> 
 
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -78,16 +80,33 @@
 <style>
 
 .button1{
-	position: right;
+	float: right;
+	margin-right:0px;
 	width: 30px;
-	font-size: 25px;
+	font-size: 20px;
 
 }
 .button2{
-	align: right;
+	float: right;
+	margin-right: 50px;
 	width: 30px;
-	font-size: 25px;
+	font-size: 20px;
+	text-decoration: underline;
 }
+.button3{
+	float: right;
+	width: 30px;
+	font-size: 20px;
+}
+#content{
+	font-family: 'Noto Serif KR', serif;
+	
+}
+.intro_brunch{
+	padding-top: 100px;
+}
+
+
 </style>
 </head>
 <body>
@@ -129,9 +148,9 @@
 					<% if(userInfo == null){ %>
 						<td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
 	        		<% }else{ %>
-	        			<td width=75% ><span><a class="button1" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
+	        			<td width=75% ><span><a class="button2" href="./logout_ok.do" id="logout-button" style="color: black;">LOGOUT</a></span></td>
 	        		<% } %>
-					<td width=5%><span><a class="button2" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
+					<td width=5%><span><a class="button3" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span></td>
 				</tr>
 			</table>		
     	</div>
@@ -140,7 +159,7 @@
 
 	<div id="content">
 		<div class="intro_brunch">
-			<h3 class="tit_brunch" style="padding-left : 30px">생각을 보고, 나눔에 감동하다. 책갈피
+			<h3 class="tit_brunch" id="tit_brunch" style="padding-left : 30px ">생각을 보고, 나눔에 감동하다. 책갈피
 					<span class="ico_brunch ico_logo"></span>
 			</h3>
 			<br>
@@ -251,9 +270,9 @@
 			<p>
 				<span ><h5 align='center'>책갈피 개발자들</h5></span> <!-- class="txt_brunch" -->
 			</p>
-			<div class="wrap_writers">
+			<div class="wrap_writers" >
 				<ul class="list_writers list_writers_group writer_52">
-					<li><a class="link_writers #home_writers "> 
+					<li><a class="link_writers #home_writers "  id="writers"> 
 						<img
 							src="./images/profile_Yechan.png"
 							width="80" height="80" class="img_brunch thumb_img"
@@ -275,7 +294,7 @@
 							
 						</div>
 					</li>
-					<li><a class="link_writers #home_writers "> 
+					<li><a class="link_writers #home_writers " id="writers"> 
 						<img
 							src="./images/profile_Dahye.jpg"
 							width="80" height="80" class="img_brunch thumb_img"
@@ -296,7 +315,7 @@
 								data-keyword="재테크">Java</button>
 						</div>
 					</li>
-					<li><a class="link_writers #home_writers "> 
+					<li><a class="link_writers #home_writers " id="writers"> 
 						<img
 							src="./images/profile_JIwon.jpg"
 							width="80" height="80" class="img_brunch thumb_img"
@@ -317,7 +336,7 @@
 								data-keyword="재테크">독서</button>
 						</div>
 					</li>
-					<li  style="padding-left:15px"><a class="link_writers #home_writers "> 
+					<li  style="padding-left:15px"><a class="link_writers #home_writers " id="writers"> 
 						<img
 							src="./images/profile_Minji.jpg"
 							width="80" height="80" class="img_brunch thumb_img"

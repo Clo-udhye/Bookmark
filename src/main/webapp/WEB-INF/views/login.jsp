@@ -35,10 +35,25 @@
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
 <style>
-	.button1, .button2{
+.button1{
+	float: right;
+	margin-right:0px;
 	width: 30px;
-	font-size: 25px;
-	}
+	font-size: 20px;
+
+}
+.button2{
+	float: right;
+	margin-right: 50px;
+	width: 30px;
+	font-size: 20px;
+}
+.button3{
+	float: right;
+	width: 30px;
+	font-size: 20px;
+}
+
 	.content{
 		margine: center;
 }
@@ -109,9 +124,9 @@
 	        <% if(userInfo == null){ %>
 	        <td width=75% ><span><a class="button1" href="./login.do" id="start-button" style="color: black;">START</a></span></td>
            <% }else{ %>
-           <td width=85% align="right"><span><a class="button1" href="./logout_ok.do" style="color: black; " >로그아웃</a></span></td> 
+           <td width=85% align="right"><span><a class="button2" href="./logout_ok.do" style="color: black;" >로그아웃</a></span></td> 
            <% } %>
-			<td width=5%><span><a class="button2" href="./search.do" style="black;"><i class="fa fa-search" aria-hidden="true"></i></a></span>
+			<td width=5%><span><a class="button3" href="./search.do" style="color: black;"><i class="fa fa-search" aria-hidden="true"></i></a></span>
 			</tr>
 		</table>			
     	</p>
@@ -125,7 +140,7 @@
 				
 					<!-- 영역 크기 -->
 					<!-- 점보트론은 특정 컨텐츠, 정보를 두드러지게 하기 위한 큰 박스 -->
-					<div class="jumbotron" style="padding-top: 45px;">
+					<div class="jumbotron" style="padding-top: 110px;">
 						<form method="post" action="./login_ok.do" name="login_frm">
 						<table align="center">
 							    <tr colspan="2" >
