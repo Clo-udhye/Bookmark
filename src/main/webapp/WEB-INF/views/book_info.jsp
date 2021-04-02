@@ -97,10 +97,8 @@
 
 	#table {
 		border: 1px solid black;
-		width : 70%;
+		width : 80%;
 		height : 50%;
-		align : center;
-		
 	}
 	#img {
 		padding : 10px;
@@ -108,19 +106,16 @@
 		width : 400px;
 	}
 	.vertical {
-		width: max-content;
+		width: 100%;
 		overflow-y: scroll;
 		height : 200px;
 	}
 	.wrap {
 		float: left;
+		width: 100%;
 	}
 	.wrapTable table {
 		border : 1px;
-	}
-	.wrapTable tr,th,td {
-		padding : 5px;
-		margin : 5px;
 	}
 	.wrapTable tr:hover {
 		background-color : ivory;
@@ -211,13 +206,13 @@ $(document).ready(function(){
     	</div>
 	</div>
     
-    <div id="content">
-    <table id="table">
+    <div id="content" style="padding-top : 100px;">
+    <table id="table" align="center">
     	<tr>
     		<td colspan="3" align="right"><div ><input type="button" onclick="history.back()" value="뒤로 가기"></div></td>
    		</tr>
    		<tr>
-   			<td rowspan="6"><img src="<%=img_url %>" alt="이미지 없음" id = "img"/></td>
+   			<td width="25%" rowspan="6"><img src="<%=img_url %>" alt="이미지 없음" id = "img"/></td>
    			<td colspan="2"><div>책 제목 : <%=title %></div></td>
    		</tr>
    		<tr>
@@ -238,27 +233,27 @@ $(document).ready(function(){
    					<div><h4>관련 게시글</h4></div>
    					<% if (lists.size() != 0){ %>
    					<div class="vertical">
-   						<div class="wrap">
-					    	<table border=1 width="1000" class="wrapTable" >
+   						<div class="wrap" width="100%">
+					    	<table border=1 width="100%" class="table wrapTable" >
 					    		<tr>
-						    		<th>게시글 제목</th>
-						    		<th>작성 일자</th>
-						    		<th>작성자</th>
-						    		<th></th>    		
+						    		<th style="width:60%">게시글 제목</th>
+						    		<th style="width:15%">작성 일자</th>
+						    		<th style="width:15%">작성자</th>
+						    		<th style="width:10%"></th>    		
 					    		</tr>
 					    		<%= board_related%>
 					    	</table>
 				    	</div>
 			    	</div>
 			    	<% } else { %>
-			    	<div height="200">
-   						<div class="wrap">
-					    	<table border=1 width="1000" class="wrapTable"  >
+			    	<div height="200px">
+   						<div class="wrap" style="width:100%">
+					    	<table border=1 style="width:100%" class="table wrapTable"  >
 					    		<tr>
-						    		<th>게시글 제목</th>
-						    		<th>작성 일자</th>
-						    		<th>작성자</th>
-						    		<th></th>    		
+						    		<th style="width:60%">게시글 제목</th>
+						    		<th style="width:15%">작성 일자</th>
+						    		<th style="width:15%">작성자</th>
+						    		<th style="width:10%"></th>    		
 					    		</tr>
 					    		<%= board_related%>
 					    	</table>
