@@ -105,7 +105,7 @@ public class UserDAO {
 		try{
 			conn = dataSource.getConnection();
 
-			String sql = "insert into user values(0, ?, ?, ?, ?, ?, ?)";
+			String sql = "insert into user values(0, ?, ?, ?, ?, ?, ?, DEFAULT, DEFAULT, DEFAULT)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, to.getId());
 			pstmt.setString(2, to.getPassword());
@@ -178,6 +178,7 @@ public class UserDAO {
 			rs = pstmt.executeQuery();		
 			if(rs.next()) {
 				if(rs.getString("count").equals("1")) {// 네이버로 로그인 한적이 있다.
+					//System.out.println("네이버로 로그인 한적이있음.");
 					sql = "select seq, id, nickname, introduction, profile_filename from user where id = ?"; 
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, to.getSns_id());
@@ -195,7 +196,9 @@ public class UserDAO {
 					return userInfo; 
 					
 				}else// 없다
-					sql = "insert into user values(0, ?, null, ?, ?, null, null)";
+					//System.out.println("네이버로 로그인 한적이 없음.");
+					//System.out.println("네이버 아이디: " + to.getSns_id() +" "+ sns_nickname);
+					sql = "insert into user values(0, ?, null, ?, ?, null, null, DEFAULT, DEFAULT, DEFAULT)";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, to.getSns_id());
 					pstmt.setString(2, sns_nickname);
@@ -203,6 +206,7 @@ public class UserDAO {
 						
 					int result = pstmt.executeUpdate();
 					if(result == 1){ //성공적으로 사용자 레코드 생성시 방금 추가한 레코드 정보 가져오기
+						//System.out.println("user에 등록 성공.");
 						sql = "select seq, id, nickname, introduction, profile_filename from user where id = ?"; 
 						pstmt = conn.prepareStatement(sql);
 						pstmt.setString(1, to.getSns_id());
@@ -215,6 +219,7 @@ public class UserDAO {
 							pstmt.setString(2, rs.getString("id"));
 							pstmt.setString(3, to.getSns_type());
 							result = pstmt.executeUpdate();
+							//System.out.println("새로 저장한 seq : " + rs.getString("seq"));
 							if(result == 1) {
 								userInfo.setSeq(rs.getString("seq"));
 								userInfo.setId(rs.getString("id"));
@@ -222,7 +227,9 @@ public class UserDAO {
 								userInfo.setIntroduction(rs.getString("introduction"));
 								userInfo.setProfile_filename(rs.getString("profile_filename"));
 								
+								//System.out.println("userInfo" + userInfo.getSeq());
 								return userInfo; 
+								
 							}
 						}						
 					}
