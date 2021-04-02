@@ -73,20 +73,20 @@
 
 			} else {
 				// nickname에 맞는 페이지로 이동하게 td에 링크 걸기! 수정하기 ★★
-				sbHtml.append("<td class='userboard'>");
+				sbHtml.append("<td class='userboard' useq="+useq+">");
 				sbHtml.append("	<div class='userprofile'>");
 				sbHtml.append("		<div class='user_img' align='center'>");
 				
 				// nickname에 맞는 페이지로 이동하게 href 수정하기 ★★
-				sbHtml.append("			<a href='list.do'><img src='./profile/"+profile_filename+"' border='0' width=80px height=80px/></a>");				
+				sbHtml.append("			<a><img src='./profile/"+profile_filename+"' border='0' width=80px height=80px/></a>");				
 				//sbHtml.append("			<a href='list.do'><img src='./profile/profile11.JPG' border='0' width=80px height=80px/></a>");
 				sbHtml.append("		</div>");
 				sbHtml.append("		<div class='user_nickname' align='center'>");
-				sbHtml.append("			<a href='list.do'>"+nickname+"</a>");
+				sbHtml.append("			<a>"+nickname+"</a>");
 				sbHtml.append("		</div>");
 				
 				sbHtml.append("		<div class='user_intro' align='center'>");
-				sbHtml.append("			<a href='list.do'>"+introduction+"</a>");
+				sbHtml.append("			<a>"+introduction+"</a>");
 				sbHtml.append("		</div>");				
 				sbHtml.append("		<div class='user_count' align='center'>");
 				sbHtml.append("			<span> 글 수 "+Bcount+" | 좋아요 수 "+Lcount+" </span>");
@@ -112,6 +112,14 @@
 	}
 	
 %>
+<script type="text/javascript">
+$(document).ready(function (e){
+	$(".userboard").on("click", function(e){
+		location.href='mypage.do?useq='+$(this).attr("useq");
+	});
+	
+});
+</script>
 
 <style type="text/css">
 
