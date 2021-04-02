@@ -64,17 +64,33 @@
 <!-- home -->
 <link rel="stylesheet" type="text/css" href="./css/home.css">
 
+<!-- 글쓰기 Summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		for ( let i = 1; i <=3; i++){
 		    $("#modal-link"+i).click(function(){
 		        var seq = $("#modal-link"+i+" #board_seq").val().split("/");
-		        $('.modal-content').load("./view.do" + "?seq=" + seq[0]);   
+		        $('.view-content').load("./view.do" + "?seq=" + seq[0]);   
 		    });
 		}
+		
+		$("#write_button").click(function(){
+			<%if(userInfo==null){%>
+				var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
+				if(comfirm_login == true){
+					location.href="./login.do";
+				}	
+			<%} else{%>
+	        	$('.write-content').load("./write.do");
+			<%}%>	        	
+	    });
     });
 	
 </script>
+
 <style>
 
 .button1{
@@ -112,6 +128,11 @@
 	}%>
 	<a href="./list.do">모든 게시글 보기</a>
 	<a href="./book_list.do">책 구경하기</a>
+	
+	<div style="padding:8px; position:absolute; bottom:2%; width:100%">
+		<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#write-modal">글쓰기</button>
+	</div>
+	
 </div>
 
 <div id="main">
@@ -178,7 +199,7 @@
 								</div>
 
 								<div class="item_pic item_pic_type4 ">														
-									<a id="modal-link1" data-bs-toggle="modal" data-bs-target="#modal" class="link_item" > 
+									<a id="modal-link1" data-bs-toggle="modal" data-bs-target="#view-modal" class="link_item" > 
 										<input type="hidden" id="board_seq" value=<%=seq1 %>/>
 										<!--  hover동작 class(위에 link_item #home_discover)  -->
 										<img
@@ -200,7 +221,7 @@
 								</div>
 
 								<div class="item_pic item_pic_type2">
-									<a id="modal-link2" data-bs-toggle="modal" data-bs-target="#modal" class="link_item #home_discover">
+									<a id="modal-link2" data-bs-toggle="modal" data-bs-target="#view-modal" class="link_item #home_discover">
 									<input type="hidden" id="board_seq" value=<%=seq2 %>/>
 									<img src="./upload/<%=filename2 %>"
 										class="img_pic" alt="<%=title2%>" >
@@ -221,7 +242,7 @@
 								</div>
 
 								<div class="item_pic item_pic_type3">
-									<a id="modal-link3" data-bs-toggle="modal" data-bs-target="#modal" class="link_item #home_discover" > 
+									<a id="modal-link3" data-bs-toggle="modal" data-bs-target="#view-modal" class="link_item #home_discover" > 
 									<input type="hidden" id="board_seq" value=<%=seq3 %>/>
 									<img
 										src="./upload/<%=filename3 %>"
@@ -343,9 +364,17 @@
 				</ul>
 			</div>
    			<!-- 모달창 정보 -->
-             <div id="modal" class="modal fade" tabindex="-1" role="dialog">
+             <div id="view-modal" class="modal fade" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
-                   <div class="modal-content">
+                   <div class="modal-content view-content">
+                   
+                   </div>
+                </div>
+             </div>
+             
+             <div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
+                   <div class="modal-content write-content">
                    
                    </div>
                 </div>

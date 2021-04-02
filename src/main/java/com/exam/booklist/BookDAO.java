@@ -1,8 +1,12 @@
 package com.exam.booklist;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -15,6 +19,9 @@ import com.exam.paging.pagingTO;
 public class BookDAO {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	private DataSource dataSource;
 	
 	public ArrayList<BookTO> BooklistTemplate(){
 		String sql = "select master_seq, isbn13, title, author, publisher, img_url, description, pub_date order by master_seq from book limit 15";
@@ -130,4 +137,45 @@ public class BookDAO {
 		
 		return pagingTO;
 	}
+	
+	//booklist 
+	public ArrayList bookSearch(String option, String searchword) {
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		ArrayList<BookTO> booklist = new ArrayList<BookTO>();
+
+		try{
+			conn = dataSource.getConnection();
+			
+			String sql = "select master_seq, isbn13, title, author, publisher, description, img_url from book where "+ option +" like ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%"+searchword+"%");
+
+			rs = pstmt.executeQuery();		
+			while(rs.next()) {
+				BookTO to = new BookTO();
+				to.setMaster_seq(rs.getString("master_seq"));
+				to.setIsbn13(rs.getString("isbn13"));
+				to.setTitle(rs.getString("title"));
+				to.setAuthor(rs.getString("author"));
+				to.setPublisher(rs.getString("publisher"));
+				to.setDescription(rs.getString("description"));
+				to.setImg_url(rs.getString("img_url"));
+				
+				booklist.add(to);
+			}					
+
+		} catch(SQLException e){
+			System.out.println("[에러] " + e.getMessage());
+		} finally {
+			if(rs!=null) try{rs.close();}catch(SQLException e) {}
+			if(pstmt!=null) try{pstmt.close();}catch(SQLException e) {}
+			if(conn!=null) try{conn.close();}catch(SQLException e) {}
+		}
+
+		return booklist;
+	}	
 }

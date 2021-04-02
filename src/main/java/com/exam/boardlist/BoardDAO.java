@@ -450,4 +450,38 @@ public class BoardDAO {
 		return snnlpagingTO;
 	}
 	
+	//writeOk
+	public int writeOk(BoardTO to) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		int flag = 0;
+
+		try{
+			conn = dataSource.getConnection();
+
+			String sql = "insert into board values(0, now(), ?, ?, ?, ?, ?, ?, 0, 0)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, to.getTitle());
+			pstmt.setString(2, to.getUseq());
+			pstmt.setString(3, to.getFilename());
+			pstmt.setString(4, to.getFilesize());
+			pstmt.setString(5, to.getContent());
+			pstmt.setString(6, to.getBseq());
+
+			int result = pstmt.executeUpdate();
+			if(result == 1){
+				flag = 1;
+			}
+
+		} catch(SQLException e){
+			System.out.println("[에러] " + e.getMessage());
+		} finally {
+			if(pstmt!=null) try{pstmt.close();}catch(SQLException e) {}
+			if(conn!=null) try{conn.close();}catch(SQLException e) {}
+		}
+
+		return flag;
+	}	
+	
 }
