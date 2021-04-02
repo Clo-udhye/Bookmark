@@ -152,5 +152,72 @@ public class UserDAO {
 		}
 
 		return flag;
-	}	
+	}
+	
+	// 마이페이지 입장할 때의 유저 정보 TO 형식으로 불러오기 by예찬
+	public UserTO myPage_Info_load (String useq) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		UserTO uto = null;
+		try{
+			conn = dataSource.getConnection();
+			
+			String sql = "select seq, id, nickname, mail, address, addresses, keywords, introduction, profile_filename from user where seq=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, useq);
+			
+			uto = new UserTO();
+			rs = pstmt.executeQuery();		
+			if(rs.next()) {
+					uto.setSeq(rs.getString("seq"));
+					uto.setId(rs.getString("id"));
+					uto.setNickname(rs.getString("nickname"));
+					uto.setMail(rs.getNString("mail"));
+					uto.setAddress(rs.getString("address"));
+					uto.setAddresses(rs.getString("addresses"));
+					uto.setIntroduction(rs.getString("introduction"));
+					uto.setKeywords(rs.getString("keywords"));
+					uto.setProfile_filename(rs.getString("profile_filename"));
+			}			
+			
+		} catch(SQLException e){
+			System.out.println("[에러] " + e.getMessage());
+		} finally {
+			if(rs!=null) try{rs.close();}catch(SQLException e) {}
+			if(pstmt!=null) try{pstmt.close();}catch(SQLException e) {}
+			if(conn!=null) try{conn.close();}catch(SQLException e) {}
+		}
+		
+		return uto;
+	}
+	
+	// user의 게시글 count by예찬
+	public int user_board_count (String useq) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int board_counts = 0;
+		try{
+			conn = dataSource.getConnection();
+			
+			String sql = "select count(*) from board where useq=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, useq);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				board_counts = Integer.parseInt(rs.getString("count(*)"));
+			}
+			
+		} catch(SQLException e){
+			System.out.println("[에러] " + e.getMessage());
+		} finally {
+			if(rs!=null) try{rs.close();}catch(SQLException e) {}
+			if(pstmt!=null) try{pstmt.close();}catch(SQLException e) {}
+			if(conn!=null) try{conn.close();}catch(SQLException e) {}
+		}
+		return board_counts;
+	}
 }

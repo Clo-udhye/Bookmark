@@ -70,8 +70,10 @@
 	$(document).ready(function(){
 		for ( let i = 1; i <=3; i++){
 		    $("#modal-link"+i).click(function(){
-		        var seq = $("#modal-link"+i+" #board_seq").val().split("/");
-		        $('.modal-content').load("./view.do" + "?seq=" + seq[0]);   
+		    	// *******************seq 이상하게 잡히는 거 수정 by 정예찬*******************
+		    	//console.log($("#modal-link"+i+" #board_seq").val());
+		        var seq = $("#modal-link"+i+" #board_seq").val();
+		        $('.modal-content').load("./view.do" + "?seq=" + seq);   
 		    });
 		}
     });
@@ -106,7 +108,6 @@
 	padding-top: 100px;
 }
 
-
 </style>
 </head>
 <body>
@@ -126,7 +127,7 @@
 		if(userInfo.getId().equals("testadmin1")) {%>
 			<a href="./admin.do">Admin Page</a>
 		<%} else{ %>
-			<a href="./mypage.do">My Page</a>
+			<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
 		<%}
 	}%>
 	<a href="./list.do">모든 게시글 보기</a>
@@ -198,7 +199,7 @@
 
 								<div class="item_pic item_pic_type4 ">														
 									<a id="modal-link1" data-bs-toggle="modal" data-bs-target="#modal" class="link_item" > 
-										<input type="hidden" id="board_seq" value=<%=seq1 %>/>
+										<input type="hidden" id="board_seq" value="<%=seq1 %>" />
 										<!--  hover동작 class(위에 link_item #home_discover)  -->
 										<img
 										src="./upload/<%= filename1%>"
@@ -220,7 +221,7 @@
 
 								<div class="item_pic item_pic_type2">
 									<a id="modal-link2" data-bs-toggle="modal" data-bs-target="#modal" class="link_item #home_discover">
-									<input type="hidden" id="board_seq" value=<%=seq2 %>/>
+									<input type="hidden" id="board_seq" value="<%=seq2 %>" />
 									<img src="./upload/<%=filename2 %>"
 										class="img_pic" alt="<%=title2%>" >
 										
@@ -241,7 +242,7 @@
 
 								<div class="item_pic item_pic_type3">
 									<a id="modal-link3" data-bs-toggle="modal" data-bs-target="#modal" class="link_item #home_discover" > 
-									<input type="hidden" id="board_seq" value=<%=seq3 %>/>
+									<input type="hidden" id="board_seq" value= "<%=seq3 %>" />
 									<img
 										src="./upload/<%=filename3 %>"
 										class="img_pic" alt="">
