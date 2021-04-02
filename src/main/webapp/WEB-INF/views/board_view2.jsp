@@ -253,7 +253,8 @@ $(document).ready(function(){
        						<!-- <div id="vertical1">
        							<div class="wrap"> 
        								<table border="1" height="230" width="580" class="wrapTable"> <tr><td>  -->
-       								<textarea cols="78" rows="10" required wrap="hard" style="border:solid 1px #EAEAEA;" readonly><%=content %></textarea>
+       								<!-- <textarea cols="78" rows="10" required wrap="hard" style="border:solid 1px #EAEAEA;" readonly><%=content %></textarea>-->
+       								<div cols="78" rows="10" required wrap="hard" style="border:solid 1px #EAEAEA;" readonly><%=content %></div>
        								<!-- </td></tr></table>
        							</div>
        						</div>  -->
