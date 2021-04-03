@@ -1,30 +1,20 @@
-<%@page import="com.exam.user.UserTO"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="com.exam.theseMonthBoard.Board_CommentTO"%>
 <%@page import="com.exam.theseMonthBoard.Home_BoardTO"%>
+<%@page import="com.exam.user.UserTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-
 	//로그인 시, 해당 게시글 좋아요 유무
 	int like_count_check = 0;
-	//현재 세션 상태를 체크한다
 	UserTO userInfo = null;
 	String userID = null;
+	String userSeq = null;
 	if (session.getAttribute("userInfo") != null) {
 		userInfo= (UserTO)session.getAttribute("userInfo");
 		userID = userInfo.getId();
-		like_count_check = (Integer)request.getAttribute("like_count_check");
-		//System.out.println(like_count_check);
+		userSeq = userInfo.getSeq();
 	}
 	
-	StringBuffer likey_button = new StringBuffer();
-	if(like_count_check != 0){
-		likey_button.append("<input type='button' value='like' style='color : gray; background-color : yellow;' id= 'button_likey' />");
-	} else {
-		likey_button.append("<input type='button' value='like' id= 'button_likey' />");
-	}
-
+	//board 데이터 로드
 	Home_BoardTO to = (Home_BoardTO)request.getAttribute("home_BoardTO");
 	String seq = to.getSeq();
 	String date = to.getDate().substring(0, 11);
@@ -33,255 +23,184 @@
 	String filename = to.getFilename();
 	String content = to.getContent();
 	String book_title = to.getBook_title();
-	String comment = to.getComment();
-	String hit = to.getHit();
-	String boardUserID = to.getUserID();
-	//String useq = to.getUseq();
+	String UserID_board = to.getUserID();
+	String board_profile = to.getProfile();
 	
-	StringBuffer commentHTML = new StringBuffer();
-	ArrayList<Board_CommentTO> comment_lists = (ArrayList)request.getAttribute("board_commentTO");
-	if(comment_lists.size() == 0){
-		commentHTML.append("<tr><td colspan='3'>등록된 댓글이 없습니다. 댓글을 통해 소통해봐요!</td></tr>");
-	} else {
-		for (Board_CommentTO comment_to : comment_lists){
-			String comment_nickname = comment_to.getNickname();
-			String comment_content = comment_to.getContent();
-			String comment_date_time = comment_to.getDate_time();
-			commentHTML.append("<tr>");
-			commentHTML.append("<td>" + comment_nickname + "</td>");
-			commentHTML.append("<td><div>"+comment_content+"</div></td>");
-			commentHTML.append("<td>"+comment_date_time+"</td>");
-			commentHTML.append("</tr>");
-		}
-	}
-	int likey_count = (Integer)request.getAttribute("likey_count");
-	
-
+	int len_title = title.length(); 
 %>
-
+<link rel="stylesheet" type="text/css" href="./css/flexslider.css">
+<script type="text/javascript" src="./js/jquery.flexslider-min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+
 <style type="text/css">
-	#comment {
-		width : 520;
-		height : 100;
+.profile_img {
+	padding: 5px;
+	width: 45px;
+	height: 45px;
+	border-radius: 50%;
 	}
-	#vertical2 {
-		width: max-content;
-		overflow-y: scroll;
-		height : 70px;
+#img_preview{
+	width: 500px; 
+	height: 500px;
 	}
-	#vertical1 {
-		width: max-content;
-		overflow-y: scroll;
-		height : 230px;
-	}
-	.wrap {
-		float: left;
-	}
-	.wrapTable table {
-		border : 1px;
-	}
-	.wrapTable tr,th,td {
-		padding : 5px;
-		margin : 5px;
-	}
-	#wrapTable tr:hover {
-		background-color : ivory;
-		font-color : black; 
-	}
+.userID{
+	color: #d2d2d2;
+}	
+
+ul, ol, li{ margin:0; padding:0; list-style:none;}
+
 </style>
 <script type="text/javascript">
-
-$(function() {
-	// 등록하기 버튼 클릭 시, 알림창 생성 및 댓글 DB 입력
-	$('#comment_btn').click(function () {
-		<%
-		if (userInfo != null) {
-			userID = userInfo.getId();
-		%>
-			let comment = $('#comment_text').val();
-			console.log(comment);
-			if(comment == ''){
-				alert('댓글을 입력해주세요');
-				$('#comment_text').focus();
-			} else if(comment.length < 10){
-				alert('최소 10자 이상 입력이 필요합니다.');
-				$('#comment_text').focus();
-			} else {
-				$.ajax({
-					url : './comment.do',
-					type : 'POST',
-					data : {
-						"user" : "<%=userID %>",
-						"comment" : comment,
-						"bseq" : <%=seq %>
-					},
-					success : function (data) {
-						alert('댓글 입력 완료');
-						//location.reload();
-						$('.modal-content').load("./view.do" + "?seq=" + <%=request.getParameter("seq")%>);
-						
-					},
-					error : function (error){
-						console.log('Error');
-					}
-				});	
+$(document).ready(function(){
+	$(".flexslider").flexslider({
+		animation: "slide",	
+		slideshow: false,
+		disableDragAndDrop: true,
+	});
+	
+	$('#summernote').summernote({
+		placeholder: '게시글 입력...',
+		dialogsInBody: true,
+		width: 630,
+		height: 320,
+		disableResizeEditor: true,
+		toolbar: [
+		    // [groupName, [list of button]]
+		    ['style', ['bold', 'italic', 'underline']],
+		    ['fontsize', ['fontsize']],
+		    ['color', ['color']]
+		  ]
+	});
+	$('.note-statusbar').hide();
+	
+	//저장버튼 클릭
+    $(document).on('click', '#complete_btn', function () {
+        if($('#title').val()==''){
+        	alert('제목을 입력해주세요.');
+        	$('#title').focus();
+        	return false;
+        }
+        if($('#summernote').val()==''){
+        	alert('내용을 입력해주세요.');
+        	$('#summernote').focus();
+        	return false;
+        }
+        if($('#summernote').val().length>10000){
+        	alert('10000자 이하로 입력하세요.');
+        	$('#summernote').focus();
+        	return false;
+        }
+      	
+        //document.mfrm.submit();
+        $.ajax({
+            url : './modify_ok.do',
+            type : 'post',
+            dataType: 'xml',
+            data : {
+               'board_title': $('#title').val(),
+               'board_content': $('#summernote').val(),
+               'useq' : $('#useq').val(),
+               'bseq': $('#boardseq').val()
+            },
+            success : function(xmlData){	            	
+            	//alert('flag : ' + $(xmlData).find("flag").text());
+            	if($(xmlData).find("flag").text()==1){
+            		alert('게시글이 수정되었습니다.');
+            		$('.view-content').load("./view2.do?seq="+<%=seq%>);
+            	}else{
+            		alert('게시글 수정에 실패했습니다.');
+            	}
+			},
+			error : function(request,status, error) {
+				alert("[에러] : code "+ request.status);
+				//alert("code:"+request.status+"\n"+"error:"+error);
 			}
-		<%
-		} else {
-		%>
-			var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
-			if(comfirm_login == true){
-				location.href="login.do";
-			}	
-		<% } %>
+		});	
+    });
+	
+	$('#title').keyup(function(){
+		//제목 글자수 세기
+        $('#counter-title').html('('+$(this).val().length+'/100)');
+	});	
+	
+	$('#close-btn').on('click', function(){
+		var confirm_result = confirm('저장하지않고 게시글로 돌아갈까요?');	
+		if(confirm_result){
+			$('.view-content').load("./view2.do?seq="+<%=seq%>);
+		}
 	});
 });
-// 좋아요 버튼
-$(function() {
-	$('#button_likey').click(function () {
-		<%
-			//System.out.println("like_count_check :"+ like_count_check );
-			if( like_count_check == 0){ // like한 기록이 없는 경우
-				if (userInfo != null) { //로그인 되어있는 경우
-					userID = userInfo.getId();
-			%>
-					$.ajax({
-						url : './likey.do',
-						type : 'POST',
-						data : {
-							"user" : "<%=userID %>",
-							"bseq" : <%=seq %>
-						},
-						success : function (data) {
-							$('.modal-content').load("./view.do" + "?seq=" + <%=request.getParameter("seq")%>);
-						},
-						error : function (error){
-							console.log('Error');
-						}
-					});
-				<%
-				} else { // 로그인이 안되어 있는 경우 --> 로그인 창 --> 로그인 후 현 페이지로 돌아오는 거 필요
-				%>
-					var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
-						if(comfirm_login == true){
-							location.href="login.do";
-						}	
-			<% 
-				}
-			} else if (like_count_check >= 1){ // 좋아요 누는 기록이 있는 경우 
-				userID = userInfo.getId();
-				%>
-				$.ajax({
-					url : './unlikey.do',
-					type : 'POST',
-					data : {
-						"user" : "<%=userID %>",
-						"bseq" : <%=seq %>
-					},
-					success : function (data) {
-						$('.modal-content').load("./view.do" + "?seq=" + <%=request.getParameter("seq")%>);
-						//console.log('좋아요 기록 삭제 성공');
-					},
-					error : function (error){
-						console.log('Error');
-					}
-				});
-				
-			<% }%>	
-	});
-});
-
 </script>
-       <table>
-       	<tr>
-       		<td rowspan="3" border="1"> <img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></td>
-       		<td >
-	       		<table width="620" height="50">
-	       			<tr>
-	       				<td width="150">작성자 : <%=nickname %></td>
-	       				<td width="180">작성 일자 : <%= date %></td>
-	       				<td width="100">조회수 : <%=hit %></td>
-	       				<td rowspan="2">
-	       				<table>
-	       				<% if (userInfo == null) {%> <!-- 로그인이 안되어 있을 시, 수정.삭제 버튼 x -->
-	       					<tr><td></td></tr>
-	       				<% } else if (userID != null && userID.equals(boardUserID)) { %> <!-- 로그인 o, Board의 useq랑 같을 때 -> 버튼 생성 -->
-	       					<tr><td><input type="button" value="수정"/></td><td><input type="button" value="삭제"/></td></tr>
-	       				<% }else {%> <!-- 그 외의 경우 버튼 생성 x -->
-	       					<tr><td></td></tr>
-	       				<% } %>
-	       				</table>
-	       				 	 
-	       				</td >
-	       				<td rowspan="2" align="top" width="30">
-	       					<div align="right">
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button></span>
-						    </div>
-	       				</td>
-	       			</tr>
-	       			<tr>
-	       				<td colspan="3">책 제목 : <%=book_title %></td><td></td>
-	       			</tr>
-	       		</table>
-       		</td>
-       	</tr>
-       	<tr>
-       		<td>
-       			<table width="600" height="350">
-       			<tr><td height="10">제목 :  <input type="text" value="<%=title%>" id="board_title" size="69"/></td></tr>
-       				<tr height="230">
-       					<td>
-       						<!-- <div id="vertical1">
-       							<div class="wrap"> 
-       								<table border="1" height="230" width="580" class="wrapTable"> <tr><td>  -->
-       								<textarea cols="78" rows="10" required wrap="hard"><%=content %></textarea>
-       								<!-- </td></tr></table>
-       							</div>
-       						</div>  -->
-   						</td>
-       				</tr>
-       				<tr>
-       					<td>
-       						<div id="vertical2">
-       							<div class="wrap">
-       								<table border="1" height="70" width="580" id="wrapTable">
-       								<tr>
-       									<th>별명</th><th>내용</th><th>일시</th>
-       								</tr>
-			       						<%= commentHTML %>
-			       						
-		       						</table>
-       							</div>
-       						</div>
-       					</td>
-       				</tr>
-       			</table>
-       		</td>
-       	</tr>
-       	<tr>
-       	<td>
-       		<table height="100" width="600" border="1">
-       			<tr>
-       				<td width="80">
-       			 		<%=likey_button %>
-   			 		</td>
-   			 		<td width="120">
-   			 			좋아요 x <%=likey_count %>개
-		 			</td>
-		 			<td width="200"></td>
-		 			<td width="100"></td>
-	 			</tr>
-       			<tr>
-	       				<td colspan="3" width="520">
-       						<input type="text" placeholder="댓글을 입력해주세요." size="60" id="comment_text"/>
-	       				</td>
-	       				<td>
-	       					<input type="button" value="등록하기" height="100" id="comment_btn"/>
-	       				</td>
-       			</tr>
-       		</table>
-       	</td>
-       	</tr>
-    </table>
+
+<div class="modal-header">
+	<h4 class="modal-title">게시물 수정</h4>
+	<button type="button" class="btn d-inline-block" id="close-btn" style="padding:6px 12px 6px 3px; color:#dcdcdc;"><i class="fas fa-times"></i></button>
+</div>
+<form action="./modify_ok.do" name="mfrm" method="post">
+<input type="hidden" id="useq" name="useq" value="<%=userSeq %>">
+<input type="hidden" id="boardseq" name="boardseq" value="<%=seq %>">
+<div class="modal-body" style="padding:0;">
+	<table>
+		<tr>
+			<td>
+				<div id="img_preview" class="flexslider">
+        			<ul class="slides">
+        				<li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
+                        <li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
+                        <li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
+        			</ul>
+        		</div>
+			</td>
+			<td>
+				<table width=100%>
+					<tr class="writerInfo button-bar" style="border-bottom:1px solid #d2d2d2;">
+						<td>
+							<img class="profile_img" src="./profile/<%=board_profile %>">
+							<span class="nickname"><%=nickname %></span>
+							<span class="userID">(<%=UserID_board %>)</span>
+							<span>
+								&nbsp;&nbsp;
+								<span class="date"style="color:#d2d2d2;">작성일자 : <%= date %></span>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+							</span>
+						</td>
+					</tr>
+					<tr class="bookInfo">
+						<td>
+							<span style="float:right; padding:2px 10px">
+								<i class="fas fa-book-open"></i>&nbsp;<%=book_title %>
+							</span>
+						</td>
+					</tr>	
+					<tr class="boardInfo">
+						<td>
+							<table>
+								<tr>
+									<td>
+										<div class="col-lg-10 d-inline-block">
+											<input class="form-control" type="text" placeholder="제목을 입력해주세요." id="title" name="title" maxlength="100" size="5" value="<%=title%>"/>
+										</div>
+										<div class="d-inline">	
+											<span id="counter-title">(<%=len_title %>/100)</span>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+			 							<textarea id="summernote" name="summernote"><%=content %></textarea>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>								
+				</table>
+			</td>
+		</tr>
+	</table>
+</div>
+<div class="modal-footer">
+	<input type="button" value="수정" id="complete_btn" class="btn btn-default" />
+</div>
+</form>

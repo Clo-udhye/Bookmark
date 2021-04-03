@@ -193,21 +193,6 @@ public class HomeController {
 		return "likey_xml";
 	}
 	
-	@RequestMapping(value = "/board_modify.do")
-	public String board_modify(HttpServletRequest req , Model model) {
-		String writer_seq = req.getParameter("user");
-		String board_seq = req.getParameter("bseq");
-		String board_title = req.getParameter("board_title");
-		String board_content = req.getParameter("board_content");
-		int flag = board_Modify_Delete_DAO.Board_Modify(writer_seq, board_seq, board_title, board_content);
-		model.addAttribute("flag", flag);
-		
-		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(board_seq);
-		model.addAttribute("home_BoardTO", home_BoardTO);
-		
-		return "modify_ok";
-	}
-	
 	@RequestMapping(value = "/board_delete.do")
 	public String board_delete(HttpServletRequest req , Model model) {
 		String writer_seq = req.getParameter("user");
@@ -496,8 +481,8 @@ public class HomeController {
 		HttpSession session = req.getSession();
 		if (session.getAttribute("userInfo") != null) {
 			UserTO userInfo = (UserTO)session.getAttribute("userInfo");
-			String userID = userInfo.getId();
-			int count_check = home_boardDAO.likey_check(seq, userID);
+			String useq = userInfo.getSeq();
+			int count_check = home_boardDAO.likey_check(seq, useq);
 			model.addAttribute("like_count_check", count_check);
 		}
 		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(seq);
@@ -512,20 +497,27 @@ public class HomeController {
 	@RequestMapping(value = "/modify.do")
 	public String modify(HttpServletRequest req , Model model) {
 		String seq = req.getParameter("seq");
-		HttpSession session = req.getSession();
-		if (session.getAttribute("userInfo") != null) {
-			UserTO userInfo = (UserTO)session.getAttribute("userInfo");
-			String userID = userInfo.getId();
-			int count_check = home_boardDAO.likey_check(seq, userID);
-			model.addAttribute("like_count_check", count_check);
-		}
-		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(seq);
+		Home_BoardTO home_BoardTO =  home_boardDAO.board_Template(seq);
 		model.addAttribute("home_BoardTO", home_BoardTO);
-		ArrayList<Board_CommentTO> board_CommentTO = home_boardDAO.CommentListTemplate(seq);
-		model.addAttribute("board_commentTO", board_CommentTO);
-		int count = home_boardDAO.likey_count(seq);
-		model.addAttribute("likey_count", count);
 		return "board_modify";
+	}
+	
+	@RequestMapping(value = "/modify_ok.do")
+	public String board_modify(HttpServletRequest req , Model model) {
+		System.out.println(req.getParameter("useq"));
+		System.out.println(req.getParameter("bseq"));
+		System.out.println(req.getParameter("board_title"));
+		System.out.println(req.getParameter("board_content"));
+		
+		
+		String writer_seq = req.getParameter("useq");
+		String board_seq = req.getParameter("bseq");
+		String board_title = req.getParameter("board_title");
+		String board_content = req.getParameter("board_content");
+		int flag = board_Modify_Delete_DAO.Board_Modify(writer_seq, board_seq, board_title, board_content);
+		model.addAttribute("flag", flag);
+		
+		return "board_modify_ok";
 	}
 	    
     @RequestMapping(value="/callback1.do", method=RequestMethod.GET)

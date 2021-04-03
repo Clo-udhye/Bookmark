@@ -36,7 +36,7 @@ $(document).ready(function(){
 		placeholder: '게시글 입력...',
 		dialogsInBody: true,
 		width: 630,
-		height: 316,
+		height: 260,
 		disableResizeEditor: true,
 		toolbar: [
 		    // [groupName, [list of button]]

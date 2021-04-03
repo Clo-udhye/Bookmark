@@ -173,7 +173,7 @@
 	.board_pagetab a { text-decoration: none; font: 15px verdana; color: #000; padding: 0 3px 0 3px; }
 	.board_pagetab a:hover { text-decoration: underline; background-color:#f2f2f2; }
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
-	#content {position: absolute; left: 50%; transform: translateX(-50%);}
+	/*#content {position: absolute; left: 50%; transform: translateX(-50%);}*/
 	
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
    body {
@@ -203,7 +203,7 @@ $(document).ready(function(){
 	$('.board1').click(function(e){
 		//alert($(this).attr('bseq')+"클릭");
 		//console.log("./view.do?seq=" + $(this).attr('bseq'));
-		$('.view-content').load("./view.do?seq=" + $(this).attr('bseq'));
+		$('.view-content').load("./view2.do?seq=" + $(this).attr('bseq'));
 	});
 	
 	$("#write_button").on('click', function(){
@@ -276,7 +276,7 @@ $(document).ready(function(){
     	</div>
     </div>
     
-    <div id="content">
+    <div id="content" style="padding: 100px 0px;" align= "center">
          <h1 >전체 게시글</h1>
          <br/> 
         	
