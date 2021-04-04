@@ -39,12 +39,16 @@
 
 %>
 
+
+
 <style type="text/css">
 	#user_img img {border-radius: 50%;}
 	.form-control0 {width: 300px;}
 	td { padding: 3px 4px 3px 4px;}
 	.btn {padding: 2px 4px 2px 4px;}
 </style>
+
+
 
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -126,28 +130,17 @@
 			//console.log($('#id').val());
 			//document.mypagemodify_frm.submit();
 			
-			
+			let formData = new FormData($('#mypagemodify_frm')[0]);
 			$.ajax({
 	            url : './mypage_modify_ok.do',
-	            type : 'post',
-	            // enctype: 'multipart/form-data',
-	            data : {
-	            	'seq' : <%=seq%>,
-	            	'id' : $('#id').val(),
-	            	'nickname' : $('#nickname').val(),
-	            	'mail' : $('#mail').val(),
-	            	'address' : $('#address').val(),
-	            	'addresses' : $('#addresses').val(),
-	            	'keywords' : $('#keywords').val(),
-	            	'introduction' : $('#introduction').val(),
-	            	'profile_filename' : $('#profile_filename').val()
-	            	//'profile_filename' : $('#input-file').val()
-	            	//'file' : $('#input-file').val()
-	            },
+	            type : 'POST',
+	            //enctype: 'multipart/form-data',
+	            cache: false,
+	            processData: false,
+	            contentType: false,
+	            data : formData,
 	            //dataType: "xml",
-	            //processData: false,
 
-	            //contentType: false,
 	            success : function(xmlData){
 	            	
 	               //console.log(typeof($(xmlData).find('flag').text()));
@@ -166,9 +159,7 @@
 	             }
 
 	         }); 
-			
-			
-			document.mypagemodify_frm.submit();
+
 		};
 		
 		$(".btn-close").click(function(){
@@ -289,6 +280,8 @@
   });
 </script>
 
+<meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />    
+
 <div id="main">
 
 	<div class="modal-header" style="padding-top: 10px; padding-bottom: 10px;">
@@ -300,9 +293,11 @@
 	
     <div class="modal-body" style="padding: 15px 18px 15px 18px;">
     <!-- 파일 업로드 할 때 enctype~ 필요함  -->
-    <!-- <form method="post" action="./mypage_modify_ok.do" name="mypagemodify_frm" id="mypagemodify_frm" enctype="multipart/form-data"> -->
-    <form method="post" action="./mypage_modify_ok.do" name="mypagemodify_frm" id="mypagemodify_frm">
+    <form action="./mypage_modify_ok.do" name="mypagemodify_frm" id="mypagemodify_frm" method="post" enctype="multipart/form-data">
+    <!-- <form method="post" action="./mypage_modify_ok.do" name="mypagemodify_frm" id="mypagemodify_frm"> -->
     <input type="hidden" name="seq" value="<%=seq%>"/>
+    <!-- 기존파일명 가져가기 -->
+    <input type="hidden" name="prefileName" value="<%=profile_filename %>"/>
     	<table>
     		<!-- 아이디 -->
     		<tr>
@@ -320,14 +315,15 @@
 						<div id="preview-image"><img src="./profile/<%=profile_filename %>" border='0' width=100px height=100px/></div>
 						<br/>
 						<!-- <textarea rows="1" cols="15" class="upload-name" id="profile_filename" name="profile_filename" style="resize:none;" ><%=profile_filename %></textarea> -->
-						<input type="text" class="upload-name" id="profile_filename" name="profile_filename" value="<%=profile_filename %>" style="width:96px;" readonly />
+						<!-- <input type="text" class="upload-name" id="profile_filename" name="profile_filename" value="<%=profile_filename %>" style="width:96px;" readonly /> -->
+						<input type="text" class="upload-name" value="<%=profile_filename %>" style="width:96px;" readonly />
 						<br/>
-						<label for="input-file">업로드</label>
+						<label for="uploadFile">업로드</label>
 						<!-- 파일 업로드 테스트 해보려고 name="uploadFile" 추가함 -->
-						<!-- <input type="file" name="uploadFile" id="input-file" class="upload-hidden"> -->
-						<input type="file" name="uploadFile" id="input-file" />
+						<!-- <input type="file" name="uploadFile" id="uploadFile" class="upload-hidden"> -->
+						<input type="file" name="uploadFile" id="uploadFile" />
 					</div>
-					<!-- <input type="file" name="uploadFile" id="input-file" value="" /> -->
+					<!-- <input type="file" name="uploadFile" id="uploadFile" value="" /> -->
 					
     			</td>
     			<td><span class="form-title">아이디</span></td>

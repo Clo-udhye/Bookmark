@@ -335,6 +335,9 @@ public class UserDAO {
 		try{
 			conn = dataSource.getConnection();
 
+			//System.out.println(to.getSeq()+"/"+to.getId()+"/"+to.getNickname()+"/"+to.getProfile_filename());
+			
+			
 			String sql = "update user set id=?, nickname=?, mail=?, address=?, addresses=?, keywords=?, introduction=?, profile_filename=? where seq=?";
 			
 			pstmt = conn.prepareStatement(sql);
