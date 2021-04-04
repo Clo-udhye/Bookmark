@@ -108,7 +108,7 @@ $(document).ready(function(){
             	//alert('flag : ' + $(xmlData).find("flag").text());
             	if($(xmlData).find("flag").text()==1){
             		alert('게시글이 수정되었습니다.');
-            		$('.view-content').load("./view2.do?seq="+<%=seq%>);
+            		$('.view-content').load("./view.do?seq="+<%=seq%>);
             	}else{
             		alert('게시글 수정에 실패했습니다.');
             	}
@@ -128,7 +128,7 @@ $(document).ready(function(){
 	$('#close-btn').on('click', function(){
 		var confirm_result = confirm('저장하지않고 게시글로 돌아갈까요?');	
 		if(confirm_result){
-			$('.view-content').load("./view2.do?seq="+<%=seq%>);
+			$('.view-content').load("./view.do?seq="+<%=seq%>);
 		}
 	});
 });

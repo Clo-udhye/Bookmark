@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 
 <%
-	int flag = (int)request.getAttribute("flag");
+	int flag = (Integer)request.getAttribute("flag");
 
 	StringBuffer result = new StringBuffer();
 	

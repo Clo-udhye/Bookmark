@@ -75,31 +75,41 @@ $(document).ready(function(){
         	return false;
         }
       	
-        document.wfrm.submit();
-        /*
+        //document.wfrm.submit();
+        
+        let formData = new FormData();
+        formData.append('title',$('#title').val());
+        formData.append('useq',$('#useq').val());
+        formData.append('content',$('#summernote').val());
+        formData.append('bookseq',$('#bookseq').val());
+        
+        $($("#img-selector")[0].files).each(function(index, file) {
+        	formData.append("files", file);				
+		});
+        
         $.ajax({
-            url : './write_ok2.do',
-            type : 'post',
-            dataType: 'xml',
-            enctype: 'multipart/form-data', // 필수 
-            processData: false, // 필수 
-            contentType: false, // 필수
-            data : {
-               'title': $('#title').val(),
-               'useq' : $('#useq').val(),
-               'content': $('#summernote').val(),
-               'bookseq': $('#bookseq').val(),
-               'file': $('#img-selector').val()
-            },
+            url : './write_ok.do',
+            type:'POST',
+			cache: false,
+			processData: false,
+			contentType: false,
+			data : formData,
+			dataType: 'xml',
             success : function(xmlData){	            	
-            	alert('flag : ' + $(xmlData).find("flag").text());
+            	//alert('flag : ' + $(xmlData).find("flag").text());
+            	if($(xmlData).find("flag").text() == 1){
+            		alert('글쓰기에 성공했습니다.');
+            		location.href="./mypage.do?useq="+<%=useq%>;
+            	} else {
+            		alert('[Error] : 글쓰기에 실패했습니다.');
+            	}
 			},
 			error : function(request,status, error) {
 				alert("[에러] : code "+ request.status);
 				//alert("code:"+request.status+"\n"+"error:"+error);
 			}
 		});	
-		*/
+		
         
         
     });
@@ -224,8 +234,7 @@ $(document).ready(function(){
 	}
 
 	function preview(arr) {
-		arr
-				.forEach(function(f) {
+		arr.forEach(function(f) {
 					//파일명이 길면 파일명...으로 처리
 					/*
 					var fileName = f.name;
@@ -241,8 +250,6 @@ $(document).ready(function(){
 					if (f.type.match('image.*')) {
 						var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
 						reader.onload = function(e) { //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
-							console.log(f.name);
-							console.log(f.path);
 							str += '<li><img src="'+e.target.result+'" title="'+f.name+'" width=600px /></li>';
 							//$(str).appendTo('#preview');
 							$('#img_preview').data('flexslider').addSlide(
@@ -292,14 +299,14 @@ ul, ol, li{ margin:0; padding:0; list-style:none;}
 
 </style>
 
-    
+<meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />    
 <div class="modal-header">
 	<h4 class="modal-title">새 게시물</h4>
 	<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
 </div>
-<form action="./write_ok.do" name="wfrm" method="post" enctype="multipart/form-data">
-<input type="hidden" name="useq" value=<%=useq %>>
-<input type="hidden" name="bookseq" value=0>
+<form action="./write_ok.do" id="wfrm" method="post" enctype="multipart/form-data">
+<input type="hidden" id="useq" name="useq" value=<%=useq %> required />
+<input type="hidden" id="bookseq" name="bookseq" value=0 required />
 <div class="modal-body" style="padding:0;">
 	<table>
 		<tr>
@@ -323,7 +330,7 @@ ul, ol, li{ margin:0; padding:0; list-style:none;}
 					<tr class="boardInfo">
 						<td>
 							<div class="col-lg-10 d-inline-block">
-								<input class="form-control" type="text" placeholder="제목을 입력해주세요." id="title" name="title" maxlength="100" size="5"/>
+								<input class="form-control" type="text" placeholder="제목을 입력해주세요." id="title" name="title" maxlength="100" size="5" required />
 							</div>
 							<div class="d-inline">							
 								<span id="counter-title">(0/100)</span>
@@ -333,7 +340,7 @@ ul, ol, li{ margin:0; padding:0; list-style:none;}
 					<tr class="imgSelector">
 						<td>
 							<div>
-								<input type="file" id="img-selector" multiple="multiple"  class="form-control form-control-sm" name="filename[]"/>
+								<input type="file" id="img-selector" class="form-control form-control-sm"  accept="image/*" name="files" multiple required /> 
 							</div>
 						</td>
 					</tr>

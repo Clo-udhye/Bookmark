@@ -97,7 +97,7 @@
 		    	// *******************seq 이상하게 잡히는 거 수정 by 정예찬*******************
 		    	//console.log($("#modal-link"+i+" #board_seq").val());
 		        var seq = $("#modal-link"+i+" #board_seq").val();
-		        $('.view-content').load("./view2.do" + "?seq=" + seq);   
+		        $('.view-content').load("./view.do" + "?seq=" + seq);   
 		    });
 		}
 

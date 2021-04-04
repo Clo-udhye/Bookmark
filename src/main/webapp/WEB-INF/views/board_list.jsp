@@ -203,7 +203,7 @@ $(document).ready(function(){
 	$('.board1').click(function(e){
 		//alert($(this).attr('bseq')+"클릭");
 		//console.log("./view.do?seq=" + $(this).attr('bseq'));
-		$('.view-content').load("./view2.do?seq=" + $(this).attr('bseq'));
+		$('.view-content').load("./view.do?seq=" + $(this).attr('bseq'));
 	});
 	
 	$("#write_button").on('click', function(){

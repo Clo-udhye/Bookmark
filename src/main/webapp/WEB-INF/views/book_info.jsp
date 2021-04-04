@@ -23,7 +23,7 @@
 	String description = to.getDescription();
 	String pub_date = to.getPub_date();
 	
-	int cpage = (int)request.getAttribute("cpage");
+	int cpage = (Integer)request.getAttribute("cpage");
 	// cpage는 받아오지만 뒤롸기 버튼 클릭 시 --> 해당 cpage를 받아가진 모못함
 	
 	StringBuffer board_related = new StringBuffer();
