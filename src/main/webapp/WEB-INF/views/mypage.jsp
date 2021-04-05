@@ -60,140 +60,140 @@
 			}
 			String filename = myboard_list.getFilename().split("//")[0];
 			int likey = myboard_list.getLike();
-		int comment = myboard_list.getComment();
-		
-		sbHtml.append("<td class='board board1' bseq='"+bseq+"' data-bs-toggle='modal' data-bs-target='#modal'>");
-		// 사진 크기 250 250
-		sbHtml.append("	<div class='img'>");
-		sbHtml.append("		<img src='./upload/"+filename+"' border='0' width=200px height=200px/>");
-		sbHtml.append("	</div>");
-		sbHtml.append("	<div class='text'>");
-		sbHtml.append("      <div id='text_title'><p>"+title+"</p></div>");
-		sbHtml.append("      <div id='text_nickname'><p>by "+visit_nickname+"</p></div>");
-		sbHtml.append("      </br>");
-		sbHtml.append("      <div id='text_count' align='right'>"); //onclick='event.cancelBubble=true' --> 특정 영역 이벤트 방지
-		if(mypage_flag==1){
-			sbHtml.append("         <span id='insight-modal"+Integer.toString(changeRow)+"' bseq='"+bseq+"' data-bs-toggle='modal' data-bs-target='#insightmodal' onclick='event.cancelBubble=true'><i class='fas fa-search-plus'></i>&nbsp;&nbsp;&nbsp;</span>");
+			int comment = myboard_list.getComment();
+			
+			sbHtml.append("<td class='board board1' bseq='"+bseq+"' data-bs-toggle='modal' data-bs-target='#view-modal'>");
+		    // 사진 크기 250 250
+		    sbHtml.append("   <div class='img'>");
+		    sbHtml.append("      <img src='./upload/"+filename+"' border='0' width=200px height=200px/>");
+		    sbHtml.append("   </div>");
+		    sbHtml.append("   <div class='text'>");
+		    sbHtml.append("      <div id='text_title'><p>"+title+"</p></div>");
+		    sbHtml.append("      <div id='text_nickname'><p>by "+visit_nickname+"</p></div>");
+		    sbHtml.append("      </br>");
+		    sbHtml.append("      <div id='text_count' align='right'>"); //onclick='event.cancelBubble=true' --> 특정 영역 이벤트 방지
+		    if(mypage_flag==1){
+		       sbHtml.append("         <span id='insight-modal"+Integer.toString(changeRow)+"' bseq='"+bseq+"' data-bs-toggle='modal' data-bs-target='#insightmodal' onclick='event.cancelBubble=true'><i class='fas fa-search-plus'></i>&nbsp;&nbsp;&nbsp;</span>");
+		    }
+		    sbHtml.append("         <span id='text_likey'><i class='fas fa-heart'></i>&nbsp;"+likey+"</span>");
+		    sbHtml.append("         &nbsp;");
+		    sbHtml.append("         <span id='text_comment'><i class='fas fa-comment-dots'></i>&nbsp;"+comment+"</span>");
+		    sbHtml.append("      </div>");  
+		    sbHtml.append("   </div>");
+		    sbHtml.append("</td>");
+		      
+		    if(changeRow%3 == 1 && changeRow>3){
+		       sbHtml.append("   </tr><tr>");
+		    }
 		}
-		sbHtml.append("         <span id='text_likey'><i class='fas fa-heart'></i>&nbsp;"+likey+"</span>");
-		sbHtml.append("         &nbsp;");
-		sbHtml.append("         <span id='text_comment'><i class='fas fa-comment-dots'></i>&nbsp;"+comment+"</span>");
-		sbHtml.append("      </div>");  
-		sbHtml.append("	</div>");
-		sbHtml.append("</td>");
-		
-		if(changeRow%3 == 1 && changeRow>3){
-			sbHtml.append("	</tr><tr>");
-		}
-	}
-	if(myboard_lists.size()%3!=0){
-		for(int i = 1; i<=(3-myboard_lists.size()%3); i++ ){
-			sbHtml.append("<td></td>");
-		}
-	}
-	
-	// TodayCounts
-	ArrayList<TodayTO> today_counts = (ArrayList)request.getAttribute("today_count");
-	if(today_counts.get(0).getTime() == 0){
-		today_counts.remove(0);
-	}
-
-	ArrayList<TodayTO> blank_count_today = new ArrayList();
-	for (int i = 1; i<=8; i++){
-		TodayTO to = new TodayTO();
-		to.setAction_count(0);
-		to.setComment_count(0);
-		to.setHit_count(0);
-		if(i==7 || i ==8){
-			to.setTime(3*i);
-			blank_count_today.add(to);
-		} else {
-			to.setTime((3*i) -1); 
-			blank_count_today.add(to);
-		}
-	}
-	
-	for (int i = 0; i<=7; i++){
-		//System.out.println(blank_count_today.get(0).getTime()+" : " +blank_count_today.get(1).getTime()+" : " +blank_count_today.get(2).getTime()+" : " +blank_count_today.get(3).getTime()+" : " +blank_count_today.get(4).getTime()+" : " +blank_count_today.get(5).getTime()+" : " +blank_count_today.get(6).getTime());
-		for(TodayTO to : today_counts){
-			if(i == 6 || i==7){
-				if(to.getTime() == (3*i +3)){
-					blank_count_today.remove(i);
-					blank_count_today.add(i,to);
-					//System.out.println("index :"+i+"|| to.getTime() :"+ (3*i +3));
-					break;
-				}
-			}else {
-				if(to.getTime()== (3*i+2)){
-					blank_count_today.remove(i);
-					blank_count_today.add(i,to);
-					//System.out.println("index :"+i+"|| to.getTime() :"+ ((3*i)+2));
-					break;
-				}
+		if(myboard_lists.size()%3!=0){
+			for(int i = 1; i<=(3-myboard_lists.size()%3); i++ ){
+				sbHtml.append("<td></td>");
 			}
 		}
 	}
 	
-	// 순서 바꿈
-	Collections.reverse(blank_count_today);
-	
-	ArrayList<Integer> today_action = new ArrayList();
-	ArrayList<Integer> today_hit = new ArrayList();
-	ArrayList<Integer> today_comment = new ArrayList();
-	ArrayList<Integer> today_like = new ArrayList();
-	ArrayList<String> today_time = new ArrayList();
-	
-	for(TodayTO to : blank_count_today){
-		today_hit.add(to.getHit_count());
-		today_like.add(to.getLike_count());
-		today_comment.add(to.getComment_count());
-		today_time.add("\""+to.getTime() + "시간 전("+(LocalDateTime.now().minusHours(to.getTime())).toString().substring(11,16)+")\"");
-		today_action.add(to.getHit_count() + to.getComment_count() + to.getLike_count());
-	}
-			
-		
-	//weekcount ArrayList로 받아오기
-	ArrayList<WeekTO> week_counts = (ArrayList)request.getAttribute("week_count");
-	// null값 정리
-	if(week_counts.get(0).getTime()==0){
-		week_counts.remove(0);
-	}
-	// 출력 될 list 생성
-	ArrayList<Integer> week_action = new ArrayList();
-	ArrayList<Integer> week_hit = new ArrayList();
-	ArrayList<Integer> week_comment = new ArrayList();
-	ArrayList<Integer> week_like = new ArrayList();
-	ArrayList<String> week_time = new ArrayList();
-	// 기존 Arraylist 만들고
-	ArrayList<WeekTO> blank_count_week = new ArrayList();
-	for(int i=1; i<=7;i++){
-		WeekTO to1 = new WeekTO();
-		to1.setComment_count(0);
-		to1.setHit_count(0);
-		to1.setLike_count(0);
-		to1.setTime(i);
-		blank_count_week.add(to1);
-	}
-	// 받아온 데이터 교체해주기
+   // TodayCounts
+   ArrayList<TodayTO> today_counts = (ArrayList)request.getAttribute("today_count");
+   if(today_counts.get(0).getTime() == 0){
+      today_counts.remove(0);
+   }
+   ArrayList<TodayTO> blank_count_today = new ArrayList();
+   for (int i = 1; i<=8; i++){
+      TodayTO to = new TodayTO();
+      to.setAction_count(0);
+      to.setComment_count(0);
+      to.setHit_count(0);
+      if(i==7 || i ==8){
+         to.setTime(3*i);
+         blank_count_today.add(to);
+      } else {
+         to.setTime((3*i) -1); 
+         blank_count_today.add(to);
+      }
+   }
+   
+   for (int i = 0; i<=7; i++){
+      //System.out.println(blank_count_today.get(0).getTime()+" : " +blank_count_today.get(1).getTime()+" : " +blank_count_today.get(2).getTime()+" : " +blank_count_today.get(3).getTime()+" : " +blank_count_today.get(4).getTime()+" : " +blank_count_today.get(5).getTime()+" : " +blank_count_today.get(6).getTime());
+      for(TodayTO to : today_counts){
+         if(i == 6 || i==7){
+            if(to.getTime() == (3*i +3)){
+               blank_count_today.remove(i);
+               blank_count_today.add(i,to);
+               //System.out.println("index :"+i+"|| to.getTime() :"+ (3*i +3));
+               break;
+            }
+         }else {
+            if(to.getTime()== (3*i+2)){
+               blank_count_today.remove(i);
+               blank_count_today.add(i,to);
+               //System.out.println("index :"+i+"|| to.getTime() :"+ ((3*i)+2));
+               break;
+            }
+         }
+      }
+   }
+   
+   // 순서 바꿈
+   Collections.reverse(blank_count_today);
+   
+   ArrayList<Integer> today_action = new ArrayList();
+   ArrayList<Integer> today_hit = new ArrayList();
+   ArrayList<Integer> today_comment = new ArrayList();
+   ArrayList<Integer> today_like = new ArrayList();
+   ArrayList<String> today_time = new ArrayList();
+   
+   for(TodayTO to : blank_count_today){
+      today_hit.add(to.getHit_count());
+      today_like.add(to.getLike_count());
+      today_comment.add(to.getComment_count());
+      today_time.add("\""+to.getTime() + "시간 전("+(LocalDateTime.now().minusHours(to.getTime())).toString().substring(11,16)+")\"");
+      today_action.add(to.getHit_count() + to.getComment_count() + to.getLike_count());
+   }
+         
+	      
+   //weekcount ArrayList로 받아오기
+   ArrayList<WeekTO> week_counts = (ArrayList)request.getAttribute("week_count");
+   // null값 정리
+   if(week_counts.get(0).getTime()==0){
+      week_counts.remove(0);
+   }
+   // 출력 될 list 생성
+   ArrayList<Integer> week_action = new ArrayList();
+   ArrayList<Integer> week_hit = new ArrayList();
+   ArrayList<Integer> week_comment = new ArrayList();
+   ArrayList<Integer> week_like = new ArrayList();
+   ArrayList<String> week_time = new ArrayList();
+   // 기존 Arraylist 만들고
+   ArrayList<WeekTO> blank_count_week = new ArrayList();
+   for(int i=1; i<=7;i++){
+      WeekTO to1 = new WeekTO();
+      to1.setComment_count(0);
+      to1.setHit_count(0);
+      to1.setLike_count(0);
+      to1.setTime(i);
+      blank_count_week.add(to1);
+   }
+   // 받아온 데이터 교체해주기
 	for (int i =0; i<7; i++){
-			for(WeekTO to : week_counts){
-				if(to.getTime()==i+1){
-					blank_count_week.remove(i);
-					blank_count_week.add(i,to);
-					//System.out.println(to.getHit_count() + "시작" + i);
-					break;
-				}
-			}		
-	}
-	// 순서 바꿈
-	Collections.reverse(blank_count_week);
-	// 각각의 Arraylist에 입력
-	for (WeekTO to1 : blank_count_week){
-		week_hit.add(to1.getHit_count());
-		week_comment.add(to1.getComment_count());
-		week_like.add(to1.getLike_count());
-		week_action.add(to1.getHit_count()+ to1.getComment_count()+to1.getLike_count());
-		week_time.add("\""+Integer.toString(to1.getTime())+ "일 전 ("+(LocalDateTime.now().minusDays(to1.getTime())).toString().substring(5,10)+")\"" );
+		for(WeekTO to : week_counts){
+            if(to.getTime()==i+1){
+				blank_count_week.remove(i);
+               	blank_count_week.add(i,to);
+               	//System.out.println(to.getHit_count() + "시작" + i);
+				break;
+            }
+		}      
+   	}
+   // 순서 바꿈
+   Collections.reverse(blank_count_week);
+   // 각각의 Arraylist에 입력
+   for (WeekTO to1 : blank_count_week){
+      week_hit.add(to1.getHit_count());
+      week_comment.add(to1.getComment_count());
+      week_like.add(to1.getLike_count());
+	  week_action.add(to1.getHit_count()+ to1.getComment_count()+to1.getLike_count());
+	  week_time.add("\""+Integer.toString(to1.getTime())+ "일 전 ("+(LocalDateTime.now().minusDays(to1.getTime())).toString().substring(5,10)+")\"" );
 	}
 
 %>    
@@ -214,6 +214,7 @@
 
 <!-- high charts -->
 <script src="http://code.highcharts.com/highcharts.js"></script>
+
 <!-- 드롭다운 리스트 -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -247,8 +248,8 @@
 }
 
 .box {
-    width: 300px;
-    height: 300px; 
+    width: 250px;
+    height: 250px; 
     border-radius: 70%;
     overflow: hidden;
 }
@@ -268,7 +269,7 @@
 
 #wrapTable3 {
 	height :300px;
-	width : 700px;
+	width : 100%;
 	border : 1px solid #F5F5DC;
 	
 }
@@ -294,46 +295,39 @@
 #text_nickname p {font-size: 12px;}
 #text_count span {font-size: 12px;}
 
+#modifymodal1 {width: 650px;}
+	
+.filebox label { display: inline-block; padding: .5em .75em; color: #999; font-size: inherit; line-height: normal; vertical-align: middle; background-color: #fdfdfd; cursor: pointer; border: 1px solid #ebebeb; border-bottom-color: #e2e2e2; border-radius: .25em; }
+.filebox input[type="file"] { /* 파일 필드 숨기기 */ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip:rect(0,0,0,0); border: 0; }
+
 .insight-modal {
-	z-index : 13;
+   z-index : 13;
 }
 .insight-modal:hover {
-	opacity: 0.5;
+   opacity: 0.5;
 }
 </style>
 
 <script>
-$(document).ready(function(){	
-	$('.board1').click(function(e){
+	$(document).ready(function(){	
+		$('.board1').click(function(e){
 			$('.view-content').load("./view.do?seq=" + $(this).attr('bseq'));
 		});
 		
-	$(".write_button").on('click', function(){
-		<%if(userInfo!=null){%>
-			$("#write-modal").modal("show");
-			$('.write-content').load("./write.do");
-		<%}else{%>
-			var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
-			if(comfirm_login==true){
-				location.href="./login.do";
-			}
-		<%}%>	        	
-	});
-})
-
-$(document).ready(function(){	
-	for(var i = 0; i <=<%=changeRow%>; i++){
-		$('#insight-modal'+i).click(function(e){
-			console.log('okok');
-			$('.insight-content').load("./insight.do?bseq=" + $(this).attr('bseq')+"&changeRow="+i);
+		$(".write_button").on('click', function(){
+			<%if(userInfo!=null){%>
+				$("#write-modal").modal("show");
+				$('.write-content').load("./write.do");
+			<%}else{%>
+				var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
+				if(comfirm_login==true){
+					location.href="./login.do";
+				}
+			<%}%>	        	
 		});
-	}
-})
-</script>
-
-<script type="text/javascript">
-	$(document).ready(function(){
+		
 		$("#modify_userInfo").click(function(){
+		  	// seq=뒤에 1 대신 받아온 값 넣어야 함.
 			$('.modify-content').load("./mypage_modify.do?seq="+<%=visit_seq%>);
 
 		});
@@ -342,7 +336,13 @@ $(document).ready(function(){
 			location.reload();
 		});
 
-	});
+		for(var i = 0; i <=<%=changeRow%>; i++){
+			$('#insight-modal'+i).click(function(e){
+				console.log('okok');
+				$('.insight-content').load("./insight.do?bseq=" + $(this).attr('bseq')+"&changeRow="+i);
+			});
+		}
+});
 </script>
 <style type="text/css">	
 	#main{
@@ -357,7 +357,7 @@ $(document).ready(function(){
 	.filebox label { display: inline-block; padding: .5em .75em; color: #999; font-size: inherit; line-height: normal; vertical-align: middle; background-color: #fdfdfd; cursor: pointer; border: 1px solid #ebebeb; border-bottom-color: #e2e2e2; border-radius: .25em; }
 	.filebox input[type="file"] { /* 파일 필드 숨기기 */ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip:rect(0,0,0,0); border: 0; }
 
-	.user_keyword {border: 1px solid gray; border-radius: 20px; padding: 3px 5px 3px 5px;}
+	.user_keyword {background-color:black; color:white; border-radius: 20px; padding: 3px 5px 3px 5px; backgroud-color:}
 </style>
 
 </head>
@@ -386,8 +386,8 @@ $(document).ready(function(){
 				<a href="./admin.do">Admin Page</a>
 			<%} else{ %>
 				<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
-			<%}%>
-		<%}%>
+			<%}
+		}%>
 		<a href="./list.do">모든 게시글 보기</a>
 		<a href="./book_list.do">책 구경하기</a>
 		
@@ -419,34 +419,33 @@ $(document).ready(function(){
 	    	</div>
 	    </div>
 		
-	    <div id="content"  style="padding-top : 100px;">
-		    <%if (mypage_flag == 1) { %>
-		    	<div><h2 class="mypage">MY PAGE</h2></div>
-		    <%} %>
-		    <div>
-		    <table width=90% height="500" style="padding : 10px; background-color:#FFFAFA;" align="center">
+	    <div id="content"  style="padding-top : 100px;" align="center">
+		    <div style="width:90%; height:450px; border-radius: 60px; background-color:#EAEAEA;" ><!-- #FFFAFA; -->
+		    <table style="padding : 10px;" >
 			    <tr height="50">
-			    	<td>
-			    		<span style="padding-top:20px;"><h2><%= visit_nickname %>님의 프로필</h2></span>
-			    	</td>
-			    	<td align="right" style="padding-right : 5%;">
+			    	<td align="right">
+			    	<div style="padding-top:25px;">
 			    		<span>
 			    		<%if (mypage_flag == 1) { %>
 			    			<button id="modify_userInfo" data-bs-toggle="modal" data-bs-target="#modifymodal" type="button" class="btn btn-dark" >수정하기</button>
-		    			<%} %>
+		    			<%} else{%>
+		    				<button style="visibility:hidden;">수정하기</button>
+		    			<%}%>
 		    			</span>
+		    		</div>
 			    	</td>
 			    </tr>
-			    <tr height="400">
+			    <tr height="350px">
 			    	<td colspan="2">
-			    		<table width=90% height="500" align="center">
+			    	<div style="width:1400px">
+			    		<table align="center">
 			    			<tr >
-			    				<td width=20%>
+			    				<td width=18%>
 				    				<div class="box">
 				    					<img class="profile" alt="프로필 없음" src="./profile/<%=visit_profile_filename%>">
 				    				</div>
 			    				</td>
-			    				<td width=30%>
+			    				<td width=42%>
 			    					<div class="profile_info"> 별명 : <%=visit_nickname %></div>
 			    					<div class="profile_info" style="height:100px; overflow-y:auto;"> 소개 : <%=visit_introduction %></div>
 			    					<!-- <div class="profile_info"> 태그 : <%= visit_keywords %></div> -->
@@ -454,13 +453,17 @@ $(document).ready(function(){
 			    					<div class="profile_info">
 			    						 태그 : 
 			    						<span class="user_keyword"><%=kwdarray[0] %></span>
-			    						<span id="kwdconnect">을(를) 좋아하는 </span>
+										<%if (kwdarray[0].equals("과학") || kwdarray[0].equals("사진") || kwdarray[0].equals("소설") || kwdarray[0].equals("여행") || kwdarray[0].equals("자기 개발") || kwdarray[0].equals("패션")) {%>
+										   <span id="kwdconnect">을 좋아하는 </span>
+										<%} else {%>
+										   <span id="kwdconnect">를 좋아하는 </span>
+										<%}%>
 			    						<span class="user_keyword"><%=kwdarray[1] %></span>
 			    						<span class="user_keyword"><%=kwdarray[2] %></span>
 			    					</div>
 			    					<div class="profile_info"> 총 게시글 : <%=request.getAttribute("board_counts") %>개</div>
 			    				</td>
-			    				<td width=50%>
+			    				<td width=40%>
 				    				<div id="vertical3">
 		       							<div class="wrap3">
 		       								<table  id="wrapTable3" >
@@ -474,183 +477,184 @@ $(document).ready(function(){
 			    			</tr>
 			    		
 			    		</table>
+			    		</div>
 			    	</td>
 			    </tr>
 	        	
 	        </table>
-	        <br><hr><br>
-	        <div>
-			<%if (mypage_flag == 1) { %>
-			<div id='chart-so-high'>
-				<div style="padding-left:5%; margin-bottom:50px;">
-					<h2>전체 게시글 인사이트</h2>
-				</div>
-				<div>
-					<div style="float: left; width: 50%; padding-left:5%">
-						<div class="btn-group" style="padding-left:10%;" >
-						 	<button type="button" class="btn btn-dark catalogue" value="action">액션</button>
-						  	<button type="button" class="btn btn-dark catalogue" value="hit">조회수</button>
-						  	<button type="button" class="btn btn-dark catalogue" value="like">좋아요</button>
-						  	<button type="button" class="btn btn-dark catalogue" value="comment">댓글</button>
-						</div>
-					</div>
-					<div style="float: left; width: 50%; padding-left:25%">
-						<div class="dropdown">
-						  	<button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
-						    	시간 구분
-						  	</button>
-						  	<div class="dropdown-menu">
-						    	<a class="dropdown-item" value="day">일주일 조회</a>
-						    	<a class="dropdown-item" value="time">하루 조회(24시간)</a>
-						  	</div>
-						</div>
-					</div>
-				</div>
-				<div style="padding-left:10%; padding-top:3%">
-					<h6 style="color:gray; font-size:10px;">액션은 '조회수','좋아요','댓글'를 합친 횟수입니다.</h6>
-				</div>
-		    	<div align="center">
-		    		<div id="container1" style="width: 80%; height: 600px; margin: 0 auto;" align="center";></div>
-		    	</div>
-	    	</div>
-	    	<br><br><hr><br><br>
-	    	<script>
+            </div>
+<br><hr><br>
+           <div style="width:85%">
+         <%if (mypage_flag == 1) { %>
+         <div id='chart-so-high'>
+            <div style="margin-bottom:50px;" align="left">
+               <h2>전체 게시글 인사이트</h2>
+            </div>
+            <div>
+               <div class="d-inline-block" align="left" style="padding-right:500px;">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-dark catalogue" value="action">액션</button>
+                    <button type="button" class="btn btn-dark catalogue" value="hit">조회수</button>
+                    <button type="button" class="btn btn-dark catalogue" value="like">좋아요</button>
+                    <button type="button" class="btn btn-dark catalogue" value="comment">댓글</button>
+                  </div>
+               </div>
+               <div class="d-inline-block" align="right" style="padding-left:500px;">
+                  <div class="dropdown">
+                    <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
+                      시간 구분
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" value="day">일주일 조회</a>
+                      <a class="dropdown-item" value="time">하루 조회(24시간)</a>
+                    </div>
+                  </div>
+               </div>
+            </div>
+            <div align="left" style="padding:10px 0px 0px 35px">
+               <h6 style="color:gray; font-size:10px;">액션은 '조회수','좋아요','댓글'를 합친 횟수입니다.</h6>
+            </div>
+             <div align="center">
+                <div id="container1" style="width: 100%; height: 600px; margin: 0 auto;" align="center";></div>
+             </div>
+          </div>
+          <br><br><hr><br><br>
+<script>
 
-	let catalogue = "action";
-	let timecontrol = "day";
+   let catalogue = "action";
+   let timecontrol = "day";
 
-	// 하이차트 실행 함수
-	function highChartFunc() {
-		
-	   var subtitle = {
-	        text: 'by BOOKMARK'
-	   };
-	   var yAxis = {
-	      title: {
-	         text: '발생 횟 수'
-	      },
-	      plotLines: [{
-	         value: 0,
-	         width: 1,
-	         color: '#808080'
-	      }]
-	   };   
-	   var tooltip = {
-	      valueSuffix: '회'
-	   }
-	   var legend = {
-	      layout: 'vertical',
-	      align: 'right',
-	      verticalAlign: 'middle',
-	      borderWidth: 0
-	   };
-	   var json = {};
-	
-	   if(timecontrol== "time"){
-		   xAxis = {categories: <%=today_time%>};
-			if(catalogue == "action"){
-				title = {text: "액션 별 모아보기"};
-				series =  [
-				    {
-				       name: '"액션" for 24h',
-				       data: <%=today_action%>
-				    }
-			    ];
-			} else if (catalogue == "hit"){
-				title = {text: "조회수 별 모아보기"};
-				series =  [
-				    {
-				       name: '"조회수" for 24h',
-				       data: <%=today_hit%>
-				    }
-			    ];
-			} else if (catalogue == "like"){
-				title = {text: "좋아요 별 모아보기"};
-				series =  [
-				    {
-				       name: '"좋아요" for 24h',
-				       data: <%=today_like%>
-				    }
-			    ];
-			} else if(catalogue == "comment"){
-				title = {text: "댓글 별 모아보기"};
-				series =  [
-				    {
-				       name: '"댓글" for 24h',
-				       data: <%=today_comment%>
-				    }
-			    ];
-			}
-		} else {
-			xAxis = {categories: <%=week_time%>};
-			if(catalogue == "action"){
-				title = {text: "액션 별 모아보기"};
-				series =  [
-				    {
-				       name: '"액션" for a week',
-				       data: <%=week_action%>
-				    }
-			    ];
-			} else if (catalogue == "hit"){
-				title = {text: "조회수 별 모아보기"};
-				series =  [
-				    {
-				       name: '"조회수" for a week',
-				       data: <%=week_hit%>
-				    }
-			    ];
-			} else if (catalogue == "like"){
-				title = {text: "좋아요 별 모아보기"};
-				series =  [
-				    {
-				       name: '"좋아요" for a week',
-				       data: <%=week_like%>
-				    }
-			    ];
-			} else if(catalogue == "comment"){
-				title = {text: "댓글 별 모아보기"};
-				series =  [
-				    {
-				       name: '"댓글" for a week',
-				       data: <%=week_comment%>
-				    }
-			    ];
-			}
-		}
-	   	
-	   json.title = title;
-	   json.subtitle = subtitle;
-	   json.xAxis = xAxis;
-	   json.yAxis = yAxis;
-	   json.tooltip = tooltip;
-	   json.legend = legend;
-	   json.series = series;
-	   
-	   $('#container1').highcharts(json);
-	}
-  	
+   // 하이차트 실행 함수
+   function highChartFunc() {
+      
+      var subtitle = {
+           text: 'by BOOKMARK'
+      };
+      var yAxis = {
+         title: {
+            text: '발생 횟 수'
+         },
+         plotLines: [{
+            value: 0,
+            width: 1,
+            color: '#808080'
+         }]
+      };   
+      var tooltip = {
+         valueSuffix: '회'
+      }
+      var legend = {
+         layout: 'vertical',
+         align: 'right',
+         verticalAlign: 'middle',
+         borderWidth: 0
+      };
+      var json = {};
+   
+      if(timecontrol== "time"){
+         xAxis = {categories: <%=today_time%>};
+         if(catalogue == "action"){
+            title = {text: "액션 별 모아보기"};
+            series =  [
+                {
+                   name: '"액션" for 24h',
+                   data: <%=today_action%>
+                }
+             ];
+         } else if (catalogue == "hit"){
+            title = {text: "조회수 별 모아보기"};
+            series =  [
+                {
+                   name: '"조회수" for 24h',
+                   data: <%=today_hit%>
+                }
+             ];
+         } else if (catalogue == "like"){
+            title = {text: "좋아요 별 모아보기"};
+            series =  [
+                {
+                   name: '"좋아요" for 24h',
+                   data: <%=today_like%>
+                }
+             ];
+         } else if(catalogue == "comment"){
+            title = {text: "댓글 별 모아보기"};
+            series =  [
+                {
+                   name: '"댓글" for 24h',
+                   data: <%=today_comment%>
+                }
+             ];
+         }
+      } else {
+         xAxis = {categories: <%=week_time%>};
+         if(catalogue == "action"){
+            title = {text: "액션 별 모아보기"};
+            series =  [
+                {
+                   name: '"액션" for a week',
+                   data: <%=week_action%>
+                }
+             ];
+         } else if (catalogue == "hit"){
+            title = {text: "조회수 별 모아보기"};
+            series =  [
+                {
+                   name: '"조회수" for a week',
+                   data: <%=week_hit%>
+                }
+             ];
+         } else if (catalogue == "like"){
+            title = {text: "좋아요 별 모아보기"};
+            series =  [
+                {
+                   name: '"좋아요" for a week',
+                   data: <%=week_like%>
+                }
+             ];
+         } else if(catalogue == "comment"){
+            title = {text: "댓글 별 모아보기"};
+            series =  [
+                {
+                   name: '"댓글" for a week',
+                   data: <%=week_comment%>
+                }
+             ];
+         }
+      }
+         
+      json.title = title;
+      json.subtitle = subtitle;
+      json.xAxis = xAxis;
+      json.yAxis = yAxis;
+      json.tooltip = tooltip;
+      json.legend = legend;
+      json.series = series;
+      
+      $('#container1').highcharts(json);
+   }
+     
 // 마이페지이 로드 시, 차트 로딩
 $(document).ready(function() {
-	highChartFunc();
+   highChartFunc();
 });
 
 //액션,조회수,좋아요,댓글 클릭 시
 $(function() {
-	$(document).on("click",".catalogue",function(){
-		catalogue = $(this).attr("value");
-		highChartFunc();
-	});
+   $(document).on("click",".catalogue",function(){
+      catalogue = $(this).attr("value");
+      highChartFunc();
+   });
 });
 // 시간 구분 클릭 시, default 
 $(function() {
-	$(document).on("click",".dropdown-item",function(){
-					timecontrol = $(this).attr("value");
-					highChartFunc();
-				});
-			});
+   $(document).on("click",".dropdown-item",function(){
+               timecontrol = $(this).attr("value");
+               highChartFunc();
+            });
+         });
 </script>
-		    <%} %> 	
-	        </div>
+          <%} %>    
 	        
 	        </div>
 	    </div>
@@ -684,8 +688,8 @@ $(function() {
 </div>
 <div id="insightmodal" class="modal fade" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
-		<div class="modal-content insight-content"></div>
-	</div>
+	<div class="modal-content insight-content"></div>
+</div>
 </div>
 
 </body>

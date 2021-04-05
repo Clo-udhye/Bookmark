@@ -163,26 +163,35 @@
 					<tr><td>
 						<div class="intro_search">
 							<div class="tit_brunch">'책갈피' 프로젝트</div>
-							<div class="desc_search">
+							<div class="desc_search" style="border-bottom:1px solid gray;">
 								<span class="part">독서 후, 당신의 감성과 생각을 나누기 위한 플랫폼<br></span>
 							</div>
 						</div>
 					</td></tr>
 					
 					<tr height="300px"><td align="right">
+						<div style="padding-bottom:5px;">
+							<span style="font-size:22px;">오늘은 어떤 영감을 받고 싶나요?</span>
+						</div>
 						<div>
-							<span>오늘은 어떤 영감을 받고 싶나요?</span>
-						
 							<form action="./search_list.do" method="get" name="search_frm">
 							<!-- hidden으로 현재 보여지는 탭명을 보내서 검색결과페이지에서 두번째 탭에서 페이지를 변경하여도 계속 두번째 탭 내용이 나오게 함 -->
 							<input type="hidden" name="active" value="tab1"/>
-								<input type="text" name = "searchword"  style="border-radius: 4px"/>
+								<input type="text" class="form-control d-inline-block" name = "searchword" style="width:260px;border-radius: 4px"/>
 								<button type="submit" id="search" value="검색" width="50px" class="btn btn-dark">검색</button>
 							</form>
 						</div>					
 					</td></tr>
 					
-					<tr height="120px"><td></td></tr>
+					<tr height="120px"><td>
+						<div class="intro_search">
+							<div class="desc_search" style="border-top:1px solid gray;">
+							<br/>
+							<br/>
+							<br/>
+							</div>
+						</div>
+					</td></tr>
 					
 					</table>
 				</td>
