@@ -27,6 +27,9 @@
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
 
+<!-- 글쓰기 Summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
 <!-- 검색어 입력 조건 -->
 <script type="text/javascript">
@@ -38,9 +41,22 @@
 				alert('검색어를 입력하세요.');
 				return false;
 			}
-
 		};
 	};
+	
+	$(document).ready(function(){
+		$("#write_button").on('click', function(){
+			<%if(userInfo!=null){%>
+				$("#write-modal").modal("show");
+				$('.write-content').load("./write.do");
+			<%}else{%>
+				var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
+				if(comfirm_login==true){
+					location.href="./login.do";
+				}
+			<%}%>	        	
+		});	
+	});	
 </script>
 
 <style type="text/css">
@@ -80,11 +96,18 @@
 
 <div id="mySidebar" class="sidebar">
 	<div class="sidebar-header">
-		<h3>당신의 책갈피</h3>
+		<a><h3>당신의 책갈피</h3></a>
 	</div>
 
 	<%if (userInfo != null) {%>
-		<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
+		<div class="sidebar-userprofile">
+			<div class="sidebar-user_img" align="center" style="padding-top: 10px; padding-bottom: 10px;">
+				<img src="./profile/<%=userInfo.getProfile_filename() %>" border="0" width=80px height=80px style="border-radius: 50%;"/>
+			</div>
+			<div  align="center" style="color:gray; font-size:18px;"><%=userInfo.getNickname()%>님이</div>
+			<div  align="center" style="color:gray; font-size:18px;">로그인 중 입니다.</div>
+			<br/>
+		</div>
 	<%} else {%>
 		<p>로그인해주세요.</p>
 	<%}%>
@@ -93,11 +116,15 @@
 		if(userInfo.getId().equals("testadmin1")) {%>
 			<a href="./admin.do">Admin Page</a>
 		<%} else{ %>
-			<a href="./mypage.do">My Page</a>
+			<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
 		<%}
 	}%>
 	<a href="./list.do">모든 게시글 보기</a>
 	<a href="./book_list.do">책 구경하기</a>
+	
+	<div style="padding:8px; position:absolute; bottom:2%; width:100%">
+		<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
+	</div>
 </div>
 
 <div id="main">
@@ -136,26 +163,35 @@
 					<tr><td>
 						<div class="intro_search">
 							<div class="tit_brunch">'책갈피' 프로젝트</div>
-							<div class="desc_search">
+							<div class="desc_search" style="border-bottom:1px solid gray;">
 								<span class="part">독서 후, 당신의 감성과 생각을 나누기 위한 플랫폼<br></span>
 							</div>
 						</div>
 					</td></tr>
 					
 					<tr height="300px"><td align="right">
+						<div style="padding-bottom:5px;">
+							<span style="font-size:22px;">오늘은 어떤 영감을 받고 싶나요?</span>
+						</div>
 						<div>
-							<span>오늘은 어떤 영감을 받고 싶나요?</span>
-						
 							<form action="./search_list.do" method="get" name="search_frm">
 							<!-- hidden으로 현재 보여지는 탭명을 보내서 검색결과페이지에서 두번째 탭에서 페이지를 변경하여도 계속 두번째 탭 내용이 나오게 함 -->
 							<input type="hidden" name="active" value="tab1"/>
-								<input type="text" name = "searchword"  style="border-radius: 4px"/>
+								<input type="text" class="form-control d-inline-block" name = "searchword" style="width:260px;border-radius: 4px"/>
 								<button type="submit" id="search" value="검색" width="50px" class="btn btn-dark">검색</button>
 							</form>
 						</div>					
 					</td></tr>
 					
-					<tr height="120px"><td></td></tr>
+					<tr height="120px"><td>
+						<div class="intro_search">
+							<div class="desc_search" style="border-top:1px solid gray;">
+							<br/>
+							<br/>
+							<br/>
+							</div>
+						</div>
+					</td></tr>
 					
 					</table>
 				</td>
@@ -165,6 +201,13 @@
         <!-- span span 같은 줄, p p 한 줄 건너 띄고 다른 줄, div div 바로 아래 줄 -->
  		
     </div>
+</div>
+<!-- 모달창 정보 -->		             
+<div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content write-content">
+		</div>
+	</div>
 </div>
 
 </body>

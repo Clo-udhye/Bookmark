@@ -25,6 +25,9 @@
 <link rel="stylesheet" type="text/css" href="./css/flexslider.css">
 <script type="text/javascript" src="./js/jquery.flexslider-min.js"></script>
 <script>
+var contents = new Array();
+var content_files = new Array();
+
 $(document).ready(function(){
 	$(".flexslider").flexslider({
 		animation: "slide",	
@@ -36,7 +39,7 @@ $(document).ready(function(){
 		placeholder: '게시글 입력...',
 		dialogsInBody: true,
 		width: 630,
-		height: 316,
+		height: 260,
 		disableResizeEditor: true,
 		toolbar: [
 		    // [groupName, [list of button]]
@@ -55,9 +58,17 @@ $(document).ready(function(){
         	return false;
         }
         if($('#img-selector').val()==''){
-        	alert('이미지를 선택해주세요.');
-        	$('#img-selector').focus();
-        	return false;
+        	let count_files =0;
+    		for(let i=0; i<contents.length; i++){
+    			if(!contents[i].is_delete){
+    				count_files++;
+    			}
+    		}
+    		if(count_files == 0){
+    			alert('이미지를 선택해주세요.');
+    			$('#img-selector').focus();
+    			return false;
+    		}
         }
         if($('#bookname').val()==''){
         	alert('책을 선택해주세요.');
@@ -75,31 +86,42 @@ $(document).ready(function(){
         	return false;
         }
       	
-        document.wfrm.submit();
-        /*
+        //document.wfrm.submit();
+        let formData = new FormData();
+        formData.append('title',$('#title').val());
+        formData.append('useq',$('#useq').val());
+        formData.append('content',$('#summernote').val());
+        formData.append('bookseq',$('#bookseq').val());
+		for(var i=0; i<contents.length; i++) {
+            var content = contents[i];
+            if(content.is_delete == false) {
+            	formData.append("files", content_files[i]);
+            }
+        }
+        
         $.ajax({
-            url : './write_ok2.do',
-            type : 'post',
-            dataType: 'xml',
-            enctype: 'multipart/form-data', // 필수 
-            processData: false, // 필수 
-            contentType: false, // 필수
-            data : {
-               'title': $('#title').val(),
-               'useq' : $('#useq').val(),
-               'content': $('#summernote').val(),
-               'bookseq': $('#bookseq').val(),
-               'file': $('#img-selector').val()
-            },
+            url : './write_ok.do',
+            type:'POST',
+			cache: false,
+			processData: false,
+			contentType: false,
+			data : formData,
+			dataType: 'xml',
             success : function(xmlData){	            	
-            	alert('flag : ' + $(xmlData).find("flag").text());
+            	//alert('flag : ' + $(xmlData).find("flag").text());
+            	if($(xmlData).find("flag").text() == 1){
+            		alert('글쓰기에 성공했습니다.');
+            		location.href="./mypage.do?useq="+<%=useq%>;
+            	} else {
+            		alert('[Error] : 글쓰기에 실패했습니다.');
+            	}
 			},
 			error : function(request,status, error) {
 				alert("[에러] : code "+ request.status);
 				//alert("code:"+request.status+"\n"+"error:"+error);
 			}
 		});	
-		*/
+		
         
         
     });
@@ -114,6 +136,8 @@ $(document).ready(function(){
 	});
 	
 	$('#book-search').on('click', function(){
+		$('#searchword').attr("bookseq", "-1");
+		//console.log($('#searchword').attr("bookseq"));
 		if($('#searchword').val().trim()==''){
 			alert('검색어를 입력해주세요.');
 		}else{
@@ -158,14 +182,25 @@ $(document).ready(function(){
 	
 	$(document).on('click', '.list-group button',function(e){
 		$('#searchword').val($(this).attr('title'));
-		console.log($(this).attr('title'));
+		$('#searchword').attr("title", $(this).attr('title'));
+		$('#searchword').attr("bookseq", $(this).attr('bookseq'));
+		//console.log($('#searchword').attr("bookseq"));
 		$(this).tab('show')
 	});
 	
 	$('#selected-book').on('click', function(){
-		$('#bookname').val($('#searchword').val());
-		$('input[name="bookseq"]').val($('.list-group button').tab().attr('bookseq'));
-		$("#booklist-modal").modal("hide");
+		if($('#searchword').attr('bookseq')==-1){
+			alert('책을 선택해주세요.');
+		}else{
+			$('#bookname').val($('#searchword').attr('title'));
+			$('input[name="bookseq"]').val($('#searchword').attr('bookseq'));
+			$("#booklist-modal").modal("hide");	
+		}
+	});
+	
+	$(document).on('click','.delete_btn', function(){
+		//console.log('이미지삭제' + $(this).attr('index'));
+		deleteItemAction($(this).attr('index'));
 	});
 	
 });
@@ -176,74 +211,104 @@ $(document).ready(function(){
 	}
 
 	$(document).on('change', "#img-selector", function(e) {
-		//div 내용 비워주기
-		//$('#img_preview').empty();
-
 		var files = e.target.files;
-		var arr = Array.prototype.slice.call(files);
-
-		//업로드 가능 파일인지 체크
-		for (var i = 0; i < files.length; i++) {
-			if (!checkExtension(files[i].name, files[i].size)) {
-				return false;
-			}
+		var filesArr = Array.prototype.slice.call(files);
+	
+		var check_flag=1;
+		if(filesArr.length>5){
+			alert("이미지는 5장까지만 업로드가능합니다.");
+			$("#img-selector").val("");
+            return;
 		}
-		preview(arr);
+		
+		filesArr.forEach(function(f) {
+			//console.log(f.name.length);
+            if(!f.type.match("image.*")) {
+                alert("이미지 파일만 업로드가능합니다.");
+                $("#img-selector").val("");
+                check_flag=0;
+                return;
+            }
+            /*
+            var regex = /^[a-zA-Z0-9_-.]$/;
+            if(!regex.test(f.name)){
+            	alert('['+fileName+']:이미지 이름은 ~~~만 가능합니다.');
+            	$("#img-selector").val("");
+            	check_flag=0;
+            	return false;
+			}
+            */
+            var maxSize = 20971520; //20MB
+            if (f.size >= maxSize) {
+    			alert('['+f.name+']: 파일 사이즈 초과');
+    			$("#img-selector").val("");
+    			check_flag=0;
+    			return false;
+    		}
+            if(f.name.length>20) {
+    			alert('['+f.name+']: 파일이름의 길이는 20자를 초과할수 없습니다.');
+    			$("#img-selector").val("");
+    			check_flag=0;
+    			return false;
+    		}
+		});
+		
+		if(check_flag==1){
+			preview(filesArr);	
+		}
 	});//file change
 
-	function checkExtension(fileName, fileSize) {
-		var regex = /^[a-zA-Z0-9_-]+\.(png|jpg|gif|bmp|PNG|JPG|GIF|BMP)$/;
-		var maxSize = 20971520; //20MB
-
-		if (fileSize >= maxSize) {
-			alert('"' + fileName + '" 파일 사이즈 초과');
-			$("#img-selector").val(""); //파일 초기화
-			return false;
-		}
-
-		if (!regex.test(fileName)) {
-			alert('"' + fileName + '" 파일이름에는 \/:*?"<>|!가 포함될수 없습니다.');
-			$("#img-selector").val(""); //파일 초기화
-			return false;
-		}
-
-		if (fileName.length > 100) {
-			alert('"' + fileName + '" 파일이름의 길이는 100자를 초과할수 없습니다.');
-			$("#img-selector").val(""); //파일 초기화
-			return false;
-		}
-		return true;
-	}
-
 	function preview(arr) {
-		arr
-				.forEach(function(f) {
-					//파일명이 길면 파일명...으로 처리
-					/*
-					var fileName = f.name;
-					if(fileName.length > 10){
-						fileName = fileName.substring(0,7)+"...";
+		arr.forEach(function(f) {
+			let str = '';
+			
+			//이미지 파일 미리보기		
+			var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
+			reader.onload = function(e) { //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
+				let index = contents.length;
+                let url_src = e.target.result;
+            	
+            	var data = {
+                    "index":index,
+                    "url_src":url_src,
+                    "is_delete":false
+                };
+               	contents.push(data);
+                content_files.push(f);
+                        
+				str += '<li class="myslide"><button type="button" class="delete_btn del-btn btn" index="'+index+'"><i class="fas fa-times-circle fa-3x"></i></button><img src="'+url_src+'" title="'+f.name+'" width=600px /></li>';
+				$('#img_preview').data('flexslider').addSlide($(str));
+				
+				let count_files =0;
+				for(let i=0; i<contents.length; i++){
+					if(!contents[i].is_delete){
+						count_files++;
 					}
-					 */
-
-					//div에 이미지 추가
-					let str = '';
-
-					//이미지 파일 미리보기
-					if (f.type.match('image.*')) {
-						var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
-						reader.onload = function(e) { //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
-							console.log(f.name);
-							console.log(f.path);
-							str += '<li><img src="'+e.target.result+'" title="'+f.name+'" width=600px /></li>';
-							//$(str).appendTo('#preview');
-							$('#img_preview').data('flexslider').addSlide(
-									$(str));
-						}
-						reader.readAsDataURL(f);
-					}
-				});//arr.forEach
+				}
+				if(count_files==1){
+					$('#img_preview').data('flexslider').removeSlide(0);
+				}
+			}
+			reader.readAsDataURL(f);
+		});//arr.forEach
+		$("#img-selector").val('');
 	}
+	
+	function deleteItemAction(index) {		
+		let count_files =0;
+		for(let i=0; i<contents.length; i++){
+			if(!contents[i].is_delete){
+				count_files++;
+			}
+		}
+        if(count_files==1){
+        	//console.log('마지막');
+        	let str = '<li><a><img class="no-image" src="./images/no_Image_upload.jpg" title="no_Image_upload" width=600px /></a></li>';
+        	$('#img_preview').data('flexslider').addSlide($(str));
+        }
+        $('#img_preview').data('flexslider').removeSlide($('#img_preview').data('flexslider').currentSlide);
+        contents[index].is_delete = true;
+    }
 </script>
 
 <style type="text/css">
@@ -256,6 +321,7 @@ $(document).ready(function(){
 	border-radius: 50%;
 	}
 #img_preview{
+	position: relative;
 	width: 500px; 
 	height: 500px;
 	}
@@ -271,6 +337,24 @@ $(document).ready(function(){
 
 ul, ol, li{ margin:0; padding:0; list-style:none;}
 
+.del-btn {
+  position: absolute;
+  top:10px;
+  z-index: 10;
+  opacity: 0;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease-in-out;
+}
+
+#img_preview:hover .del-btn{
+  opacity: 0.6;
+}
+#img_preview:hover .del-btn:hover{
+  opacity: 1;
+}
+
 .list-group{
     max-height: 500px;
     overflow:scroll;
@@ -284,22 +368,22 @@ ul, ol, li{ margin:0; padding:0; list-style:none;}
 
 </style>
 
-    
+<meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />    
 <div class="modal-header">
 	<h4 class="modal-title">새 게시물</h4>
 	<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
 </div>
-<form action="./write_ok.do" name="wfrm" method="post" enctype="multipart/form-data">
-<input type="hidden" name="useq" value=<%=useq %>>
-<input type="hidden" name="bookseq" value=0>
+<form action="./write_ok.do" id="wfrm" method="post" enctype="multipart/form-data">
+<input type="hidden" id="useq" name="useq" value=<%=useq %> required />
+<input type="hidden" id="bookseq" name="bookseq" value=0 required />
 <div class="modal-body" style="padding:0;">
 	<table>
 		<tr>
 			<td>
 				<div id="img_preview" class="flexslider">
+					<div class="darkness"></div>
         			<ul class="slides">
-        				<li><img class="default" id="profile_img1" src="./images/profile_Dahye.jpg" /></li>
-        				<li><img class="upload_img" src="./images/profile_Minji.jpg" /></li>
+        				<li><img class="no-image" src="./images/no_Image_upload.jpg" /></li>
         			</ul>
         		</div>
 			</td>
@@ -315,7 +399,7 @@ ul, ol, li{ margin:0; padding:0; list-style:none;}
 					<tr class="boardInfo">
 						<td>
 							<div class="col-lg-10 d-inline-block">
-								<input class="form-control" type="text" placeholder="제목을 입력해주세요." id="title" name="title" maxlength="100" size="5"/>
+								<input class="form-control" type="text" placeholder="제목을 입력해주세요." id="title" name="title" maxlength="100" size="5" required />
 							</div>
 							<div class="d-inline">							
 								<span id="counter-title">(0/100)</span>
@@ -325,7 +409,7 @@ ul, ol, li{ margin:0; padding:0; list-style:none;}
 					<tr class="imgSelector">
 						<td>
 							<div>
-								<input type="file" id="img-selector" multiple="multiple"  class="form-control form-control-sm" name="filename[]"/>
+								<input type="file" id="img-selector" class="form-control form-control-sm"  accept="image/*" name="files" multiple required /> 
 							</div>
 						</td>
 					</tr>
@@ -354,7 +438,7 @@ ul, ol, li{ margin:0; padding:0; list-style:none;}
 											  			<label class="form-check-label" for="inlineRadio2">작가</label>
 													</div>
 													<div class="input-group mb-3">
-														<input type="text" class="form-control" placeholder="검색어를 입력하세요." id="searchword">
+														<input type="text" class="form-control" placeholder="검색어를 입력하세요." id="searchword" title="" bookseq="-1">
 														<button class="btn btn-outline-secondary" type="button" id="book-search">검색</button>
 													</div>
 													<div class="list-group">

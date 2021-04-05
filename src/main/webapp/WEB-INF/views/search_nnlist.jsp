@@ -37,6 +37,9 @@
 	
 	StringBuffer sbHtml = new StringBuffer();
 	
+	// keywords가 null인 경우도 있으니 kwdarray 선언 먼저 해줘야 빈 리스트 레이아웃 출력시 에러 안 나.
+	String[] kwdarray = new String[3];
+	
 	int cnt = 0;
 	if(lists != null){
 		for( JoinBLUTO to : lists ) {
@@ -47,7 +50,10 @@
 			String nickname = to.getNickname();
 			String mail = to.getMail();
 			String keywords = to.getKeywords();
-			// introduction이 길수도 있으니 잘라야할듯
+			if (keywords != null) {
+				kwdarray = keywords.split("//");
+			}
+			// introduction이 길수도 있으니 잘라야할듯 ★★★
 			String introduction = to.getIntroduction();
 			String profile_filename = to.getProfile_filename();
 			String Lcount = to.getLcount();
@@ -56,53 +62,79 @@
 			}
 			String Bcount = to.getBcount();
 			
-			if(cnt % 5 == 1) {
+			// 한 줄에 나오는 수 변경
+			if(cnt % 2 == 1) {
 				sbHtml.append("</tr>");
 				sbHtml.append("<tr>");
 			}
 		
 			// 수정하기 ★★★
 			if(nickname == null) {
+			//if(keywords == null) {
 				sbHtml.append("<td class='userboard'>");
 				sbHtml.append("	<div class='userprofile0'>");
 				sbHtml.append("		<div class='user_img'></div>");
 				sbHtml.append("		<div class='user_nickname'></div>");
-				sbHtml.append("		<div class='user_keyword'></div>");
+				sbHtml.append("		<div class='user_keywords'></div>");
+				sbHtml.append("		<div class='user_intro'></div>");	
+				sbHtml.append("		<div class='user_count'></div>");				
 				sbHtml.append("	</div>");
 				sbHtml.append("</td>");
 
+				
 			} else {
 				// nickname에 맞는 페이지로 이동하게 td에 링크 걸기! 수정하기 ★★
 				sbHtml.append("<td class='userboard' useq="+useq+">");
-				sbHtml.append("	<div class='userprofile'>");
-				sbHtml.append("		<div class='user_img' align='center'>");
-				
-				// nickname에 맞는 페이지로 이동하게 href 수정하기 ★★
-				sbHtml.append("			<a><img src='./profile/"+profile_filename+"' border='0' width=80px height=80px/></a>");				
-				//sbHtml.append("			<a href='list.do'><img src='./profile/profile11.JPG' border='0' width=80px height=80px/></a>");
-				sbHtml.append("		</div>");
-				sbHtml.append("		<div class='user_nickname' align='center'>");
-				sbHtml.append("			<a>"+nickname+"</a>");
-				sbHtml.append("		</div>");
-				
-				sbHtml.append("		<div class='user_intro' align='center'>");
-				sbHtml.append("			<a>"+introduction+"</a>");
-				sbHtml.append("		</div>");				
-				sbHtml.append("		<div class='user_count' align='center'>");
-				sbHtml.append("			<span> 글 수 "+Bcount+" | 좋아요 수 "+Lcount+" </span>");
-				sbHtml.append("		</div>");				
-				
-				sbHtml.append("		<div class='user_keyword' align='center'>");
+				sbHtml.append("	<table class='userprofile'>");
+				sbHtml.append("		<tr>");
+				sbHtml.append("			<td rowspan='4' width=150px>");
+				sbHtml.append("				<div class='user_img' align='center'>");
+				sbHtml.append("					<a><img src='./profile/"+profile_filename+"' border='0' width=80px height=80px/></a>");
+				sbHtml.append("				</div>");				
+				sbHtml.append("			</td>");
+				sbHtml.append("			<td>");
+				//sbHtml.append("				<div class='user_nickname' align='center'>");
+				sbHtml.append("				<div class='user_nickname'>");
+				sbHtml.append("					<a>"+nickname+"</a>");
+				sbHtml.append("				</div>");				
+				sbHtml.append("			</td>");				
+				sbHtml.append("		</tr>");				
+				sbHtml.append("		<tr>");
+				sbHtml.append("			<td>");
 				// keywords
-				// 키워드 처리... 수정하기.
-				sbHtml.append("			<span>키워드</span>&nbsp;");
-				sbHtml.append("			<span>입력해</span>&nbsp;");
-				sbHtml.append("			<span>주세요</span>&nbsp;");
-				sbHtml.append("		</div>");
-				sbHtml.append("	</div>");
-				sbHtml.append("</td>");
-			}
-						
+				sbHtml.append("				<div class='user_keywords'>");
+				sbHtml.append("					<span class='user_keyword'>"+kwdarray[0]+"</span>");
+				if (kwdarray[0].equals("과학") || kwdarray[0].equals("사진") || kwdarray[0].equals("소설") || kwdarray[0].equals("여행") || kwdarray[0].equals("자기 개발") || kwdarray[0].equals("패션")) {
+				   sbHtml.append("               <span id='kwdconnect'>을 좋아하는 </span>");
+				} else {
+				   sbHtml.append("               <span id='kwdconnect'>를 좋아하는 </span>");
+				}
+				sbHtml.append("					<span class='user_keyword'>"+kwdarray[1]+"</span>");
+				sbHtml.append("					<span class='user_keyword'>"+kwdarray[2]+"</span>");
+				sbHtml.append("				</div>");				
+				sbHtml.append("			</td>");				
+				sbHtml.append("		</tr>");				
+				sbHtml.append("		<tr>");
+				sbHtml.append("			<td>");
+				//sbHtml.append("				<div class='user_intro' align='center'>");
+				// 소개 부분 div 사이즈 고정 
+				sbHtml.append("				<div class='user_intro' style='width:490px; height:47px; overflow-x:hidden; overflow-y:hidden;'>");
+				//sbHtml.append("					<a>"+introduction+"</a>");
+				sbHtml.append(					introduction);
+				sbHtml.append("				</div>");						
+				sbHtml.append("			</td>");				
+				sbHtml.append("		</tr>");	
+				sbHtml.append("		<tr>");
+				sbHtml.append("			<td>");
+				//sbHtml.append("				<div class='user_count' align='center'>");
+				sbHtml.append("				<div class='user_count'>");
+				sbHtml.append("					<span> 글 수 "+Bcount+" | 좋아요 수 "+Lcount+" </span>");
+				sbHtml.append("				</div>");				
+				sbHtml.append("			</td>");				
+				sbHtml.append("		</tr>");					
+				sbHtml.append("	</table>");
+				sbHtml.append("</td>");				
+			}		
 		}
 		//System.out.println(lists==null);
 		if(lists.size()==0) {
@@ -122,20 +154,20 @@ $(document).ready(function (e){
 </script>
 
 <style type="text/css">
-
 	.userboard {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
-	.userprofile {background-color: white; width: 250px; height: 250px;}
-	.userprofile0 {width: 250px; height: 250px;}
+	.userprofile {background-color: white; width: 655px; height: 180px;}
+	.userprofile0 {width: 655px; height: 180px;}
 	.userprofile a {text-decoration: none;}
 	.user_img img {border-radius: 50%;}
 	.user_img {padding-top: 15px; padding-bottom: 5px;}
 	.user_nickname a {font: 18px verdana; color: #000;}
-	.user_nickname {padding-top: 10px; padding-bottom: 5px;}
+	.user_nickname {padding-top: 2px; padding-bottom: 0px;}
 	.user_intro a {color: #000;}
-	.user_intro {padding-bottom: 12px;}
+	.user_intro {padding-bottom: 5px;}
 	.user_count {font: 14px verdana; color: gray;}
-	.user_keyword {padding-top: 10px;}
-	.user_keyword span {border: 1px solid gray; border-radius: 20px; padding: 5px 5px 5px 5px; font: 13px verdana; color: gray;}
+	.user_keywords {padding-bottom: 10px;}
+	.user_keyword {border: 1px solid gray; border-radius: 20px; padding: 3px 3px 3px 3px; font: 13px verdana;}
+	#kwdconnect {font: 11px verdana; color: gray;}
 </style>
 
 <!-- 키워드
@@ -152,6 +184,7 @@ intro 위치 조절
 count 글자색 회색
 keyword 위치 조절
 각 keyword마다 동그라미
+keyword 연결하는 문구 글자 크기, 글자색 
 -->
 
         <!-- ■■ 내가 추가한 부분 ■■ -->
@@ -164,9 +197,49 @@ keyword 위치 조절
 		<!--//게시판-->
 		
 		<!-- 작가 리스트 레이아웃 -->
-		<!--
+		<!--  
 		<table>
 			<tr>
+				<td class='userboard'>
+					<table class='userprofile'>
+						<tr >
+							<td rowspan="4">
+								<div class='user_img' align="center">
+									<a href='list.do'><img src='./profile/profile11.JPG' border='0' width=80px height=80px/></a>
+								</div>								
+							</td>
+							<td>
+								<div class='user_nickname' align="center">
+									<a href='list.do'>사용자1</a>
+								</div>							
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class='user_intro' align="center">
+									<a href='list.do'>안녕하세요. 반갑습니다^^</a>
+								</div>							
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class='user_count' align="center">
+									<span>글 수 1 | 좋아요 수 0 </span>
+								</div>							
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class='user_keywords' align="center">
+									<span>키워드</span>&nbsp;
+									<span>입력해</span>&nbsp;
+									<span>주세요</span>&nbsp;
+								</div>							
+							</td>
+						</tr>
+																								
+					</table>
+				</td>			
 				<td class='userboard'>
 					<div class='userprofile'>
 						<div class='user_img' align="center">
@@ -181,7 +254,7 @@ keyword 위치 조절
 						<div class='user_count' align="center">
 							<span>글 수 1 | 좋아요 수 0 </span>
 						</div>
-						<div class='user_keyword' align="center">
+						<div class='user_keywords' align="center">
 							<span>키워드</span>&nbsp;
 							<span>입력해</span>&nbsp;
 							<span>주세요</span>&nbsp;
@@ -197,7 +270,7 @@ keyword 위치 조절
 						<div class='user_nickname' align="center">
 							<a href='list.do'>사용자1</a>
 						</div>
-						<div class='user_keyword' align="center">
+						<div class='user_keywords' align="center">
 							<span>키워드</span>&nbsp;
 							<span>입력해</span>&nbsp;
 							<span>주세요</span>&nbsp;

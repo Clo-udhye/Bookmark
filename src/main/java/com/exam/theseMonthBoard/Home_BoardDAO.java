@@ -55,7 +55,7 @@ public class Home_BoardDAO {
 		int result = jdbcTemplate.update(hit_sql, seq);
 		//System.out.println("hit 1증가 from board : " +result);
 		
-		String sql = "select b.seq as seq, b.date as date, b.title as title, u.seq as useq ,u.id as userID, u.nickname as nickname, b.filename as filename, b.content as content, book.title as book_title, b.hit as hit, b.comment as comment from board as b join user as u on b.useq = u.seq  join book as book on b.bseq = book.Master_seq where b.seq=?";
+		String sql = "select b.seq as seq, b.date as date, book.Master_seq as bookseq, b.title as title, u.seq as useq ,u.id as userID, u.nickname as nickname, b.filename as filename, b.content as content, book.title as book_title, b.hit as hit, b.comment as comment, u.profile_filename as profile from board as b join user as u on b.useq = u.seq  join book as book on b.bseq = book.Master_seq where b.seq=?";
 		Home_BoardTO book = (Home_BoardTO) jdbcTemplate.queryForObject(sql, new Object[]{seq}, new RowMapper<Home_BoardTO>() {
 			public Home_BoardTO mapRow(ResultSet rs, int rowNum) throws SQLException{
 				Home_BoardTO to = new Home_BoardTO();
@@ -65,11 +65,13 @@ public class Home_BoardDAO {
 				to.setNickname(rs.getString("nickname"));
 				to.setFilename(rs.getString("filename"));
 				to.setContent(rs.getString("content"));
+				to.setBseq(rs.getString("bookseq"));
 				to.setBook_title(rs.getString("book_title"));
 				to.setComment(rs.getString("comment"));
 				to.setHit(rs.getString("hit"));
 				to.setUserID(rs.getString("userID"));
 				to.setUseq(rs.getString("useq"));
+				to.setProfile(rs.getString("profile"));
 				return to;
 			}
 		});
@@ -83,7 +85,7 @@ public class Home_BoardDAO {
 	}
 	
 	public ArrayList<Board_CommentTO> CommentListTemplate(String seq){
-		String sql = "select c.seq as seq, u.seq as useq, u.nickname as nickname, c.content as content, c.date_time as date_time from comment as c join user as u on c.useq = u.seq where c.bseq="+seq+" order by c.seq desc";
+		String sql = "select c.seq as seq, ifnull(u.seq, -1) as useq, ifnull(u.nickname,'탈퇴한 회원입니다.') as nickname, ifnull(u.profile_filename,'no-profile.png') as filename, c.content as content, c.date_time as date_time from comment as c left outer join user as u on c.useq = u.seq where c.bseq="+seq+" order by c.seq desc";
 		ArrayList<Board_CommentTO> comment_lists = (ArrayList<Board_CommentTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<Board_CommentTO>(Board_CommentTO.class));
 		return comment_lists;
 	}
@@ -99,5 +101,28 @@ public class Home_BoardDAO {
 		String sql = "select count(*) from likey where bseq =? and useq =?";
 		int count_check = jdbcTemplate.queryForObject(sql, new Object[] {seq, useq} , Integer.class);
 		return count_check;
+	}
+	
+	//조회수를 증가시키지 않고 게시글 정보를 가져오기
+	public Home_BoardTO board_Template(String seq){
+		String sql = "select b.seq as seq, b.date as date, b.title as title, u.seq as useq ,u.id as userID, u.nickname as nickname, b.filename as filename, b.content as content, book.title as book_title, u.profile_filename as profile from board as b join user as u on b.useq = u.seq  join book as book on b.bseq = book.Master_seq where b.seq=?";
+		Home_BoardTO board = (Home_BoardTO) jdbcTemplate.queryForObject(sql, new Object[]{seq}, new RowMapper<Home_BoardTO>() {
+			public Home_BoardTO mapRow(ResultSet rs, int rowNum) throws SQLException{
+				Home_BoardTO to = new Home_BoardTO();
+				to.setSeq(rs.getString("seq"));
+				to.setDate(rs.getString("date"));
+				to.setTitle(rs.getNString("title"));
+				to.setNickname(rs.getString("nickname"));
+				to.setFilename(rs.getString("filename"));
+				to.setContent(rs.getString("content"));
+				to.setBook_title(rs.getString("book_title"));
+				to.setUserID(rs.getString("userID"));
+				to.setUseq(rs.getString("useq"));
+				to.setProfile(rs.getString("profile"));
+				return to;
+			}
+		});
+		
+		return board;
 	}
 }

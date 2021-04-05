@@ -36,4 +36,10 @@ public class Board_Modify_Delete_DAO {
 		return result_board;
 	};
 	
+	//삭제할 게시글의 사진 이름받아오기
+	public String Board_Select_Filename (String board_seq) {
+	      String sql_select_filename = "select filename from board where seq = ?";
+	      String result_filename = jdbcTemplate.queryForObject(sql_select_filename, new Object[]{board_seq}, String.class);
+	      return result_filename;
+	   }
 }

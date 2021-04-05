@@ -13,6 +13,7 @@ public class Home_BoardTO {
 	private String book_title;
 	private String userID;
 	private String useq;
+	private String profile;
 	
 	
 	
@@ -88,6 +89,12 @@ public class Home_BoardTO {
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+	public String getProfile() {
+		return profile;
+	}
+	public void setProfile(String profile) {
+		this.profile = profile;
 	}
 	
 	

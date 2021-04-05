@@ -23,7 +23,7 @@
 	String description = to.getDescription();
 	String pub_date = to.getPub_date();
 	
-	int cpage = (int)request.getAttribute("cpage");
+	int cpage = (Integer)request.getAttribute("cpage");
 	// cpage는 받아오지만 뒤롸기 버튼 클릭 시 --> 해당 cpage를 받아가진 모못함
 	
 	StringBuffer board_related = new StringBuffer();
@@ -68,22 +68,38 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+<!-- sidebar -->
+<link rel="stylesheet" type="text/css" href="./css/sidebar.css">
+<script type="text/javascript" src="./js/sidebar.js"></script>
 
 <!-- 글쓰기 Summernote -->
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
 <style>
-
-	.button1{
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+	#main{
+		font-family: 'Noto Serif KR', serif;
+	}
+	#view-modal{
+		font-family: 'Noto Serif KR', serif;
+	}
+   body {
+ font-family: 'Noto Serif KR', serif;
+  background: #white;
+}	
+.button1{
 	float: right;
-	margin-right: 50px;
-	width: 30px;
+	margin-right:20px;
+	width: 20px;
 	font-size: 20px;
 
 }
-	.button2{
+.button2{
 	float: right;
 	margin-right: 30px;
 	width: 30px;
@@ -97,10 +113,8 @@
 
 	#table {
 		border: 1px solid black;
-		width : 70%;
+		width : 80%;
 		height : 50%;
-		align : center;
-		
 	}
 	#img {
 		padding : 10px;
@@ -108,21 +122,18 @@
 		width : 400px;
 	}
 	.vertical {
-		width: max-content;
+		width: 99%;
 		overflow-y: scroll;
 		height : 200px;
 	}
 	.wrap1 {
 		float: left;
+		width: 100%;
 	}
 	.wrapTable1 table {
 		border : 1px;
 	}
-	.wrapTable1 tr,th,td {
-		padding : 5px;
-		margin : 5px;
-	}
-	.wrapTable1 tr:hover {
+	.wrapTable tr:hover {
 		background-color : ivory;
 		font-color : black; 
 	}
@@ -132,9 +143,7 @@
 
 </style>
 
-<!-- 모달창 생성 -->
 <script type="text/javascript">
-
 $(document).ready(function(){
     for(var index=0; index<<%=lists.size()%>; index++){
        $("#modal-link"+index).click(function(){
@@ -159,40 +168,42 @@ $(document).ready(function(){
        <%}%>              
     });
  });
-	
 </script>
 
-
-<!-- sidebar -->
-<link rel="stylesheet" type="text/css" href="./css/sidebar.css">
-<script type="text/javascript" src="./js/sidebar.js"></script>
 </head>
 <body>
 
 <div id="mySidebar" class="sidebar">
 	<div class="sidebar-header">
-      <h3>당신의 책갈피</h3>
-   </div>
+		<a><h3>당신의 책갈피</h3></a>
+	</div>
 
-   <%if (userInfo != null) {%>
-      <p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
-   <%} else {%>
-      <p>로그인해주세요.</p>
-   <%}%>
-   <a href="./home.do">Home</a>
-      <%if(userInfo != null){
-      if(userInfo.getId().equals("testadmin1")) {%>
-         <a href="./admin.do">Admin Page</a>
-      <%} else{ %>
-         <a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
-      <%}
-   }%>
-   <a href="./list.do">모든 게시글 보기</a>
-   <a href="./book_list.do">책 구경하기</a>
-   
-   <div style="padding:8px; position:absolute; bottom:2%; width:100%">
-      <button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
-   </div>
+	<%if (userInfo != null) {%>
+		<div class="sidebar-userprofile">
+			<div class="sidebar-user_img" align="center" style="padding-top: 10px; padding-bottom: 10px;">
+				<img src="./profile/<%=userInfo.getProfile_filename() %>" border="0" width=80px height=80px style="border-radius: 50%;"/>
+			</div>	
+			<div  align="center" style="color:gray; font-size:18px;"><%=userInfo.getNickname()%>님이</div>
+			<div  align="center" style="color:gray; font-size:18px;">로그인 중 입니다.</div>
+			<br/>
+		</div>
+	<%} else {%>
+		<p>로그인해주세요.</p>
+	<%}%>
+	<a href="./home.do">Home</a>
+		<%if(userInfo != null){
+		if(userInfo.getId().equals("testadmin1")) {%>
+			<a href="./admin.do">Admin Page</a>
+		<%} else{ %>
+			<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
+		<%}
+	}%>
+	<a href="./list.do">모든 게시글 보기</a>
+	<a href="./book_list.do">책 구경하기</a>
+	
+	<div style="padding:8px; position:absolute; bottom:2%; width:100%">
+		<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
+	</div>
 </div>
 
 <div id="main">
@@ -218,13 +229,13 @@ $(document).ready(function(){
     	</div>
 	</div>
     
-    <div id="content">
-    <table id="table">
+    <div id="content" style="padding-top : 100px;">
+    <table id="table" align="center">
     	<tr>
     		<td colspan="3" align="right"><div ><input type="button" onclick="history.back()" value="뒤로 가기"></div></td>
    		</tr>
    		<tr>
-   			<td rowspan="6"><img src="<%=img_url %>" alt="이미지 없음" id = "img"/></td>
+   			<td width="25%" rowspan="6"><img src="<%=img_url %>" alt="이미지 없음" id = "img"/></td>
    			<td colspan="2"><div>책 제목 : <%=title %></div></td>
    		</tr>
    		<tr>
@@ -245,27 +256,27 @@ $(document).ready(function(){
    					<div><h4>관련 게시글</h4></div>
    					<% if (lists.size() != 0){ %>
    					<div class="vertical">
-   						<div class="wrap1">
-					    	<table border=1 class="wrapTable1 table table-lg" >
+   						<div class="wrap" width="100%">
+					    	<table border=1 width="100%" class="table wrapTable" >
 					    		<tr>
-						    		<th>게시글 제목</th>
-						    		<th>작성 일자</th>
-						    		<th>작성자</th>
-						    		<th></th>    		
+						    		<th style="width:60%">게시글 제목</th>
+						    		<th style="width:15%">작성 일자</th>
+						    		<th style="width:15%">작성자</th>
+						    		<th style="width:10%"></th>    		
 					    		</tr>
 					    		<%= board_related%>
 					    	</table>
 				    	</div>
 			    	</div>
 			    	<% } else { %>
-			    	<div height="200">
-   						<div class="wrap1">
-					    	<table border=1 class="wrapTable1 table-lg"  >
+			    	<div height="200px">
+   						<div class="wrap" style="width:100%">
+					    	<table border=1 style="width:100%" class="table wrapTable"  >
 					    		<tr>
-						    		<th>게시글 제목</th>
-						    		<th>작성 일자</th>
-						    		<th>작성자</th>
-						    		<th></th>    		
+						    		<th style="width:60%">게시글 제목</th>
+						    		<th style="width:15%">작성 일자</th>
+						    		<th style="width:15%">작성자</th>
+						    		<th style="width:10%"></th>    		
 					    		</tr>
 					    		<%= board_related%>
 					    	</table>
@@ -275,23 +286,23 @@ $(document).ready(function(){
    				</div>
    			</td>
    		</tr>
-        </table>
-        	<!-- 모달창 정보 -->
-			<div id="view-modal" class="modal fade" tabindex="-1" role="dialog">
-			   <div class="modal-dialog modal-xl modal-dialog-centered">
-			      <div class="modal-content view-content">                   
-			      </div>
-			   </div>
-			</div>
-			                   
-			<div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
-			   <div class="modal-dialog modal-xl modal-dialog-centered">
-			      <div class="modal-content write-content">
-			      </div>
-			   </div>
-			</div>
+        </table>     
     </div>
 </div>
 
+<!-- 모달창 정보 -->
+<div id="view-modal" class="modal fade" tabindex="-1" role="dialog">
+   <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content view-content">                   
+      </div>
+   </div>
+</div>
+                   
+<div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
+   <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content write-content">
+      </div>
+   </div>
+</div>
 </body>
 </html>

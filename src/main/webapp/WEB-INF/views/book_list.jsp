@@ -25,9 +25,9 @@
     StringBuffer SearchResult = new StringBuffer();
     if (request.getAttribute("bookname") != null){
     	bookname = (String)request.getAttribute("bookname");
-    	SearchResult.append("<div ><h1><span id='result'>"+bookname+"</span> 으로 검색한 결과</h1></div>");
+    	SearchResult.append("<div style='width:1160px'><h1 align='left'><span id='result'>"+bookname+"</span> 으로 검색한 결과</h1></div>");
     } else {
-    	SearchResult.append("<div><h1 style='padding-left: 50px;'>도서 리스트</h1></div>");
+    	SearchResult.append("<div style='width:1160px'><h1 align='left'>도서 리스트</h1></div>");
     }
     String search = request.getParameter("search");
 	int totalRecord = pagelistTO.getTotalrecord();
@@ -60,8 +60,8 @@
 		}
 		String pub_date = to.getPub_date();
 			// 아래의 HTMl 양식으로 append하기
-			bookHTML.append("<div>");
-			bookHTML.append("<table id=innerlist align='center'>");
+			bookHTML.append("<div style='width:1160px'>");
+			bookHTML.append("<table id=innerlist>");
 			bookHTML.append("<tr>");
 			bookHTML.append("<td rowspan='4' width='20%'><img width='200px' src='"+img_url+"' alt='이미지 없음' border='1px'/></td>");
 			bookHTML.append("<td width=60% style='padding-top: 20px;'>책 제목 :"+title+"</td>");
@@ -84,9 +84,27 @@
 <title>책갈피</title>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--  <style> #content {position: absolute; left: 50%; transform: translateX(-50%);}</style> -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+<!-- sidebar -->
+<link rel="stylesheet" type="text/css" href="./css/sidebar.css">
+<script type="text/javascript" src="./js/sidebar.js"></script>
+
+<!-- 글쓰기 Summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&family=Quicksand:wght@500&display=swap');
-
+#main{
+		font-family: 'Noto Serif KR', serif;
+	}
+	
 .button1{
 	float: right;
 	margin-right: 0px;
@@ -108,7 +126,6 @@
 #resist-books{
 	font-family: 'Noto Serif KR', serif;
 	font-family: 'Quicksand', sans-serif;
-	padding-left: 50px;
 }
 #list {
   border: 1px solid black;
@@ -118,7 +135,7 @@
 #innerlist {
   border: 1px solid black;
   padding: 15px;
-  width:80%;
+  width:100%;
  
 }
 #logo{
@@ -150,27 +167,39 @@ table {
 .opener { display:none; }
 .opener:checked ~ .nav_item { display:block; }
 </style>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#write_button").on('click', function(){
+			<%if(userInfo!=null){%>
+				$("#write-modal").modal("show");
+				$('.write-content').load("./write.do");
+			<%}else{%>
+				var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
+				if(comfirm_login==true){
+					location.href="./login.do";
+				}
+			<%}%>	        	
+		});		
+	});
+</script>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<!--  <style> #content {position: absolute; left: 50%; transform: translateX(-50%);}</style> -->
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-
-<!-- sidebar -->
-<link rel="stylesheet" type="text/css" href="./css/sidebar.css">
-<script type="text/javascript" src="./js/sidebar.js"></script>
 </head>
 <body>
 
 <div id="mySidebar" class="sidebar">
 	<div class="sidebar-header">
-		<h3>당신의 책갈피</h3>
+		<a><h3>당신의 책갈피</h3></a>
 	</div>
 
 	<%if (userInfo != null) {%>
-		<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
+		<div class="sidebar-userprofile">
+			<div class="sidebar-user_img" align="center" style="padding-top: 10px; padding-bottom: 10px;">
+				<img src="./profile/<%=userInfo.getProfile_filename() %>" border="0" width=80px height=80px style="border-radius: 50%;"/>
+			</div>
+			<div  align="center" style="color:gray; font-size:18px;"><%=userInfo.getNickname()%>님이</div>
+			<div  align="center" style="color:gray; font-size:18px;">로그인 중 입니다.</div>
+			<br/>
+		</div>
 	<%} else {%>
 		<p>로그인해주세요.</p>
 	<%}%>
@@ -179,11 +208,15 @@ table {
 		if(userInfo.getId().equals("testadmin1")) {%>
 			<a href="./admin.do">Admin Page</a>
 		<%} else{ %>
-			<a href="./mypage.do">My Page</a>
+			<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
 		<%}
 	}%>
 	<a href="./list.do">모든 게시글 보기</a>
 	<a href="./book_list.do">책 구경하기</a>
+	
+	<div style="padding:8px; position:absolute; bottom:2%; width:100%">
+		<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
+	</div>
 </div>
 
 <div id="main">
@@ -209,17 +242,17 @@ table {
     	</div>
 	</div>
     
-    <div id="content" width=100% > 
+    <div id="content" style="padding: 100px 0px;" align= "center"> 
         <%=SearchResult %>
-        <div width=100% >
+        <div style='width:1160px'>
         	<table>
         	
-        	<tr><td width = 80% height="40" id="resist-books" > 현재 <%= totalRecord %>개의 책이 등록되어 있습니다.</td></tr>
+        		<tr><td width = 100% height="40" id="resist-books" > 현재 <%= totalRecord %>개의 책이 등록되어 있습니다.</td></tr>
         		<tr>
         			<td height="50" width="200" ></td>
         			<td>
-        				<table width="550">
-        				<form action="./book_list_search.do" type="get" align="left">
+        				<table width="422px">
+        				<form action="./book_list_search.do" type="get">
         				<tr>
 	        				<td  width="120">
 	        					<select name="search" style="border-radius: 4px">
@@ -242,10 +275,9 @@ table {
         		</tr>
         	</table>
         </div>
-     </div>
-     <div>
-   		<%= bookHTML %>
-     </div>
+        <div>
+   			<%= bookHTML %>
+     	</div>
      <br><br>
      <footer>
      <div align="center">
@@ -333,6 +365,15 @@ table {
      </footer>
      <br><br>
 </div>
+     </div>
+     
 
+<!-- 모달창 정보 -->
+<div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content write-content">
+		</div>
+	</div>
+</div>
 </body>
 </html>
