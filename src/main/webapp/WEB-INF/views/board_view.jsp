@@ -48,7 +48,7 @@
 		for (Board_CommentTO comment_to : comment_lists){
 			String comment_nickname = comment_to.getNickname();
 			String comment_content = comment_to.getContent();
-			String comment_date_time = comment_to.getDate_time().substring(0,16);
+			String comment_date_time = comment_to.getDate_time().substring(0,11);
 			commentHTML.append("<tr>");
 			if(comment_to.getUseq().equals(userSeq)){
 				commentHTML.append("<td id='comment_seq' comment_seq_attr = '"+comment_to.getSeq()+"'>" + comment_nickname + "</td>");
@@ -144,14 +144,6 @@ $(function (){
 		location.reload();
 	});
 });
-
-//게시글 modify 페이지 --> 이미지 수정 및 책 수정 미포함으로 인해서 --> 일시 중단 by 정예찬
-//$(document).ready(function(){
-//		    $("#modify").click(function(){
-//		    	alert('수정 버튼 클릭');
-//		        $('.modal-content').load("./modify.do" + "?seq=" +seq);
-//		    });
-// });
 
 //제목 및 게시글 수정
 $(function() {
@@ -310,7 +302,7 @@ $(function() {
 						$(data_xml).find('comment').each(function(){
 							result += "<tr>";
 							let useq = $(this).find('useq').text();
-							let date_time = $(this).find('date_time').text().substring(0,19);
+							let date_time = $(this).find('date_time').text().substring(0,11);
 							if (useq === '<%= userSeq%>') {
 								result += "<td id='comment_seq' comment_seq_attr = '"+$(this).find('seq').text()+"'>" +$(this).find('nickname').text()+"</td>";
 								result += "<td><div><textarea cols='55' rows='1' required wrap='hard' style='border:0px;' id='comment_text'>" +$(this).find('content').text()+"</textarea></div></td>";
@@ -371,7 +363,7 @@ $(document).ready(function () { //$(document).read --> 페이지가 로드되었
 					$(data_xml).find('comment').each(function(){
 						result += "<tr>";
 						let useq = $(this).find('useq').text();
-						let date_time = $(this).find('date_time').text().substring(0,19);
+						let date_time = $(this).find('date_time').text().substring(0,11);
 						if (useq === '<%= userSeq%>') {
 							result += "<td id='comment_seq' comment_seq_attr = '"+$(this).find('seq').text()+"'>" +$(this).find('nickname').text()+"</td>";
 							result += "<td><div><textarea cols='55' rows='1' required wrap='hard' style='border:0px;' id='comment_text'>" +$(this).find('content').text()+"</textarea></div></td>";
@@ -417,7 +409,7 @@ $(function () {
 					$(data_xml).find('comment').each(function(){
 						result += "<tr>";
 						let useq = $(this).find('useq').text();
-						let date_time = $(this).find('date_time').text().substring(0,19);
+						let date_time = $(this).find('date_time').text().substring(0,11);
 						if (useq === '<%= userSeq%>') {
 							result += "<td id='comment_seq' comment_seq_attr = '"+$(this).find('seq').text()+"'>" +$(this).find('nickname').text()+"</td>";
 							result += "<td><div><textarea cols='55' rows='1' required wrap='hard' style='border:0px;' id='comment_text'>" +$(this).find('content').text()+"</textarea></div></td>";
