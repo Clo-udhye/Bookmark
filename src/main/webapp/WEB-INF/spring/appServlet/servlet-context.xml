@@ -23,8 +23,9 @@
 	
 	<!-- 파일 업로드 설정 -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<beans:property name="maxUploadSize" value="-1" />	
+		<beans:property name="maxUploadSize" value="-1" />
 	</beans:bean>
+
 	
 	<context:component-scan base-package="com.exam.boardlist" />
 	<context:component-scan base-package="com.exam.bookmark" />

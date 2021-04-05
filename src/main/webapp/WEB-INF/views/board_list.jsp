@@ -142,6 +142,11 @@
 
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">	
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+   body {
+ font-family: 'Noto Serif KR', serif;
+  background: #white;
+}	
 .button1{
 	float: right;
 	margin-right:20px;
@@ -160,7 +165,6 @@
 	width: 30px;
 	font-size: 20px;
 }
-
 	.board:hover .img {filter: brightness(60%);}
 	.text {text-align: center; position: absolute; top: 50%; left: 50%; transform: translate( -50%, -50% ); color: white; opacity: 0;}
 	.text {width: 180px;}
@@ -233,11 +237,18 @@ $(document).ready(function(){
 
 <div id="mySidebar" class="sidebar">
 	<div class="sidebar-header">
-		<h3>당신의 책갈피</h3>
+		<a><h3>당신의 책갈피</h3></a>
 	</div>
 
 	<%if (userInfo != null) {%>
-		<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
+		<div class="sidebar-userprofile">
+			<div class="sidebar-user_img" align="center" style="padding-top: 10px; padding-bottom: 10px;">
+				<img src="./profile/<%=userInfo.getProfile_filename() %>" border="0" width=80px height=80px style="border-radius: 50%;"/>
+			</div>	
+			<div  align="center" style="color:gray; font-size:18px;"><%=userInfo.getNickname()%>님이</div>
+			<div  align="center" style="color:gray; font-size:18px;">로그인 중 입니다.</div>
+			<br/>
+		</div>
 	<%} else {%>
 		<p>로그인해주세요.</p>
 	<%}%>
@@ -303,7 +314,7 @@ $(document).ready(function(){
 		out.println("<span class='off'><a style='color:black'>처음</a>&nbsp;&nbsp;</span>");
 	} else {
 		//out.println("<span class='off'><a href='./list.do?cpage="+(startBlock-blockPerPage)+"'>&lt;처음&gt;</a>&nbsp;&nbsp;</span>");
-		out.println("<span class='off'><a href='./list.do?cpage="+1+"'style='color:black'>처음</a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a href='./list.do?cpage="+1+" style='color:black'>처음</a>&nbsp;&nbsp;</span>");
 	}
 
 	// < 표시 설정

@@ -33,7 +33,7 @@
 	
     StringBuffer SearchResult = new StringBuffer();
     if (searchword != null){
-    	SearchResult.append("<div ><h2><span id='result'>"+searchword+"</span> (으)로 검색한 결과</h2></div>");
+    	SearchResult.append("<div><h2><span id='result'>"+searchword+"</span> (으)로 검색한 결과</h2></div>");
     	SearchResult.append("<div><h4>총 "+(tTotalRecord+nTotalRecord)+"건("+"게시글 "+tTotalRecord+" / 작가 "+nTotalRecord+")</h4></div>");
     	//System.out.println(searchword);
     	//System.out.println(searchword.length());
@@ -145,16 +145,15 @@ $(document).ready(function(){
 	}
 	.button2{
 	float: right;
-	margin-right: 50px;
+	margin-right: 15px;
 	width: 30px;
 	font-size: 20px;
 	}
 	.button3{
-	align: right;
+	float: right;	
 	width: 30px;
-	font-size: 40px;
-	}
-	
+	font-size: 20px;
+}
 	.board:hover .img {filter: brightness(60%);}
 	.text {text-align: center; position: absolute; top: 50%; left: 50%; transform: translate( -50%, -50% ); color: white; opacity: 0;}
 	.text {width: 180px;}
@@ -200,11 +199,18 @@ tab하나 처리
 
 <div id="mySidebar" class="sidebar">
 	<div class="sidebar-header">
-		<h3>당신의 책갈피</h3>
+		<a><h3>당신의 책갈피</h3></a>
 	</div>
 
 	<%if (userInfo != null) {%>
-		<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
+		<div class="sidebar-userprofile">
+			<div class="sidebar-user_img" align="center" style="padding-top: 10px; padding-bottom: 10px;">
+				<img src="./profile/<%=userInfo.getProfile_filename() %>" border="0" width=80px height=80px style="border-radius: 50%;"/>
+			</div>
+			<div  align="center" style="color:gray; font-size:18px;"><%=userInfo.getNickname()%>님이</div>
+			<div  align="center" style="color:gray; font-size:18px;">로그인 중 입니다.</div>
+			<br/>
+		</div>
 	<%} else {%>
 		<p>로그인해주세요.</p>
 	<%}%>

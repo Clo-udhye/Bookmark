@@ -299,8 +299,42 @@ public class HomeController {
 	
 	
 	@RequestMapping(value = "/mypage_modify_ok.do")
-	public String mypage_modify_ok(HttpServletRequest request, Model model) {
+	//public String mypage_modify_ok(HttpServletRequest request, Model model) {
+	public String mypage_modify_ok(MultipartHttpServletRequest request, @RequestParam("uploadFile") MultipartFile uploadFile, Model model) throws Exception {
+		
 		UserTO to = new UserTO();
+		
+		//mypage_modify.jsp에서 hidden으로 가져온 기존파일명 
+		String prefileName = request.getParameter("prefileName");
+		//System.out.println(prefileName);
+		//System.out.println(request.getParameter("kwd1")+"//"+request.getParameter("kwd2")+"//"+request.getParameter("kwd3"));
+		
+		// 파일 저장소 서버로 설정
+		String path="/profile";
+		ServletContext context = request.getSession().getServletContext();
+		String realPath = context.getRealPath(path);
+	    
+		
+		// 파일 업로드 처리
+		String fileName=null;
+		//MultipartFile uploadFile = to.getUploadFile();
+		//MultipartFile uploadFile = multipartRequest.getFile("uploadFile");
+		if (!uploadFile.isEmpty()) {
+			String originalFileName = uploadFile.getOriginalFilename();
+			String ext = FilenameUtils.getExtension(originalFileName);	//확장자 구하기
+			UUID uuid = UUID.randomUUID();	//UUID 구하기
+			fileName = uuid+"."+ext;
+			//uploadFile.transferTo(new File("C:/Java/project-workspace/Project_Bookmark/src/main/webapp/profile/" + fileName));
+			uploadFile.transferTo(new File(realPath + "/" + fileName));
+			
+			//byte[] bytes = uploadFile.getBytes();
+			//File file = new File("C:/Java/project-workspace/Project_Bookmark/src/main/webapp/profile", fileName);
+			//FileCopyUtils.copy(bytes, file);
+		} else {
+			// 파일 변경 안했을 경우
+			fileName = prefileName;
+		}
+
 		to.setSeq(request.getParameter("seq"));
 		to.setId(request.getParameter("id"));
 		to.setNickname(request.getParameter("nickname"));
@@ -309,12 +343,39 @@ public class HomeController {
 			to.setAddress(request.getParameter("address"));
 			to.setAddresses(request.getParameter("addresses"));
 		}
-		to.setKeywords(request.getParameter("keywords"));
+		//to.setKeywords(request.getParameter("keywords"));
+		to.setKeywords(request.getParameter("kwd1")+"//"+request.getParameter("kwd2")+"//"+request.getParameter("kwd3"));
 		to.setIntroduction(request.getParameter("introduction"));
-		to.setProfile_filename(request.getParameter("profile_filename"));
+		to.setProfile_filename(fileName);
 
+		//to.setProfile_filename(multi.getFilesystemName("uploadFile"));
+		//File file = multi.getFile("uploadFile");
+		
+		//System.out.println(to.getSeq()+"/"+to.getId()+"/"+to.getNickname()+"/"+to.getProfile_filename());
+		
 		int flag = userDao.mypagemodifyOk(to) ;
 		model.addAttribute("flag", flag);
+		
+		if(flag == 0) {
+			// 업로드 안했으면 파일 삭제되면 안되니까
+			if(!uploadFile.isEmpty()) {
+				//DB업로드 실패시 업로드파일 삭제
+				//File file = new File("C:/Java/project-workspace/Project_Bookmark/src/main/webapp/profile/" + fileName);
+				File file = new File(realPath + "/" + fileName);
+				file.delete();
+			}
+		}
+		
+		if(flag == 1) {
+			if(!uploadFile.isEmpty()) {
+				//DB업로드 성공시 기존파일 삭제 (단, profile1.JPG는 제외)		
+				if(!prefileName.equals("profile1.JPG")) {
+					//File prefile = new File("C:/Java/project-workspace/Project_Bookmark/src/main/webapp/profile/" + prefileName);
+					File prefile = new File(realPath + "/" + prefileName);
+					prefile.delete();
+				}
+			}
+		}
 		
 		//System.out.println(to.getMail()+" / "+to.getNickname());
 		//System.out.println(flag);
@@ -389,6 +450,8 @@ public class HomeController {
 			to.setAddress(request.getParameter("address"));
 			to.setAddresses(request.getParameter("addresses"));
 		}
+		// 키워드 결합
+		to.setKeywords(request.getParameter("kwd1")+"//"+request.getParameter("kwd2")+"//"+request.getParameter("kwd3"));
 
 		int flag = userDao.signupOk(to) ;
 		model.addAttribute("flag", flag);

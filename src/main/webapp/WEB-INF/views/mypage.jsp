@@ -17,7 +17,9 @@
 	String visit_introduction = visit_TO.getIntroduction();
 	String visit_profile_filename = visit_TO.getProfile_filename();
 	String visit_keywords = visit_TO.getKeywords();
-
+	// keywords 분리
+	String[] kwdarray = visit_keywords.split("//");
+	
 	// 나의 페이지인지, 다른 사람의 마이페이지인지 구분하는 flag
 	int mypage_flag = 0;
 	
@@ -154,6 +156,9 @@
 		overflow-y: scroll;
 		height : 300px;
 }
+.mypage{
+	padding-left: 50px;
+}
 .board:hover .img {filter: brightness(60%);}
 .text {text-align: center; position: absolute; top: 50%; left: 50%; transform: translate( -50%, -50% ); color: white; opacity: 0;}
 .text #a1 {text-decoration: none; color: white; font-weight: bold;}
@@ -205,16 +210,33 @@
 
 	});
 </script>
+<style type="text/css">
+	
+	#modifymodal1 {width: 650px;}
+	
+	.filebox label { display: inline-block; padding: .5em .75em; color: #999; font-size: inherit; line-height: normal; vertical-align: middle; background-color: #fdfdfd; cursor: pointer; border: 1px solid #ebebeb; border-bottom-color: #e2e2e2; border-radius: .25em; }
+	.filebox input[type="file"] { /* 파일 필드 숨기기 */ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip:rect(0,0,0,0); border: 0; }
+
+	.user_keyword {border: 1px solid gray; border-radius: 20px; padding: 3px 5px 3px 5px;}
+</style>
+
 </head>
 <body style="overflow-y:scroll;">
 
 	<div id="mySidebar" class="sidebar">
 		<div class="sidebar-header">
-			<h3>당신의 책갈피</h3>
+			<a><h3>당신의 책갈피</h3></a>
 		</div>
 	
 		<%if (userInfo != null) {%>
-			<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
+			<div class="sidebar-userprofile">
+				<div class="sidebar-user_img" align="center" style="padding-top: 10px; padding-bottom: 10px;">
+					<img src="./profile/<%=userInfo.getProfile_filename() %>" border="0" width=80px height=80px style="border-radius: 50%;"/>
+				</div>
+				<div  align="center" style="color:gray; font-size:18px;"><%=userInfo.getNickname()%>님이</div>
+				<div  align="center" style="color:gray; font-size:18px;">로그인 중 입니다.</div>
+				<br/>
+			</div>
 		<%} else {%>
 			<p>로그인해주세요.</p>
 		<%}%>
@@ -259,7 +281,7 @@
 		
 	    <div id="content"  style="padding-top : 100px;">
 		    <%if (mypage_flag == 1) { %>
-		    	<div><h1>MY PAGE</h1></div>
+		    	<div><h2 class="mypage">MY PAGE</h2></div>
 		    <%} %>
 		    <div>
 		    <table width=90% height="500" style="padding : 10px; background-color:#FFFAFA;" align="center">
@@ -286,8 +308,16 @@
 			    				</td>
 			    				<td width=30%>
 			    					<div class="profile_info"> 별명 : <%=visit_nickname %></div>
-			    					<div class="profile_info"> 소개 : <%=visit_introduction %></div>
-			    					<div class="profile_info"> 태그 : <%= visit_keywords %></div>
+			    					<div class="profile_info" style="overflow-y:scroll;"> 소개 : <%=visit_introduction %></div>
+			    					<!-- <div class="profile_info"> 태그 : <%= visit_keywords %></div> -->
+			    					<!-- <div class="profile_info"> 태그 : <%=kwdarray[0] %>을(를) 좋아하는 <%=kwdarray[1] %> <%=kwdarray[2] %></div> -->
+			    					<div class="profile_info">
+			    						 태그 : 
+			    						<span class="user_keyword"><%=kwdarray[0] %></span>
+			    						<span id="kwdconnect">을(를) 좋아하는 </span>
+			    						<span class="user_keyword"><%=kwdarray[1] %></span>
+			    						<span class="user_keyword"><%=kwdarray[2] %></span>
+			    					</div>
 			    					<div class="profile_info"> 총 게시글 : <%=request.getAttribute("board_counts") %>개</div>
 			    				</td>
 			    				<td width=50%>
@@ -296,6 +326,11 @@
 		       								<table  id="wrapTable3" >
 				    						<tr>
 				    							<%=sbHtml %>
+				    						</tr>
+				    						<tr>
+				    						<h4>현재 게시글이 존재하지 않습니다.</h4>
+				    						<h3>새로운 게시글을 작성 하시겠습니까?</h3>
+				    						<button id="new_article" class="btn btn-dark" >새로운 글 작성하기</button>
 				    						</tr>
 				    					</table>
 				    					</div>	

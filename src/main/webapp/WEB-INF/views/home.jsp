@@ -148,17 +148,28 @@
 	padding-top: 100px;
 }
 
+
 </style>
 </head>
 <body>
 
 <div id="mySidebar" class="sidebar">
 	<div class="sidebar-header">
-		<h3>당신의 책갈피</h3>
+		<a><h3>당신의 책갈피</h3></a>
 	</div>
 
 	<%if (userInfo != null) {%>
-		<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
+		<div class="sidebar-userprofile">
+			<div class="sidebar-user_img" align="center" style="padding-top: 10px; padding-bottom: 10px;">
+				<img src="./profile/<%=userInfo.getProfile_filename() %>" border="0" width=80px height=80px style="border-radius: 50%;"/>
+			</div>	
+			<!--		  
+			<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p> 
+			-->
+			<div  align="center" style="color:gray; font-size:18px;"><%=userInfo.getNickname()%>님이</div>
+			<div  align="center" style="color:gray; font-size:18px;">로그인 중 입니다.</div>
+			<br/>
+		</div>
 	<%} else {%>
 		<p>로그인해주세요.</p>
 	<%}%>
@@ -255,7 +266,7 @@
 													<em class="cate_pic"></em> 
 													<strong class="tit_pic"><%= title1%></strong> 
 													<span class="txt_pic">&quot;</span> 
-														<span class="info_by" style="font-size: 14px;"><span class="ico_by">by</span>&nbsp;<%= nickname1 %></span>
+														<span class="info_by" style="font-size: 14px;">by&nbsp;<%= nickname1 %></span>
 														
 													<!-- 추가 (위에 nickname부분 글씨 크기 조절도)-->
 													<br/>
@@ -285,7 +296,7 @@
 												<div class="inner_g">
 													<em class="cate_pic"></em> <strong class="tit_pic" style="padding-left : 20px ;padding-right : 20px;"><%=title2%></strong> 
 													<span class="txt_pic"></span>
-														<span class="info_by" style="font-size: 14px;"><span class="ico_brunch ico_by">by</span> <%= nickname2 %></span>
+														<span class="info_by" style="font-size: 14px;">by&nbsp;<%= nickname2 %></span>
 														
 													<!-- 추가 (위에 nickname부분 글씨 크기 조절도)-->
 													<br/>
@@ -317,7 +328,7 @@
 												<div class="inner_g">
 													<em class="cate_pic"></em> <strong class="tit_pic" style="padding-left : 20px ;padding-right : 20px;"><%=title3%></strong> 
 													<span class="txt_pic">
-														</span> <span class="info_by"><span class="ico_brunch ico_by">by</span> <%= nickname3 %></span>
+														</span> <span class="info_by">by&nbsp;<%= nickname3 %></span>
 														
 													<!-- 추가 (위에 nickname부분 글씨 크기 조절도)-->
 													<br/>
