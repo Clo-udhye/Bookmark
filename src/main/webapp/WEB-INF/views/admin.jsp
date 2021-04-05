@@ -315,12 +315,12 @@
 }
 .button2{
 	float: right;
-	margin-right: 50px;
+	margin-right: 80px;
 	width: 30px;
 	font-size: 20px;
 }
 .button3{
-	align: right;
+	float: right;
 	width: 30px;
 	font-size: 20px;
 }
