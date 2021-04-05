@@ -230,6 +230,22 @@ padding-left: 100px;
 			    $('#userPassword').focus();
 			    return false;
 			}
+			// 키워드 알림창
+			if($("#kwd1 option:selected").val() == "none"){
+				alert('키워드1을 선택해주세요.');
+				$('#kwd1').focus();
+				return false;
+			}
+			if($("#kwd2 option:selected").val() == "none"){
+				alert('키워드2를 선택해주세요.');
+				$('#kwd2').focus();
+				return false;
+			}			
+			if($("#kwd3 option:selected").val() == "none"){
+				alert('키워드3을 선택해주세요.');
+				$('#kwd3').focus();
+				return false;
+			}
 			document.signup_frm.submit();
 		};
 	});
@@ -254,12 +270,19 @@ padding-left: 100px;
 <body>
 
 <div id="mySidebar" class="sidebar">
-   <div class="sidebar-header">
-      <h3>당신의 책갈피</h3>
-   </div>
+	<div class="sidebar-header">
+		<a><h3>당신의 책갈피</h3></a>
+	</div>
 
 	<%if (userInfo != null) {%>
-		<p><%=userInfo.getNickname()%>님이 로그인 중 입니다.</p>
+		<div class="sidebar-userprofile">
+			<div class="sidebar-user_img" align="center" style="padding-top: 10px; padding-bottom: 10px;">
+				<img src="./profile/<%=userInfo.getProfile_filename() %>" border="0" width=80px height=80px style="border-radius: 50%;"/>
+			</div>
+			<div  align="center" style="color:gray; font-size:18px;"><%=userInfo.getNickname()%>님이</div>
+			<div  align="center" style="color:gray; font-size:18px;">로그인 중 입니다.</div>
+			<br/>
+		</div>
 	<%} else {%>
 		<p>로그인해주세요.</p>
 	<%}%>
@@ -353,7 +376,7 @@ padding-left: 100px;
 							<div class="form-group" >
 							<div>
 								<input type="text" class="form-control" placeholder="주소" id="address" name="address" maxlength="20" /> 
-							
+							</div>
 							
 							<div class="address-modal" >
 								<button id="modal-button" data-bs-toggle="modal" data-bs-target="#modal" type="button" class="btn btn-dark form-control" >주소찾기</button>
@@ -362,14 +385,83 @@ padding-left: 100px;
 										<div class="modal-content address-content"></div>
 									</div>
 								</div>
-								</div>
 							</div>
 							</div>
 						
 							<div class="form-group">
 								<input type="text" class="form-control" placeholder="상세 주소" name="addresses" maxlength="20" />
-								
 							</div>
+							
+							<!-- 키워드 -->
+							<div class="form-group" style="height:70px;">
+								<!-- class="form-control" -->
+								<select class="kwdselect" name="kwd1" id="kwd1">
+									<option value="none">키워드1(*)</option>
+									<option value="경제">경제</option>
+									<option value="과학">과학</option>
+									<option value="만화">만화</option>
+									<option value="사진">사진</option>
+									<option value="소설">소설</option>
+									<option value="시">시</option>
+									<option value="에세이">에세이</option>
+									<option value="여행">여행</option>
+									<option value="역사">역사</option>
+									<option value="자기 개발">자기 개발</option>
+									<option value="잡지">잡지</option>
+									<option value="추리">추리</option>
+									<option value="패션">패션</option>
+									<option value="IT">IT</option>
+									<option value="SF">SF</option>
+								</select>
+								
+								<span>을(를) 좋아하는 </span>
+								<select class="kwdselect" name="kwd2" id="kwd2">
+									<option value="none">키워드2(*)</option>
+									<option value="감성적인">감성적인</option>
+			    					<option value="계획적인">계획적인</option>
+			    					<option value="귀여운">귀여운</option>
+			    					<option value="꿈꾸는">꿈꾸는</option>
+			    					<option value="똑똑한">똑똑한</option>
+			    					<option value="말이 많은">말이 많은</option>
+			    					<option value="매력있는">매력있는</option>
+			    					<option value="밝은">밝은</option>
+			    					<option value="상큼한">상큼한</option>
+			    					<option value="섹시한">섹시한</option>
+			    					<option value="소심한">소심한</option>
+			    					<option value="솔직한">솔직한</option>
+			    					<option value="잘생긴">잘생긴</option>
+			    					<option value="적극적인">적극적인</option>
+			    					<option value="허술한">허술한</option>
+			    					<option value="활발한">활발한</option>
+			    				</select>
+			    				<select class="kwdselect" name="kwd3" id="kwd3">
+			    					<option value="none">키워드3(*)</option>
+			    					<option value="강사">강사</option>
+			    					<option value="개발자">개발자</option>
+			    					<option value="건축가">건축가</option>
+			    					<option value="기획자">기획자</option>
+			    					<option value="디자이너">디자이너</option>
+			    					<option value="마케터">마케터</option>
+			    					<option value="백수">백수</option>
+			    					<option value="소설가">소설가</option>
+			    					<option value="쉐프">쉐프</option>
+			    					<option value="알바생">알바생</option>
+			    					<option value="에세이스트">에세이스트</option>
+			    					<option value="연예인">연예인</option>
+			    					<option value="예술인">예술인</option>
+			    					<option value="작가 지망생">작가 지망생</option>
+			    					<option value="주부">주부</option>
+			    					<option value="직장인">직장인</option>
+			    					<option value="취준생">취준생</option>
+			    					<option value="프로듀서">프로듀서</option>
+			    					<option value="프리랜서">프리랜서</option>
+			    					<option value="학생">학생</option>
+			    					<option value="SNS스타">SNS스타</option>
+			    				</select>
+			    				<div style="color:gray; font-size:13px;">나를 소개할 수 있는 키워드를 선택해주세요</div>
+							</div>							
+							
+							
 							<div class="form-group">
 								<input type="text"  id="information" style="float:left; width: 430px; height: 150px; " value="책갈피 정보제공 동의" disabled />
 							</div>
