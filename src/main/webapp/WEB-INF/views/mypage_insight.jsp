@@ -273,7 +273,9 @@ function highChartFunc1() {
 $(document).ready(function() {
 	highChartFunc1();
 });
-
+$(document).on("click", fuction(e){
+	
+});
 //액션,조회수,좋아요,댓글 클릭 시
 $(function() {
 	$(document).on("click",".catalogue1",function(){
@@ -288,4 +290,6 @@ $(function() {
 					highChartFunc1();
 				});
 			});
+			
+//myModal.dispose()
 </script>

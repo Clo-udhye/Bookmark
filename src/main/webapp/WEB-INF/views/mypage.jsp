@@ -88,7 +88,7 @@
 	if(today_counts.get(0).getTime() == 0){
 		today_counts.remove(0);
 	}
-
+	
 	ArrayList<TodayTO> blank_count_today = new ArrayList();
 	for (int i = 1; i<=8; i++){
 		TodayTO to = new TodayTO();
@@ -298,9 +298,14 @@ $(document).ready(function(){
 $(document).ready(function(){	
 	for(var i = 0; i <=<%=changeRow%>; i++){
 		$('#insight-modal'+i).click(function(e){
-			console.log('okok');
+			//console.log('okok');
 			$('.insight-content').load("./insight.do?bseq=" + $(this).attr('bseq')+"&changeRow="+i);
 		});
+		
+		$(document).on('hidden.bs.insight-modal'+i, function (event) {
+			  console.log('Destroy modal');
+			  //$('.insight-content').dispose();
+			});
 	}
 })
 </script>
@@ -412,11 +417,6 @@ $(document).ready(function(){
 				    						<tr>
 				    							<%=sbHtml %>
 				    						</tr>
-				    						<tr>
-				    						<h4>현재 게시글이 존재하지 않습니다.</h4>
-				    						<h3>새로운 게시글을 작성 하시겠습니까?</h3>
-				    						<button id="new_article" class="btn btn-dark" >새로운 글 작성하기</button>
-				    						</tr>
 				    					</table>
 				    					</div>	
 			    					</div>
@@ -450,8 +450,8 @@ $(document).ready(function(){
 						    시간 구분
 						  </button>
 						  <div class="dropdown-menu">
-						    <a class="dropdown-item" value="day">일주일 조회</a>
-						    <a class="dropdown-item" value="time">하루 조회(24시간)</a>
+						    <a class="dropdown-item dropdown-item2" value="day">일주일 조회</a>
+						    <a class="dropdown-item dropdown-item2" value="time">하루 조회(24시간)</a>
 						  </div>
 						</div>
 					</div>
@@ -593,7 +593,7 @@ $(function() {
 });
 // 시간 구분 클릭 시, default 
 $(function() {
-	$(document).on("click",".dropdown-item",function(){
+	$(document).on("click",".dropdown-item2",function(){
 					timecontrol = $(this).attr("value");
 					highChartFunc();
 				});
