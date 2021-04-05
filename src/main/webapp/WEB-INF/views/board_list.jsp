@@ -137,6 +137,11 @@
 
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">	
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+   body {
+ font-family: 'Noto Serif KR', serif;
+  background: #white;
+}	
 .button1{
 	float: right;
 	margin-right:20px;
@@ -155,7 +160,9 @@
 	width: 30px;
 	font-size: 20px;
 }
-
+#modal{
+	font-family: 'Noto Serif KR', serif;
+}
 	.board:hover .img {filter: brightness(60%);}
 	.text {text-align: center; position: absolute; top: 50%; left: 50%; transform: translate( -50%, -50% ); color: white; opacity: 0;}
 	.text {width: 180px;}
@@ -168,13 +175,9 @@
 	.board_pagetab a { text-decoration: none; font: 15px verdana; color: #000; padding: 0 3px 0 3px; }
 	.board_pagetab a:hover { text-decoration: underline; background-color:#f2f2f2; }
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
-	#content {position: absolute; left: 50%; transform: translateX(-50%);}
+	/*#content {position: absolute; left: 50%; transform: translateX(-50%);}*/
 	
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
-   body {
- font-family: 'Noto Serif KR', serif;
-  background: #white;
-}	
+
 </style>
 <!--
 class=board에 마우스 갖다대면 class=img를 filter 적용
@@ -281,7 +284,7 @@ $(document).ready(function(){
 		out.println("<span class='off'><a style='color:black'>처음</a>&nbsp;&nbsp;</span>");
 	} else {
 		//out.println("<span class='off'><a href='./list.do?cpage="+(startBlock-blockPerPage)+"'>&lt;처음&gt;</a>&nbsp;&nbsp;</span>");
-		out.println("<span class='off'><a href='./list.do?cpage="+1+"'style='color:black'>처음</a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a href='./list.do?cpage="+1+" style='color:black'>처음</a>&nbsp;&nbsp;</span>");
 	}
 
 	// < 표시 설정

@@ -102,7 +102,7 @@ li{
 .ico_by {
 	
 	font-style: italic;
-	color: #bfbfbf
+	color: #bfbfbf;
 }
 
 body {
@@ -224,7 +224,7 @@ body {
 	margin: 0 auto;
 	white-space: nowrap;
 	overflow: hidden;
-	text-overflow: ellipsis
+	text-overflow: ellipsis;
 }
 
 .info_g {
@@ -247,7 +247,7 @@ body {
 
 .info_g .info_by {
 	padding-top: 30px;
-	font-size: 12px;
+	font-size: 14px;
 	color: #fff;
 	opacity: .8;
 	filter: alpha(opacity = 50)
@@ -256,7 +256,7 @@ body {
 .info_by .ico_by {
 	width: 14px;
 	height: 13px;
-	margin-top: 3px
+	margin-top: 5px
 }
 
 .wrap_pic .ico_by {

@@ -126,14 +126,14 @@ $(document).ready(function(){
 }
 	.button2{
 	float: right;
-	margin-right: 50px;
+	margin-right: 15px;
 	width: 30px;
 	font-size: 20px;
 }
 	.button3{
-	align: right;
+	float: right;	
 	width: 30px;
-	font-size: 40px;
+	font-size: 20px;
 }
 	.board:hover .img {filter: brightness(60%);}
 	.text {text-align: center; position: absolute; top: 50%; left: 50%; transform: translate( -50%, -50% ); color: white; opacity: 0;}
