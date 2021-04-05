@@ -75,7 +75,7 @@ public class Home_BoardDAO {
 	}
 	
 	public ArrayList<Board_CommentTO> CommentListTemplate(String seq){
-		String sql = "select c.seq as seq, ifnull(u.seq, -1) as useq, ifnull(u.nickname,'탈퇴한 회원입니다.') as nickname, ifnull(u.profile_filename,'profile22.JPG') as filename, c.content as content, c.date_time as date_time from comment as c left outer join user as u on c.useq = u.seq where c.bseq="+seq+" order by c.seq desc";
+		String sql = "select c.seq as seq, ifnull(u.seq, -1) as useq, ifnull(u.nickname,'탈퇴한 회원입니다.') as nickname, ifnull(u.profile_filename,'no-profile.png') as filename, c.content as content, c.date_time as date_time from comment as c left outer join user as u on c.useq = u.seq where c.bseq="+seq+" order by c.seq desc";
 		ArrayList<Board_CommentTO> comment_lists = (ArrayList<Board_CommentTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<Board_CommentTO>(Board_CommentTO.class));
 		return comment_lists;
 	}
