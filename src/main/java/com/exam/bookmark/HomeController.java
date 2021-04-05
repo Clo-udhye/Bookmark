@@ -38,6 +38,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.exam.BoardAction.BoardActionDAO;
+import com.exam.MyPage.CountDAO;
+import com.exam.MyPage.TodayTO;
+import com.exam.MyPage.WeekTO;
 import com.exam.admin.AdminDAO;
 import com.exam.admin.PagingBoardTO;
 import com.exam.admin.PagingUserTO;
@@ -90,6 +93,9 @@ public class HomeController {
 
 	@Autowired
 	Board_Modify_Delete_DAO board_Modify_Delete_DAO;
+	
+	@Autowired
+	CountDAO countDAO;
 	
 	@RequestMapping(value = "/test.do")
 	public String test() {
@@ -286,7 +292,23 @@ public class HomeController {
 		model.addAttribute("board_counts", board_counts);
 		ArrayList<MyPageTO> myboard_list = boardDao.boardList_Mypage(vister_useq);
 		model.addAttribute("myboard_list", myboard_list);
+		ArrayList<TodayTO> today_count = countDAO.todayCounts(vister_useq);
+		model.addAttribute("today_count", today_count);
+		ArrayList<WeekTO> week_count = countDAO.weekCounts(vister_useq);
+		model.addAttribute("week_count", week_count);
 		return "mypage";
+	}
+	@RequestMapping(value = "/insight.do")
+	public String mypage_insight(HttpServletRequest req, Model model) {
+		String bseq = req.getParameter("bseq");
+		String changeRow = req.getParameter("changeRow");
+		//System.out.println("controller : "+ bseq + "changeRow : "+ changeRow);
+		model.addAttribute("changeRow", changeRow);
+		ArrayList<TodayTO> today_count = countDAO.todayCounts_insight(bseq);
+		model.addAttribute("today_count", today_count);
+		ArrayList<WeekTO> week_count = countDAO.weekCounts_insight(bseq);
+		model.addAttribute("week_count", week_count);
+		return "mypage_insight";
 	}
 	
 	@RequestMapping(value = "/mypage_modify.do")

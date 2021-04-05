@@ -501,7 +501,7 @@ public class BoardDAO {
 			
 			try{
 				conn = dataSource.getConnection();
-				String sql = "select bl.seq as seq, bl.title as title, bl.filename as filename, bl.likey as likey , count(bseq) as comment from (select b.seq as seq, b.title, b.filename, b.useq as useq, count(l.bseq) as likey from (select seq, title, filename, useq from board where useq=?) as b left outer join likey as l on b.seq = l.bseq group by b.seq) as bl left outer join comment as c on bl.seq = c.bseq group by bl.seq";
+				String sql = "select bl.seq as seq, bl.title as title, bl.filename as filename, bl.likey as likey , count(bseq) as comment from (select b.seq as seq, b.title, b.filename, b.useq as useq, count(l.bseq) as likey from (select seq, title, filename, useq from board where useq=?) as b left outer join likey as l on b.seq = l.bseq group by b.seq) as bl left outer join comment as c on bl.seq = c.bseq group by bl.seq order by bl.seq desc";
 				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				pstmt.setString(1, useq);
 				
