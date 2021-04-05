@@ -80,7 +80,12 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <style type="text/css">
-   
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+    
+body {
+  font-family: 'Noto Serif KR', serif;
+  background: #white;
+}
    #comment {
       width : 520;
       height : 100;
@@ -119,16 +124,16 @@
     float: right;
     
    }
-   @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
-   body {
- font-family: 'Noto Serif KR', serif;
-  background: #white;
-}
+  
 
 #comment_modify, #comment_delete {
 	width : 25px;
 	font-size : 3px;
 	padding : 1px;
+}
+#content{
+	font-family: 'Noto Serif KR', serif;
+	
 }
 </style>
 <script type="text/javascript">
