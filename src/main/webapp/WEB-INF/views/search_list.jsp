@@ -167,7 +167,7 @@ $(document).ready(function(){
 	.board_pagetab a { text-decoration: none; font: 15px verdana; color: #000; padding: 0 3px 0 3px; }
 	.board_pagetab a:hover { text-decoration: underline; background-color:#f2f2f2; }
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
-	#content {position: absolute; left: 50%; transform: translateX(-50%);}
+	/*#content {position: absolute; left: 50%; transform: translateX(-50%);}*/
 	
 	.tabcontent {background-color: rgb(250, 250, 250); border: 3px solid #a6a6a6;}
 	.tab { width: 1356px; height: 50px; }

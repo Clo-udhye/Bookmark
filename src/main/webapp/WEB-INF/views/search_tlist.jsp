@@ -49,6 +49,9 @@
 			String seq = to.getSeq();
 			String date = to.getDate();
 			String filename = to.getFilename();
+			if(filename!=null){
+				filename = filename.split("//")[0];
+			}
 			String title = to.getTitle();
 			// title 처리랑, css에 text width 설정함.
 			if (title != null && title.length() > 25) {

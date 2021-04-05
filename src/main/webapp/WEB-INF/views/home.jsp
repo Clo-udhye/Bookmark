@@ -22,7 +22,7 @@
 	JoinBULCTO to1 = theseBoards.get(0);
 	String seq1 = to1.getSeq();
 	String date1 = to1.getDate();
-	String filename1 = to1.getFilename();
+	String filename1 = to1.getFilename().split("//")[0];
 	String title1 = to1.getTitle();
 	String useq1 = to1.getUseq();
 	String nickname1 = to1.getNickname();
@@ -32,7 +32,7 @@
 	JoinBULCTO to2 = theseBoards.get(1);
 	String seq2 = to2.getSeq();
 	String date2 = to2.getDate();
-	String filename2 = to2.getFilename();
+	String filename2 = to2.getFilename().split("//")[0];
 	String title2 = to2.getTitle();
 	String useq2 = to2.getUseq();
 	String nickname2 = to2.getNickname();
@@ -42,7 +42,7 @@
 	JoinBULCTO to3 = theseBoards.get(2);
 	String seq3 = to3.getSeq();
 	String date3 = to3.getDate();
-	String filename3 = to3.getFilename();
+	String filename3 = to3.getFilename().split("//")[0];
 	String title3 = to3.getTitle();
 	String useq3 = to3.getUseq();
 	String nickname3 = to3.getNickname();
@@ -140,7 +140,7 @@
 	width: 30px;
 	font-size: 20px;
 }
-#content{
+#main{
 	font-family: 'Noto Serif KR', serif;
 	
 }

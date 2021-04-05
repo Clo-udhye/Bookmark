@@ -1,3 +1,4 @@
+<%@page import="java.util.Set"%>
 <%@page import="com.exam.user.UserTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -14,7 +15,6 @@
 		userInfo = (UserTO)session.getAttribute("userInfo");
 		//System.out.println(session.getAttribute("userInfo"));
 	}
-
 	
 	BoardPagingTO pagingTO = (BoardPagingTO)request.getAttribute( "pagingTO" );
 
@@ -45,7 +45,7 @@
 			cnt++;
 			String seq = to.getSeq();
 			String date = to.getDate();
-			String filename = to.getFilename();
+			String filename = to.getFilename().split("//")[0];
 			String title = to.getTitle();
 			// title 처리랑, css에 text width 설정함.
 			if (title != null && title.length() > 25) {
@@ -174,12 +174,16 @@
 	.board_pagetab a:hover { text-decoration: underline; background-color:#f2f2f2; }
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
 	/*#content {position: absolute; left: 50%; transform: translateX(-50%);}*/
+
+#view-modal {
+	font-family: 'Noto Serif KR', serif;	
+}
 	
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
-   body {
+ #main{
  font-family: 'Noto Serif KR', serif;
-  background: #white;
-}	
+}
+	
 </style>
 <!--
 class=board에 마우스 갖다대면 class=img를 filter 적용

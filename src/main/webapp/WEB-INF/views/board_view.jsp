@@ -31,12 +31,13 @@
 	String date = to.getDate().substring(0, 11);
 	String title = to.getTitle();
 	String nickname = to.getNickname();
-	String filename = to.getFilename();
+	String[] filenames = to.getFilename().split("//");
 	String content = to.getContent();
+	String bookseq = to.getBseq();
 	String book_title = to.getBook_title();
 	String comment = to.getComment();
 	String hit = to.getHit();
-	String boardUserID = to.getUserID();
+	String boardUserSeq = to.getUseq();
 	String UserID_board = to.getUserID();
 	String board_profile = to.getProfile();
 	
@@ -48,6 +49,7 @@
 		commentHTML.append("<li style='padding:20px 20px'>등록된 댓글이 없습니다. 댓글을 통해 소통해봐요!</li>");
 	} else {
 		for (Board_CommentTO comment_to : comment_lists){
+			String comment_useq = comment_to.getUseq();
 			String comment_nickname = comment_to.getNickname();
 			String comment_profile = comment_to.getFilename();
 			String comment_content = comment_to.getContent();
@@ -58,8 +60,21 @@
 			commentHTML.append("<img class='profile_img' src='./profile/"+comment_profile+"' style='float:left' />");
 			commentHTML.append("</span>");
 			commentHTML.append("<span class='txt' style='margin:0px; padding:2px 5px 2px 2px;'>");
-			commentHTML.append("<span id='c_txt"+comment_to.getSeq()+"'><span style='font-size:18px;'><b>"+comment_nickname+"</b></span>&nbsp;&nbsp;"+comment_content+"&nbsp;&nbsp;<span style='color:#dcdcdc; font-size:3px;'>"+comment_date_time+"</span></span>");
-			//commentHTML.append("<span id='c_modify' style='display: none;'><input type='text' id='modify_input' /><span>");
+			
+			//commentHTML.append("<span id='c_txt"+comment_to.getSeq()+"'><a href='./mypage.do?"+comment_to.getSeq()+" style='text-decoration: none; color:black;'><span style='font-size:18px;'><b>"+comment_nickname+"</b></span></a>&nbsp;&nbsp;"+comment_content+"&nbsp;&nbsp;<span style='color:#dcdcdc; font-size:3px;'>"+comment_date_time+"</span></span>");
+			commentHTML.append("<span id='c_txt"+comment_to.getSeq()+"'>");
+			if(!comment_useq.equals("-1")){
+				commentHTML.append("	<a href='./mypage.do?useq="+comment_useq+"' style='text-decoration: none; color:black;'>");	
+			}else{
+				commentHTML.append("	<a style='text-decoration: none; color:black;'>");
+			}
+			
+			commentHTML.append("		<span style='font-size:18px;'><b>"+comment_nickname+"</b></span>");
+			commentHTML.append("	</a>&nbsp;&nbsp;");
+			commentHTML.append("	<span>"+comment_content+"</span>&nbsp;&nbsp;");
+			commentHTML.append("	<span style='color:#dcdcdc; font-size:3px;'>"+comment_date_time+"</span>");
+			commentHTML.append("</span>");
+				
 			commentHTML.append("<input type='hidden' class='modify_input' id='modify_input"+comment_to.getSeq()+"' size='40' value='"+comment_content+"'/>");
 			commentHTML.append("<button type='button' class='modify_ok_btn btn btn-sm btn-secondary' id='modify_ok_btn"+comment_to.getSeq()+"' comment_seq='"+comment_to.getSeq()+"' style='display:none; margin-left:10px;'>수정</button>");
 			commentHTML.append("</span>");
@@ -132,7 +147,7 @@ $(document).ready(function(){
 			var delete_confirm = confirm("삭제 하시겠습니까?");
 			if(delete_confirm == true){
 				$.ajax({
-					url : './board_delete_ok.do',
+					url : './board_delete_ok_xml.do',
 					type : 'POST',
 					data : {
 						"value" : "delete",
@@ -140,8 +155,12 @@ $(document).ready(function(){
 						"bseq" : <%=seq %>
 					},
 					success : function (data) {
-						alert("게시글이 삭제 되었습니다.");
-						location.reload();
+						if($(data).find('flag').text()==1){
+							alert("게시글이 삭제 되었습니다.");
+							location.reload();
+						}else{
+							alert("게시글 삭제에 실패했습니다.");
+						}
 					},
 					error : function (error){
 						console.log('Error');
@@ -256,12 +275,26 @@ $(document).ready(function(){
 								result+="<img class='profile_img' src='./profile/"+$(this).find('profile').text()+"' style='float:left' />";
 								result+="</span>";
 								result+="<span class='txt' style='margin:0px; padding:2px 5px 2px 2px;'>";
-								result+="<span id='c_txt"+$(this).find('seq').text()+"'><span style='font-size:18px;'><b>"+$(this).find('nickname').text()+"</b></span>&nbsp;&nbsp;"+$(this).find('content').text()+"&nbsp;&nbsp;<span style='color:#dcdcdc; font-size:3px;'>"+date_time+"</span></span>";
+								
+								//result+="<span id='c_txt"+$(this).find('seq').text()+"'><span style='font-size:18px;'><b>"+$(this).find('nickname').text()+"</b></span>&nbsp;&nbsp;"+$(this).find('content').text()+"&nbsp;&nbsp;<span style='color:#dcdcdc; font-size:3px;'>"+date_time+"</span></span>";
+								result+="<span id='c_txt"+$(this).find('seq').text()+"'>";
+								if(useq!="-1"){
+									result+="	<a href='./mypage.do?useq="+useq+"' style='text-decoration: none; color:black;'>";	
+								}else{
+									result+="	<a style='text-decoration: none; color:black;'>";
+								}
+								
+								result+="		<span style='font-size:18px;'><b>"+$(this).find('nickname').text()+"</b></span>";
+								result+="	</a>&nbsp;&nbsp;";
+								result+="	<span>"+$(this).find('content').text()+"</span>&nbsp;&nbsp;";
+								result+="	<span style='color:#dcdcdc; font-size:3px;'>"+date_time+"</span>";
+								result+="</span>";
+								
 								result+="<input type='hidden' class='modify_input' id='modify_input"+$(this).find('seq').text()+"' size='40' value='"+$(this).find('content').text()+"'/>";
 							    result+="<button type='button' class='modify_ok_btn btn btn-sm btn-secondary' id='modify_ok_btn"+$(this).find('seq').text()+"' comment_seq='"+$(this).find('seq').text()+"' style='display:none; margin-left:10px;'>수정</button>";
 								result+="</span>";
 								if(useq == <%=userSeq%>){
-									result+="<div class='btn-group dropend'>";
+									result+="<div class='btn-group dropend' style='z-index:10'>";
 									result+="<button type='button' class='btn d-inline-block dropdown-bs-toggle' data-bs-toggle='dropdown' id='menu-btn' style='padding:6px 3px; color:#dcdcdc;'><i class='fas fa-ellipsis-h'></i></button>";
 									result+="<ul class='dropdown-menu'>";
 									result+="  <li><button type='button' class='dropdown-item comment_modify' comment_seq='"+$(this).find('seq').text()+"'>수정</button></li>";
@@ -333,7 +366,19 @@ $(document).ready(function(){
 							result+="<img class='profile_img' src='./profile/"+$(this).find('profile').text()+"' style='float:left' />";
 							result+="</span>";
 							result+="<span class='txt' style='margin:0px; padding:2px 5px 2px 2px;'>";
-							result+="<span id='c_txt"+$(this).find('seq').text()+"'><span style='font-size:18px;'><b>"+$(this).find('nickname').text()+"</b></span>&nbsp;&nbsp;"+$(this).find('content').text()+"&nbsp;&nbsp;<span style='color:#dcdcdc; font-size:3px;'>"+date_time+"</span></span>";
+							//result+="<span id='c_txt"+$(this).find('seq').text()+"'><span style='font-size:18px;'><b>"+$(this).find('nickname').text()+"</b></span>&nbsp;&nbsp;"+$(this).find('content').text()+"&nbsp;&nbsp;<span style='color:#dcdcdc; font-size:3px;'>"+date_time+"</span></span>";
+							result+="<span id='c_txt"+$(this).find('seq').text()+"'>";
+							if(useq!="-1"){
+								result+="	<a href='./mypage.do?useq="+useq+"' style='text-decoration: none; color:black;'>";	
+							}else{
+								result+="	<a style='text-decoration: none; color:black;'>";
+							}
+							
+							result+="		<span style='font-size:18px;'><b>"+$(this).find('nickname').text()+"</b></span>";
+							result+="	</a>&nbsp;&nbsp;";
+							result+="	<span>"+$(this).find('content').text()+"</span>&nbsp;&nbsp;";
+							result+="	<span style='color:#dcdcdc; font-size:3px;'>"+date_time+"</span>";
+							result+="</span>";
 							result+="<input type='hidden' class='modify_input' id='modify_input"+$(this).find('seq').text()+"' size='40' value='"+$(this).find('content').text()+"'/>";
 						    result+="<button type='button' class='modify_ok_btn btn btn-sm btn-secondary' id='modify_ok_btn"+$(this).find('seq').text()+"' comment_seq='"+$(this).find('seq').text()+"' style='display:none; margin-left:10px;'>수정</button>";
 							result+="</span>";
@@ -390,7 +435,19 @@ $(document).ready(function(){
 							result+="<img class='profile_img' src='./profile/"+$(this).find('profile').text()+"' style='float:left' />";
 							result+="</span>";
 							result+="<span class='txt' style='margin:0px; padding:2px 5px 2px 2px;'>";
-							result+="<span id='c_txt"+$(this).find('seq').text()+"'><span style='font-size:18px;'><b>"+$(this).find('nickname').text()+"</b></span>&nbsp;&nbsp;"+$(this).find('content').text()+"&nbsp;&nbsp;<span style='color:#dcdcdc; font-size:3px;'>"+date_time+"</span></span>";
+							//result+="<span id='c_txt"+$(this).find('seq').text()+"'><span style='font-size:18px;'><b>"+$(this).find('nickname').text()+"</b></span>&nbsp;&nbsp;"+$(this).find('content').text()+"&nbsp;&nbsp;<span style='color:#dcdcdc; font-size:3px;'>"+date_time+"</span></span>";
+							result+="<span id='c_txt"+$(this).find('seq').text()+"'>";
+							if(useq!="-1"){
+								result+="	<a href='./mypage.do?useq="+useq+"' style='text-decoration: none; color:black;'>";	
+							}else{
+								result+="	<a style='text-decoration: none; color:black;'>";
+							}
+							
+							result+="		<span style='font-size:18px;'><b>"+$(this).find('nickname').text()+"</b></span>";
+							result+="	</a>&nbsp;&nbsp;";
+							result+="	<span>"+$(this).find('content').text()+"</span>&nbsp;&nbsp;";
+							result+="	<span style='color:#dcdcdc; font-size:3px;'>"+date_time+"</span>";
+							result+="</span>";
 							result+="<input type='hidden' class='modify_input' id='modify_input"+$(this).find('seq').text()+"' size='40' value='"+$(this).find('content').text()+"'/>";
 						    result+="<button type='button' class='modify_ok_btn btn btn-sm btn-secondary' id='modify_ok_btn"+$(this).find('seq').text()+"' comment_seq='"+$(this).find('seq').text()+"' style='display:none; margin-left:10px;'>수정</button>";
 							result+="</span>";
@@ -431,9 +488,9 @@ $(document).ready(function(){
 			<td>
 				<div id="img_preview" class="flexslider">
         			<ul class="slides">
-        				<li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
-                        <li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
-                        <li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
+        				<% for(String filename : filenames){%>
+        					<li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
+                        <%} %>
         			</ul>
         		</div>
 			</td>
@@ -442,7 +499,7 @@ $(document).ready(function(){
 					<tr class="writerInfo button-bar" style="border-bottom:1px solid #d2d2d2;">
 						<td>
 							<img class="profile_img" src="./profile/<%=board_profile %>">
-							<span class="nickname"><%=nickname %></span>
+							<a href='./mypage.do?useq=<%=boardUserSeq %>' style="text-decoration: none; color:black;"><b><span class="nickname"><%=nickname %></span></b></a>
 							<span class="userID">(<%=UserID_board %>)</span>
 							<span>
 								&nbsp;&nbsp;
@@ -451,7 +508,7 @@ $(document).ready(function(){
 								<span class="hit" style="color:#d2d2d2;">조회수: <%=hit %></span>
 							</span>
 							<div class="d-inline-block" style="float:right;">
-								<%if(userID != null && userID.equals(boardUserID)){ %>
+								<%if(userID != null && userID.equals(UserID_board)){ %>
 									<div class="btn-group dropup">
 										<button type="button" class="btn d-inline-block dropdown-bs-toggle" data-bs-toggle="dropdown" id="menu-btn" style="padding:6px 3px; color:#dcdcdc;"><i class="fas fa-ellipsis-h"></i></button>
 										<ul class="dropdown-menu">
@@ -469,7 +526,7 @@ $(document).ready(function(){
 					<tr class="bookInfo">
 						<td>
 							<span style="float:right; padding:2px 10px">
-								<i class="fas fa-book-open"></i>&nbsp;<%=book_title %>
+								<a href='./book_info.do?master_seq=<%=bookseq %>' style="text-decoration: none; color:black;"><i class="fas fa-book-open"></i>&nbsp;<%=book_title %></a>
 							</span>
 						</td>
 					</tr>	

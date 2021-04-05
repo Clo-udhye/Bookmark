@@ -45,7 +45,7 @@ public class Home_BoardDAO {
 		int result = jdbcTemplate.update(hit_sql, seq);
 		//System.out.println("hit 1증가 from board : " +result);
 		
-		String sql = "select b.seq as seq, b.date as date, b.title as title, u.seq as useq ,u.id as userID, u.nickname as nickname, b.filename as filename, b.content as content, book.title as book_title, b.hit as hit, b.comment as comment, u.profile_filename as profile from board as b join user as u on b.useq = u.seq  join book as book on b.bseq = book.Master_seq where b.seq=?";
+		String sql = "select b.seq as seq, b.date as date, book.Master_seq as bookseq, b.title as title, u.seq as useq ,u.id as userID, u.nickname as nickname, b.filename as filename, b.content as content, book.title as book_title, b.hit as hit, b.comment as comment, u.profile_filename as profile from board as b join user as u on b.useq = u.seq  join book as book on b.bseq = book.Master_seq where b.seq=?";
 		Home_BoardTO book = (Home_BoardTO) jdbcTemplate.queryForObject(sql, new Object[]{seq}, new RowMapper<Home_BoardTO>() {
 			public Home_BoardTO mapRow(ResultSet rs, int rowNum) throws SQLException{
 				Home_BoardTO to = new Home_BoardTO();
@@ -55,6 +55,7 @@ public class Home_BoardDAO {
 				to.setNickname(rs.getString("nickname"));
 				to.setFilename(rs.getString("filename"));
 				to.setContent(rs.getString("content"));
+				to.setBseq(rs.getString("bookseq"));
 				to.setBook_title(rs.getString("book_title"));
 				to.setComment(rs.getString("comment"));
 				to.setHit(rs.getString("hit"));
@@ -74,7 +75,7 @@ public class Home_BoardDAO {
 	}
 	
 	public ArrayList<Board_CommentTO> CommentListTemplate(String seq){
-		String sql = "select c.seq as seq, u.seq as useq, u.nickname as nickname, u.profile_filename as filename, c.content as content, c.date_time as date_time from comment as c join user as u on c.useq = u.seq where c.bseq="+seq+" order by c.seq desc";
+		String sql = "select c.seq as seq, ifnull(u.seq, -1) as useq, ifnull(u.nickname,'탈퇴한 회원입니다.') as nickname, ifnull(u.profile_filename,'profile22.JPG') as filename, c.content as content, c.date_time as date_time from comment as c left outer join user as u on c.useq = u.seq where c.bseq="+seq+" order by c.seq desc";
 		ArrayList<Board_CommentTO> comment_lists = (ArrayList<Board_CommentTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<Board_CommentTO>(Board_CommentTO.class));
 		return comment_lists;
 	}

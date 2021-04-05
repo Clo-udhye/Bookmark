@@ -20,7 +20,7 @@
 	String date = to.getDate().substring(0, 11);
 	String title = to.getTitle();
 	String nickname = to.getNickname();
-	String filename = to.getFilename();
+	String[] filenames = to.getFilename().split("//");
 	String content = to.getContent();
 	String book_title = to.getBook_title();
 	String UserID_board = to.getUserID();
@@ -45,7 +45,7 @@
 	width: 500px; 
 	height: 500px;
 	}
-.userID{
+.userID, #counter-title{
 	color: #d2d2d2;
 }	
 
@@ -147,9 +147,10 @@ $(document).ready(function(){
 			<td>
 				<div id="img_preview" class="flexslider">
         			<ul class="slides">
-        				<li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
-                        <li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
-                        <li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
+        			
+        				<%for(String filename:filenames){%>
+        					<li><img src="./upload/<%=filename %>" style="width : 500px; height : 500px;"/></li>
+						<%} %>                        
         			</ul>
         		</div>
 			</td>

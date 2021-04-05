@@ -178,14 +178,30 @@ public class HomeController {
 		return "likey_xml";
 	}
 	
-	@RequestMapping(value = "/board_delete.do")
+	@RequestMapping(value = "/board_delete_ok_xml.do")
 	public String board_delete(HttpServletRequest req , Model model) {
 		String writer_seq = req.getParameter("user");
 		String board_seq = req.getParameter("bseq");
+		
+		String filenames = board_Modify_Delete_DAO.Board_Select_Filename(board_seq);
+		//System.out.println(filenames);	
+		
 		int flag = board_Modify_Delete_DAO.Board_Delete(writer_seq, board_seq);
 		model.addAttribute("flag", flag);
 		
-		return "";
+		if(flag == 1) {
+			String path="/upload/";
+			ServletContext context = req.getSession().getServletContext();
+			String realPath = context.getRealPath(path);
+			
+			//DB삭제 성공시 업로드파일 삭제
+			String[] filenamelist = filenames.split("//");
+			for(String fname : filenamelist) {
+				File file = new File(realPath, fname);
+				file.delete();
+			}
+		}
+		return "board_delete_ok_xml";
 	}
 	
 	@RequestMapping(value = "/book_list.do")
@@ -527,13 +543,7 @@ public class HomeController {
     }
     
     @RequestMapping(value="/write_ok.do", method=RequestMethod.POST)
-    public String write(@RequestParam("files") List<MultipartFile> fileList, MultipartHttpServletRequest multi , Model model) {
-    	System.out.println(multi.getParameter("title"));
-	    System.out.println(multi.getParameter("useq"));
-	    System.out.println(multi.getParameter("content"));
-	    System.out.println(multi.getParameter("bookseq"));
-	    System.out.println(fileList.size());
-    	
+    public String write(@RequestParam("files") List<MultipartFile> fileList, MultipartHttpServletRequest multi , Model model) {	
 	    String path="/upload/";
 	    ServletContext context = multi.getSession().getServletContext();
 	    String realPath = context.getRealPath(path);
@@ -553,11 +563,11 @@ public class HomeController {
                 //파일 생성
                 String orifileName = f.getOriginalFilename();
                 //확장자 자르기
-                String ext = orifileName.substring(orifileName.indexOf("."));
+                //String ext = orifileName.substring(orifileName.indexOf("."));
                 //rename 규칙
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
                 int rdv = (int)(Math.random()*1000);
-                String file_rename = orifileName+"_"+sdf.format(System.currentTimeMillis())+"_"+rdv+ext;
+                String file_rename = sdf.format(System.currentTimeMillis())+"_"+orifileName;
                 
                 filenames += file_rename+"//";
                 filesizes += Long.toString(f.getSize())+"//";
@@ -600,5 +610,4 @@ public class HomeController {
         
         return "booklist_search";
     }
-	
 }

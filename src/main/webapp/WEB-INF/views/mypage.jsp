@@ -44,7 +44,7 @@
 		if(title.length() > 20){
 			title = myboard_list.getTitle().substring(0, 20) + "...";
 		}
-		String filename = myboard_list.getFilename();
+		String filename = myboard_list.getFilename().split("//")[0];
 		int likey = myboard_list.getLike();
 		int comment = myboard_list.getComment();
 		
@@ -137,6 +137,7 @@
 .profile_info {
 	margin : 15px;
 }
+
 
 .wrap3 {
 	float: left;

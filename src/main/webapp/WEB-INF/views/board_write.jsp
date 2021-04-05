@@ -25,6 +25,9 @@
 <link rel="stylesheet" type="text/css" href="./css/flexslider.css">
 <script type="text/javascript" src="./js/jquery.flexslider-min.js"></script>
 <script>
+var contents = new Array();
+var content_files = new Array();
+
 $(document).ready(function(){
 	$(".flexslider").flexslider({
 		animation: "slide",	
@@ -55,9 +58,17 @@ $(document).ready(function(){
         	return false;
         }
         if($('#img-selector').val()==''){
-        	alert('이미지를 선택해주세요.');
-        	$('#img-selector').focus();
-        	return false;
+        	let count_files =0;
+    		for(let i=0; i<contents.length; i++){
+    			if(!contents[i].is_delete){
+    				count_files++;
+    			}
+    		}
+    		if(count_files == 0){
+    			alert('이미지를 선택해주세요.');
+    			$('#img-selector').focus();
+    			return false;
+    		}
         }
         if($('#bookname').val()==''){
         	alert('책을 선택해주세요.');
@@ -76,16 +87,17 @@ $(document).ready(function(){
         }
       	
         //document.wfrm.submit();
-        
         let formData = new FormData();
         formData.append('title',$('#title').val());
         formData.append('useq',$('#useq').val());
         formData.append('content',$('#summernote').val());
         formData.append('bookseq',$('#bookseq').val());
-        
-        $($("#img-selector")[0].files).each(function(index, file) {
-        	formData.append("files", file);				
-		});
+		for(var i=0; i<contents.length; i++) {
+            var content = contents[i];
+            if(content.is_delete == false) {
+            	formData.append("files", content_files[i]);
+            }
+        }
         
         $.ajax({
             url : './write_ok.do',
@@ -186,6 +198,11 @@ $(document).ready(function(){
 		}
 	});
 	
+	$(document).on('click','.delete_btn', function(){
+		//console.log('이미지삭제' + $(this).attr('index'));
+		deleteItemAction($(this).attr('index'));
+	});
+	
 });
 	//나중에 추가 ..
 	var dropFile = function(event) {
@@ -194,71 +211,104 @@ $(document).ready(function(){
 	}
 
 	$(document).on('change', "#img-selector", function(e) {
-		//div 내용 비워주기
-		//$('#img_preview').empty();
-
 		var files = e.target.files;
-		var arr = Array.prototype.slice.call(files);
-
-		//업로드 가능 파일인지 체크
-		for (var i = 0; i < files.length; i++) {
-			if (!checkExtension(files[i].name, files[i].size)) {
-				return false;
+		var filesArr = Array.prototype.slice.call(files);
+	
+		var check_flag=1;
+		if(filesArr.length>5){
+			alert("이미지는 5장까지만 업로드가능합니다.");
+			$("#img-selector").val("");
+            return;
+		}
+		
+		filesArr.forEach(function(f) {
+			//console.log(f.name.length);
+            if(!f.type.match("image.*")) {
+                alert("이미지 파일만 업로드가능합니다.");
+                $("#img-selector").val("");
+                check_flag=0;
+                return;
+            }
+            /*
+            var regex = /^[a-zA-Z0-9_-.]$/;
+            if(!regex.test(f.name)){
+            	alert('['+fileName+']:이미지 이름은 ~~~만 가능합니다.');
+            	$("#img-selector").val("");
+            	check_flag=0;
+            	return false;
 			}
+            */
+            var maxSize = 20971520; //20MB
+            if (f.size >= maxSize) {
+    			alert('['+f.name+']: 파일 사이즈 초과');
+    			$("#img-selector").val("");
+    			check_flag=0;
+    			return false;
+    		}
+            if(f.name.length>20) {
+    			alert('['+f.name+']: 파일이름의 길이는 20자를 초과할수 없습니다.');
+    			$("#img-selector").val("");
+    			check_flag=0;
+    			return false;
+    		}
+		});
+		
+		if(check_flag==1){
+			preview(filesArr);	
 		}
-		preview(arr);
 	});//file change
-
-	function checkExtension(fileName, fileSize) {
-		var regex = /^[a-zA-Z0-9_-]+\.(png|jpg|gif|bmp|PNG|JPG|GIF|BMP)$/;
-		var maxSize = 20971520; //20MB
-
-		if (fileSize >= maxSize) {
-			alert('"' + fileName + '" 파일 사이즈 초과');
-			$("#img-selector").val(""); //파일 초기화
-			return false;
-		}
-
-		if (!regex.test(fileName)) {
-			alert('"' + fileName + '" 파일이름에는 \/:*?"<>|!가 포함될수 없습니다.');
-			$("#img-selector").val(""); //파일 초기화
-			return false;
-		}
-
-		if (fileName.length > 100) {
-			alert('"' + fileName + '" 파일이름의 길이는 100자를 초과할수 없습니다.');
-			$("#img-selector").val(""); //파일 초기화
-			return false;
-		}
-		return true;
-	}
 
 	function preview(arr) {
 		arr.forEach(function(f) {
-					//파일명이 길면 파일명...으로 처리
-					/*
-					var fileName = f.name;
-					if(fileName.length > 10){
-						fileName = fileName.substring(0,7)+"...";
+			let str = '';
+			
+			//이미지 파일 미리보기		
+			var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
+			reader.onload = function(e) { //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
+				let index = contents.length;
+                let url_src = e.target.result;
+            	
+            	var data = {
+                    "index":index,
+                    "url_src":url_src,
+                    "is_delete":false
+                };
+               	contents.push(data);
+                content_files.push(f);
+                        
+				str += '<li class="myslide"><button type="button" class="delete_btn del-btn btn" index="'+index+'"><i class="fas fa-times-circle fa-3x"></i></button><img src="'+url_src+'" title="'+f.name+'" width=600px /></li>';
+				$('#img_preview').data('flexslider').addSlide($(str));
+				
+				let count_files =0;
+				for(let i=0; i<contents.length; i++){
+					if(!contents[i].is_delete){
+						count_files++;
 					}
-					 */
-
-					//div에 이미지 추가
-					let str = '';
-
-					//이미지 파일 미리보기
-					if (f.type.match('image.*')) {
-						var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
-						reader.onload = function(e) { //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
-							str += '<li><img src="'+e.target.result+'" title="'+f.name+'" width=600px /></li>';
-							//$(str).appendTo('#preview');
-							$('#img_preview').data('flexslider').addSlide(
-									$(str));
-						}
-						reader.readAsDataURL(f);
-					}
-				});//arr.forEach
+				}
+				if(count_files==1){
+					$('#img_preview').data('flexslider').removeSlide(0);
+				}
+			}
+			reader.readAsDataURL(f);
+		});//arr.forEach
+		$("#img-selector").val('');
 	}
+	
+	function deleteItemAction(index) {		
+		let count_files =0;
+		for(let i=0; i<contents.length; i++){
+			if(!contents[i].is_delete){
+				count_files++;
+			}
+		}
+        if(count_files==1){
+        	//console.log('마지막');
+        	let str = '<li><a><img class="no-image" src="./images/no_Image_upload.jpg" title="no_Image_upload" width=600px /></a></li>';
+        	$('#img_preview').data('flexslider').addSlide($(str));
+        }
+        $('#img_preview').data('flexslider').removeSlide($('#img_preview').data('flexslider').currentSlide);
+        contents[index].is_delete = true;
+    }
 </script>
 
 <style type="text/css">
@@ -271,6 +321,7 @@ $(document).ready(function(){
 	border-radius: 50%;
 	}
 #img_preview{
+	position: relative;
 	width: 500px; 
 	height: 500px;
 	}
@@ -285,6 +336,24 @@ $(document).ready(function(){
 }
 
 ul, ol, li{ margin:0; padding:0; list-style:none;}
+
+.del-btn {
+  position: absolute;
+  top:10px;
+  z-index: 10;
+  opacity: 0;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease-in-out;
+}
+
+#img_preview:hover .del-btn{
+  opacity: 0.6;
+}
+#img_preview:hover .del-btn:hover{
+  opacity: 1;
+}
 
 .list-group{
     max-height: 500px;
@@ -312,9 +381,9 @@ ul, ol, li{ margin:0; padding:0; list-style:none;}
 		<tr>
 			<td>
 				<div id="img_preview" class="flexslider">
+					<div class="darkness"></div>
         			<ul class="slides">
-        				<li><img class="default" id="profile_img1" src="./images/profile_Dahye.jpg" /></li>
-        				<li><img class="upload_img" src="./images/profile_Minji.jpg" /></li>
+        				<li><img class="no-image" src="./images/no_Image_upload.jpg" /></li>
         			</ul>
         		</div>
 			</td>
