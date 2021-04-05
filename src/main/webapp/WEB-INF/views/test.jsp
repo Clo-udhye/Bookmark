@@ -1,151 +1,221 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+
+	 
+	  
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" />
+<title>StartUp</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="./css/flexslider.css">
 <script type="text/javascript" src="./js/jquery.flexslider-min.js"></script>
-<style type="text/css">
+
+<style>
 ul, ol, li{ margin:0; padding:0; list-style:none;}
+ .imgs_wrap {
+        display: flex;
+        flex-flow: row wrap;
+        width: 100%;
+        border: 1px solid gray;
+        padding: 10px;
+        box-sizing: content-box;
+        margin-bottom: 20px;
+    }
+    .imgs_wrap .img_item {
+        width: 150px;
+        padding: 5px;
+        border: 1px solid black;
+        margin-right: 10px;
+    }
+
+    .imgs_wrap .img_item img {
+        width: 100%;
+    }
+
 </style>
 </head>
 <body>
-  <h1>첨부파일 미리보기</h1>
-  <hr>
-  <table border="1">
-    <tr>
-      <th align="center" bgcolor="orange" width="500px">첨부파일</th>
-    </tr>
-    <tr>
-      <td align="center">
-        <input type="file" name="uploadFile" id="uploadFile" multiple accept=".gif, .jpg, .png">
-        <div id="slider" class="flexslider" style="width:500px; height:500px;">
-        	<ul id="preview" class="slides">
-        		<li><img class="default" id="profile_img1" src="./images/profile_Dahye.jpg" width=400px/></li>
-        	</ul>
+<div class="container">
+    <h3>업로드 이미지 미리보기</h3>
+    <div class="imgs_wrap">
+
+    </div>
+    
+    <div id="slider2" as-nav-for="#slider .flexslider" style="width:500px; height:500px;">
+     	<ul id="preview" class="slides">
+			<li><img class="default" id="profile_img1" src="./images/profile_Dahye.jpg" width=400px/></li>
+        </ul>
+    </div>
+
+    <input type="file" id="input_file" multiple />
+    <input type="button" value="submit" onclick="submitAction();" />
+
+
+
+</div>
+	<!-- <script type="text/x-mustache" id="temp_item">
+        <div class="img_item" id="img_item_{{ index }}">
+            <img src="{{ url_src }}" />
+            <input type="button" value="삭제" onclick="deleteItemAction({{ index }})" />
+            <input type="hidden" class="hd_content_index" value="{{index}}" />
         </div>
-      </td>
-    </tr>
-  </table>
-  <input type="button" id="btn" value="btn"/>
+    </script>
+     -->
+    <script>
+        var contents = new Array();
+        var content_files = new Array();
+
+        $(document).ready(function() {
+        	$(".flexslider").flexslider({
+      		  animation: "slide",
+      		  slideshow: false,
+      	  });
+        	
+            $(document).on("change", "#input_file", function(e){
+            	var files = e.target.files;
+                var filesArr = Array.prototype.slice.call(files);
+
+                let html2="";
+                filesArr.forEach(function(f) {
+                    if(!f.type.match("image.*")) {
+                        alert("확장자는 이미지 확장자만 가능합니다.");
+                        return;
+                    }
+
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                    	let index = contents.length;
+                        let url_src = e.target.result;
+                    	
+                    	var data = {
+                            "index":index,
+                            "url_src":url_src,
+                            "is_delete":false
+                        };
+                        
+                        contents.push(data);
+                        content_files.push(f);
+                        
+                        console.log(contents);
+
+                        var html ="<div class='img_item' id='img_item_"+index+"'>";
+    			        html+="<img src='"+url_src+"' />";
+    			        html+="<input type='button' value='삭제' onclick='deleteItemAction("+index+")' />"
+                        html+="</div>";
+                        
+                       	html2 ="<li>";
+    			        html2+="<img src='"+url_src+"' />";
+    			        html2+="<input type='button' value='삭제' onclick='deleteItemAction("+index+")' />"
+                        html2+="</li>";
+            			
+                        $(".imgs_wrap").append(html);
+                        //$("#preview").append(html2);
+                        $('#preview').data('flexslider').addSlide($(html2));
+                        //$(".imgs_wrap").sortable();
+                    }
+                    reader.readAsDataURL(f);
+                });
+
+                $("#input_file").val('');
+            	
+            });
+        });
+
+        function submitAction() {
+            var formData = new FormData();
+            $(".hd_content_index").each(function(index, item){
+                for(var i=0; i<contents.length; i++) {
+                    var content = contents[i];
+                    if(content.index == $(this).val() && content.is_delete == false) {
+                        formData.append("img_"+i, content_files[i]);
+                        break;
+                    }
+                }
+            });
+
+            var url = "/api/form/upload_images";
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: url,
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(result) {
+                    // 성공시 http status code 200
+                    console.log(result);
+                },
+                error: function(xhr, status, error) {
+                    // 실패시 http status code 200 이 아닌 경우
+                    console.log(xhr);
+                }
+            });
+
+        }
+
+        function deleteItemAction(index) {
+            $("#img_item_"+index).css("display","none");
+            contents[index].is_delete = true;
+        }
+
+        function handleImgFileSelect(e) {
+            var files = e.target.files;
+            var filesArr = Array.prototype.slice.call(files);
+
+            filesArr.forEach(function(f) {
+                if(!f.type.match("image.*")) {
+                    alert("확장자는 이미지 확장자만 가능합니다.");
+                    return;
+                }
+
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                	let index = contents.length;
+                    let url_src = e.target.result;
+                	
+                	var data = {
+                        "index":index,
+                        "url_src":url_src,
+                        "is_delete":false
+                    };
+                    
+                    contents.push(data);
+                    content_files.push(f);
+                    
+                    console.log(contents);
+
+                    var html ="<div class='img_item' id='img_item_"+index+"'>";
+			        html+="<img src='"+url_src+"' />";
+			        html+="<input type='button' value='삭제' onclick='deleteItemAction("+index+")' />"
+                    html+="</div>";
+                    
+                    var html2 ="<li id='img_item2_"+index+"'>";
+			        html2+="<img src='"+url_src+"' />";
+			        html2+="<input type='button' value='삭제' onclick='deleteItemAction("+index+")' />"
+                    html2+="</li>";
+        			
+                    $(".imgs_wrap").append(html);
+                    //$("#preview").append(html2);
+                    $('#preview').data('flexslider').addSlide($(html2));
+                    //$(".imgs_wrap").sortable();
+                }
+                reader.readAsDataURL(f);
+            });
+
+            $("#input_file").val('');
+        }
+
+    </script>
+
 </body>
-<script type="text/javascript">
-  $(document).ready(function (e){
-	 
-	  $(".flexslider").flexslider({
-		  animation: "slide",
-		  slideshow: false,
-	  });
-	  
-	function flex(){
-		console.log("flex");
-		 $('.flexslider').flexslider({
-			  animation: "slide",
-			  slideshow: false,
-		  });
-	};
-	$(document).on('click', '#btn', function(){
-		let html = '<li><img id="profile_img4" src="./images/profile_Minji.jpg" width=400px/></li>'
-		$('#slider').data('flexslider').addSlide($(html));
-		$('#slider').data('flexslider').removeSlide($('#profile_img1'));
-		//$('#preview').empty();
-		
-	});
-	
-	function removeRose() {
-	    saved1 = $('#carousel').find('.rose');
-	    saved2 = $('#slider').find('.rose');
-	    $('#carousel').data('flexslider').removeSlide($('.rose'));
-	    $('#slider').data('flexslider').removeSlide($('.rose'));
-	};
-
-	function addRose() {
-	    $('#carousel').data('flexslider').addSlide(saved1);
-	    $('#slider').data('flexslider').addSlide($(saved2));
-	};
-	
-	
-	  
-    //$("input[type='file']").change(function(e){
-	$(document).on('change',"input[type='file']", function(e){    	
-
-      //div 내용 비워주기
-     //$('#preview').empty();
-       //$('#slider').data('flexslider').removeSlide($('.default'));
-       //$('#slider').data('flexslider').removeSlide($('.clone'));
-	
-      var files = e.target.files;
-      var arr =Array.prototype.slice.call(files);
-      
-      //업로드 가능 파일인지 체크
-      for(var i=0;i<files.length;i++){
-    	  console.log(files[i].name);
-        if(!checkExtension(files[i].name,files[i].size)){
- 
-          return false;
-        }
-      }
-      
-      preview(arr);  
-    });//file change
-    
-    function checkExtension(fileName,fileSize){
-    	
-    var regex1 = /^[a-zA-Z0-9_-]+\.(png|jpg|gif|bmp|PNG|JPG|GIF|BMP)$/;
-    	
-      var maxSize = 20971520;  //20MB
-      
-      if(fileSize >= maxSize){
-        alert('파일 사이즈 초과');
-        $("input[type='file']").val("");  //파일 초기화
-        return false;
-      }
-      
-      if(!regex1.test(fileName)){
-        alert('업로드 불가능한 파일이 있습니다.');
-        $("input[type='file']").val("");  //파일 초기화
-        return false;
-      }
-     
-      return true;
-    }
-    
-    function preview(arr){
-      arr.forEach(function(f){
-        
-        //파일명이 길면 파일명...으로 처리
-        var fileName = f.name;
-        if(fileName.length > 10){
-          fileName = fileName.substring(0,7)+"...";
-        }
-        
-        //div에 이미지 추가
-        let str = '';
-        
-        //이미지 파일 미리보기
-        if(f.type.match('image.*')){
-          var reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
-          reader.onload = function (e) { //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
-            //str += '<button type="button" class="delBtn" value="'+f.name+'" style="background: red">x</button><br>';
-            str += '<li><img src="'+e.target.result+'" title="'+f.name+'" width=400px /></li>';
-            //$(str).appendTo('#preview');
-            $('#slider').data('flexslider').addSlide($(str));
-            
-          } 
-          reader.readAsDataURL(f);
-        }else{
-          str += '<img src="/resources/img/fileImg.png" title="'+f.name+'" width=100 height=100 />';
-          $(str).appendTo('#preview');
-        }
-        
-      });//arr.forEach        
-    }
-  });
-</script>
 </html>
