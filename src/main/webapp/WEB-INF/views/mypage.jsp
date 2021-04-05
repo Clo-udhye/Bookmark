@@ -263,6 +263,9 @@
 		overflow-y: scroll;
 		height : 300px;
 }
+.mypage{
+	padding-left: 50px;
+}
 .board:hover .img {filter: brightness(60%);}
 .text {text-align: center; position: absolute; top: 50%; left: 50%; transform: translate( -50%, -50% ); color: white; opacity: 0;}
 .text #a1 {text-decoration: none; color: white; font-weight: bold;}
@@ -371,7 +374,7 @@ $(document).ready(function(){
 		
 	    <div id="content"  style="padding-top : 100px;">
 		    <%if (mypage_flag == 1) { %>
-		    	<div><h1>MY PAGE</h1></div>
+		    	<div><h2 class="mypage">MY PAGE</h2></div>
 		    <%} %>
 		    <div>
 		    <table width=90% height="500" style="padding : 10px; background-color:#FFFAFA;" align="center">
@@ -408,6 +411,11 @@ $(document).ready(function(){
 		       								<table  id="wrapTable3" >
 				    						<tr>
 				    							<%=sbHtml %>
+				    						</tr>
+				    						<tr>
+				    						<h4>현재 게시글이 존재하지 않습니다.</h4>
+				    						<h3>새로운 게시글을 작성 하시겠습니까?</h3>
+				    						<button id="new_article" class="btn btn-dark" >새로운 글 작성하기</button>
 				    						</tr>
 				    					</table>
 				    					</div>	
