@@ -22,7 +22,7 @@
 	JoinBULCTO to1 = theseBoards.get(0);
 	String seq1 = to1.getSeq();
 	String date1 = to1.getDate();
-	String filename1 = to1.getFilename();
+	String filename1 = to1.getFilename().split("//")[0];
 	String title1 = to1.getTitle();
 	String useq1 = to1.getUseq();
 	String nickname1 = to1.getNickname();
@@ -32,7 +32,7 @@
 	JoinBULCTO to2 = theseBoards.get(1);
 	String seq2 = to2.getSeq();
 	String date2 = to2.getDate();
-	String filename2 = to2.getFilename();
+	String filename2 = to2.getFilename().split("//")[0];
 	String title2 = to2.getTitle();
 	String useq2 = to2.getUseq();
 	String nickname2 = to2.getNickname();
@@ -42,7 +42,7 @@
 	JoinBULCTO to3 = theseBoards.get(2);
 	String seq3 = to3.getSeq();
 	String date3 = to3.getDate();
-	String filename3 = to3.getFilename();
+	String filename3 = to3.getFilename().split("//")[0];
 	String title3 = to3.getTitle();
 	String useq3 = to3.getUseq();
 	String nickname3 = to3.getNickname();
@@ -80,9 +80,9 @@
 
 
 <!-- sidebar -->
-
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
+
 <!-- home -->
  <link rel="stylesheet" type="text/css" href="./css/home.css"> 
 
@@ -101,18 +101,21 @@
 		    });
 		}
 
-		$("#write_button").click(function(){
+		$("#write_button").on('click', function(){
 			<%if(userInfo!=null){%>
+				$("#write-modal").modal("show");
 				$('.write-content').load("./write.do");
-			<%} else{%>
+			<%}else{%>
 				var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
-				if(comfirm_login == true){
+				if(comfirm_login==true){
 					location.href="./login.do";
-				} else{
-					location.reload();
 				}
 			<%}%>	        	
 	    });
+		
+		$('#view-modal').on('hidden.bs.modal', function(){
+			location.reload();
+		});
     });
 </script>
 
@@ -137,7 +140,7 @@
 	width: 30px;
 	font-size: 20px;
 }
-#content{
+#main{
 	font-family: 'Noto Serif KR', serif;
 	
 }
@@ -182,7 +185,7 @@
 	<a href="./book_list.do">책 구경하기</a>
 	
 	<div style="padding:8px; position:absolute; bottom:2%; width:100%">
-		<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#write-modal">글쓰기</button>
+		<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
 	</div>
 	
 </div>
@@ -447,20 +450,20 @@
 			</div>
    			<!-- 모달창 정보 -->
              <div id="view-modal" class="modal fade" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-dialog modal-xl modal-dialog-centered">
                    <div class="modal-content view-content">
                    
                    </div>
                 </div>
              </div>
              
-             <div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
-                   <div class="modal-content write-content">
-                   
-                   </div>
-                </div>
-             </div>
+			<div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-xl modal-dialog-centered">
+					<div class="modal-content write-content">
+	                 
+	                 </div>
+				</div>
+			</div>
 		</div>
 	</div>	
 </div>

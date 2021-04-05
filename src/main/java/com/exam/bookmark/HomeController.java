@@ -12,7 +12,10 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
@@ -27,7 +30,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +38,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.exam.BoardAction.BoardActionDAO;
+import com.exam.MyPage.CountDAO;
+import com.exam.MyPage.TodayTO;
+import com.exam.MyPage.WeekTO;
 import com.exam.admin.AdminDAO;
 import com.exam.admin.PagingBoardTO;
 import com.exam.admin.PagingUserTO;
@@ -59,10 +64,6 @@ import com.exam.user.UserDAO;
 import com.exam.user.UserTO;
 import com.exam.zipcode.ZipcodeDAO;
 import com.exam.zipcode.ZipcodeTO;
-
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
-import com.oreilly.servlet.multipart.FileRenamePolicy;
-import com.oreilly.servlet.MultipartRequest;
 import java.io.File;
 import java.io.IOException;
 
@@ -92,6 +93,9 @@ public class HomeController {
 
 	@Autowired
 	Board_Modify_Delete_DAO board_Modify_Delete_DAO;
+	
+	@Autowired
+	CountDAO countDAO;
 	
 	@RequestMapping(value = "/test.do")
 	public String test() {
@@ -132,24 +136,7 @@ public class HomeController {
 		return "board_list";
 	}
 	
-	@RequestMapping(value = "/view.do")
-	public String view(HttpServletRequest req , Model model) {
-		String seq = req.getParameter("seq");
-		HttpSession session = req.getSession();
-		if (session.getAttribute("userInfo") != null) {
-			UserTO userInfo = (UserTO)session.getAttribute("userInfo");
-			String useq = userInfo.getSeq();
-			int count_check = home_boardDAO.likey_check(seq, useq);
-			model.addAttribute("like_count_check", count_check);
-		}
-		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(seq);
-		model.addAttribute("home_BoardTO", home_BoardTO);
-		ArrayList<Board_CommentTO> board_CommentTO = home_boardDAO.CommentListTemplate(seq);
-		model.addAttribute("board_commentTO", board_CommentTO);
-		int count = home_boardDAO.likey_count(seq);
-		model.addAttribute("likey_count", count);
-		return "board_view";
-	}
+	
 	@RequestMapping(value = "/comment.do")
 	public String comment(HttpServletRequest req , Model model) {
 		String value = req.getParameter("value");
@@ -197,29 +184,30 @@ public class HomeController {
 		return "likey_xml";
 	}
 	
-	@RequestMapping(value = "/board_modify.do")
-	public String board_modify(HttpServletRequest req , Model model) {
-		String writer_seq = req.getParameter("user");
-		String board_seq = req.getParameter("bseq");
-		String board_title = req.getParameter("board_title");
-		String board_content = req.getParameter("board_content");
-		int flag = board_Modify_Delete_DAO.Board_Modify(writer_seq, board_seq, board_title, board_content);
-		model.addAttribute("flag", flag);
-		
-		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(board_seq);
-		model.addAttribute("home_BoardTO", home_BoardTO);
-		
-		return "modify_ok";
-	}
-	
-	@RequestMapping(value = "/board_delete.do")
+	@RequestMapping(value = "/board_delete_ok_xml.do")
 	public String board_delete(HttpServletRequest req , Model model) {
 		String writer_seq = req.getParameter("user");
 		String board_seq = req.getParameter("bseq");
+		
+		String filenames = board_Modify_Delete_DAO.Board_Select_Filename(board_seq);
+		//System.out.println(filenames);	
+		
 		int flag = board_Modify_Delete_DAO.Board_Delete(writer_seq, board_seq);
 		model.addAttribute("flag", flag);
 		
-		return "";
+		if(flag == 1) {
+			String path="/upload/";
+			ServletContext context = req.getSession().getServletContext();
+			String realPath = context.getRealPath(path);
+			
+			//DB삭제 성공시 업로드파일 삭제
+			String[] filenamelist = filenames.split("//");
+			for(String fname : filenamelist) {
+				File file = new File(realPath, fname);
+				file.delete();
+			}
+		}
+		return "board_delete_ok_xml";
 	}
 	
 	@RequestMapping(value = "/book_list.do")
@@ -304,7 +292,23 @@ public class HomeController {
 		model.addAttribute("board_counts", board_counts);
 		ArrayList<MyPageTO> myboard_list = boardDao.boardList_Mypage(vister_useq);
 		model.addAttribute("myboard_list", myboard_list);
+		ArrayList<TodayTO> today_count = countDAO.todayCounts(vister_useq);
+		model.addAttribute("today_count", today_count);
+		ArrayList<WeekTO> week_count = countDAO.weekCounts(vister_useq);
+		model.addAttribute("week_count", week_count);
 		return "mypage";
+	}
+	@RequestMapping(value = "/insight.do")
+	public String mypage_insight(HttpServletRequest req, Model model) {
+		String bseq = req.getParameter("bseq");
+		String changeRow = req.getParameter("changeRow");
+		//System.out.println("controller : "+ bseq + "changeRow : "+ changeRow);
+		model.addAttribute("changeRow", changeRow);
+		ArrayList<TodayTO> today_count = countDAO.todayCounts_insight(bseq);
+		model.addAttribute("today_count", today_count);
+		ArrayList<WeekTO> week_count = countDAO.weekCounts_insight(bseq);
+		model.addAttribute("week_count", week_count);
+		return "mypage_insight";
 	}
 	
 	@RequestMapping(value = "/mypage_modify.do")
@@ -557,14 +561,14 @@ public class HomeController {
 		return "board_delete_ok";
 	}
 	
-	@RequestMapping(value = "/view2.do")
+	@RequestMapping(value = "/view.do")
 	public String view2(HttpServletRequest req , Model model) {
 		String seq = req.getParameter("seq");
 		HttpSession session = req.getSession();
 		if (session.getAttribute("userInfo") != null) {
 			UserTO userInfo = (UserTO)session.getAttribute("userInfo");
-			String userID = userInfo.getId();
-			int count_check = home_boardDAO.likey_check(seq, userID);
+			String useq = userInfo.getSeq();
+			int count_check = home_boardDAO.likey_check(seq, useq);
 			model.addAttribute("like_count_check", count_check);
 		}
 		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(seq);
@@ -573,26 +577,27 @@ public class HomeController {
 		model.addAttribute("board_commentTO", board_CommentTO);
 		int count = home_boardDAO.likey_count(seq);
 		model.addAttribute("likey_count", count);
-		return "board_view2";
+		return "board_view";
 	}
 	
 	@RequestMapping(value = "/modify.do")
 	public String modify(HttpServletRequest req , Model model) {
 		String seq = req.getParameter("seq");
-		HttpSession session = req.getSession();
-		if (session.getAttribute("userInfo") != null) {
-			UserTO userInfo = (UserTO)session.getAttribute("userInfo");
-			String userID = userInfo.getId();
-			int count_check = home_boardDAO.likey_check(seq, userID);
-			model.addAttribute("like_count_check", count_check);
-		}
-		Home_BoardTO home_BoardTO =  home_boardDAO.Book_infoTemplate(seq);
+		Home_BoardTO home_BoardTO =  home_boardDAO.board_Template(seq);
 		model.addAttribute("home_BoardTO", home_BoardTO);
-		ArrayList<Board_CommentTO> board_CommentTO = home_boardDAO.CommentListTemplate(seq);
-		model.addAttribute("board_commentTO", board_CommentTO);
-		int count = home_boardDAO.likey_count(seq);
-		model.addAttribute("likey_count", count);
 		return "board_modify";
+	}
+	
+	@RequestMapping(value = "/modify_ok.do")
+	public String board_modify(HttpServletRequest req , Model model) {
+		String writer_seq = req.getParameter("useq");
+		String board_seq = req.getParameter("bseq");
+		String board_title = req.getParameter("board_title");
+		String board_content = req.getParameter("board_content");
+		int flag = board_Modify_Delete_DAO.Board_Modify(writer_seq, board_seq, board_title, board_content);
+		model.addAttribute("flag", flag);
+		
+		return "board_modify_ok";
 	}
 	    
     @RequestMapping(value="/callback1.do", method=RequestMethod.GET)
@@ -622,92 +627,62 @@ public class HomeController {
         return "board_write";
     }
     
-    @RequestMapping(value="/write_ok.do")
-    public String write_ok(HttpServletRequest request , Model model) {
-    	//String uploadPath = "C:/Project_BM/Project_BM/src/main/webapp/upload";
-    	//System.out.println(request.getParameter("title"));
-    	
-    	String path="/upload";
-    	ServletContext context = request.getSession().getServletContext();
-    	String realPath = context.getRealPath(path);
-    	
-    	int maxFileSize = 1024 *1024 * 2; 
-    	String encType = "utf-8";
-    	
-    	BoardTO to = new BoardTO();
-    	MultipartRequest multi;
-		try {
-			multi = new MultipartRequest(request, realPath, maxFileSize, encType, new DefaultFileRenamePolicy());
-			System.out.println(multi.getParameter("title"));
-	    	System.out.println(multi.getParameter("useq"));
-	    	System.out.println(multi.getParameter("summernote"));
-	    	System.out.println(multi.getParameter("bookseq"));
-	    	System.out.println(multi.getFilesystemName("filename[]"));
-	    	
+    @RequestMapping(value="/write_ok.do", method=RequestMethod.POST)
+    public String write(@RequestParam("files") List<MultipartFile> fileList, MultipartHttpServletRequest multi , Model model) {	
+	    String path="/upload/";
+	    ServletContext context = multi.getSession().getServletContext();
+	    String realPath = context.getRealPath(path);
+	    //String uploadPath = "C:/Project_BM/Project_BM/src/main/webapp/upload";
 	    
-	    	to.setTitle(multi.getParameter("title"));
-	    	to.setUseq(multi.getParameter("useq"));
-	    	to.setContent(multi.getParameter("summernote"));
-	    	to.setBseq(multi.getParameter("bookseq"));
-	    	
-	    	to.setFilename(multi.getFilesystemName("filename[]"));
-	    	File file = multi.getFile("filename[]");
-	    	//to.setFilesize(file.length());
-	    	to.setFilesize("123123");
-	    	
-	    	
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-   	
-		int flag = boardDao.writeOk(to);
-		model.addAttribute("flag", flag);
+    	BoardTO to = new BoardTO();	
+	    to.setTitle(multi.getParameter("title"));
+	    to.setUseq(multi.getParameter("useq"));
+	    to.setContent(multi.getParameter("content"));
+	    to.setBseq(multi.getParameter("bookseq"));
+	    
+	    String filenames = "";
+	    String filesizes = "";
+	    
+        for(MultipartFile f:fileList){
+            if(!f.isEmpty()){
+                //파일 생성
+                String orifileName = f.getOriginalFilename();
+                //확장자 자르기
+                //String ext = orifileName.substring(orifileName.indexOf("."));
+                //rename 규칙
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                int rdv = (int)(Math.random()*1000);
+                String file_rename = sdf.format(System.currentTimeMillis())+"_"+orifileName;
+                
+                filenames += file_rename+"//";
+                filesizes += Long.toString(f.getSize())+"//";
+                
+                //파일 서버에 저장하기
+                try {
+                	//System.out.println("저장");
+                    f.transferTo(new File(realPath+file_rename));
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        to.setFilename(filenames);
+        to.setFilesize(filesizes);
+        
+	    int flag = boardDao.writeOk(to);
+	    
+	    if(flag == 0) {
+	    	//DB업로드 실패시 업로드파일 삭제
+	    	//System.out.println("삭제");
+	    	String[] filenamelist = filenames.split("//");
+	    	for(String fname : filenamelist) {
+				File file = new File(realPath, fname);
+				file.delete();
+			}
+	    }
+	    
+	    model.addAttribute("flag",flag);
         return "board_write_ok";
-    }
-    
-    @RequestMapping(value="/write_ok2.do")
-    public String write_ok2(HttpServletRequest request , Model model) {
-    	//String uploadPath = "C:/Project_BM/Project_BM/src/main/webapp/upload";
-    	
-    	
-    	
-    	String path="/upload";
-    	ServletContext context = request.getSession().getServletContext();
-    	String realPath = context.getRealPath(path);
-    	
-    	int maxFileSize = 1024 *1024 * 2; 
-    	String encType = "utf-8";
-    	
-    	BoardTO to = new BoardTO();
-    	MultipartRequest multi;
-		try {
-			multi = new MultipartRequest(request, realPath, maxFileSize, encType, new DefaultFileRenamePolicy());
-			System.out.println(multi.getParameter("title"));
-	    	System.out.println(multi.getParameter("useq"));
-	    	System.out.println(multi.getParameter("summernote"));
-	    	System.out.println(multi.getParameter("bookseq"));
-	    	System.out.println(multi.getFilesystemName("filename[]"));
-	    	
-	    
-	    	to.setTitle(multi.getParameter("title"));
-	    	to.setUseq(multi.getParameter("useq"));
-	    	to.setContent(multi.getParameter("summernote"));
-	    	to.setBseq(multi.getParameter("bookseq"));
-	    	
-	    	to.setFilename(multi.getFilesystemName("filename[]"));
-	    	File file = multi.getFile("filename[]");
-	    	//to.setFilesize(file.length());
-	    	to.setFilesize("123123");
-	    	
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("[에러] " + e.getMessage());
-		}
-   	
-		int flag = boardDao.writeOk(to);
-		model.addAttribute("flag", flag);
-        return "board_write_ok2";
     }
     
     @RequestMapping(value="/booklist_search.do")
@@ -720,5 +695,4 @@ public class HomeController {
         
         return "booklist_search";
     }
-	
 }

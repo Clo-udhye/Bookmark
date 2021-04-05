@@ -12,6 +12,6 @@
 			<property name="password" value="!123456"/>
 		</bean>
 		<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-      	<property name="dataSource" ref="dataSource" />
+      		<property name="dataSource" ref="dataSource" />
       	</bean>
 </beans>

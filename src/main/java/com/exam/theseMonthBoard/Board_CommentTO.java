@@ -3,6 +3,7 @@ package com.exam.theseMonthBoard;
 public class Board_CommentTO {
 	private String useq;
 	private String nickname;
+	private String filename;
 	private String content;
 	private String date_time;
 	private String seq;
@@ -24,6 +25,12 @@ public class Board_CommentTO {
 	}
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
+	}
+	public String getFilename() {
+		return filename;
+	}
+	public void setFilename(String filename) {
+		this.filename = filename;
 	}
 	public String getContent() {
 		return content;

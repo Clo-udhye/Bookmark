@@ -102,11 +102,13 @@
 				sbHtml.append("		<tr>");
 				sbHtml.append("			<td>");
 				// keywords
-				//sbHtml.append("				<div class='user_keywords' align='center'>");
 				sbHtml.append("				<div class='user_keywords'>");
-				//sbHtml.append("				<span>"+kwdarray[0]+"을(를) 좋아하는 "+kwdarray[1]+" "+kwdarray[2]+"</span>");
 				sbHtml.append("					<span class='user_keyword'>"+kwdarray[0]+"</span>");
-				sbHtml.append("					<span id='kwdconnect'>을(를) 좋아하는 </span>");
+				if (kwdarray[0].equals("과학") || kwdarray[0].equals("사진") || kwdarray[0].equals("소설") || kwdarray[0].equals("여행") || kwdarray[0].equals("자기 개발") || kwdarray[0].equals("패션")) {
+				   sbHtml.append("               <span id='kwdconnect'>을 좋아하는 </span>");
+				} else {
+				   sbHtml.append("               <span id='kwdconnect'>를 좋아하는 </span>");
+				}
 				sbHtml.append("					<span class='user_keyword'>"+kwdarray[1]+"</span>");
 				sbHtml.append("					<span class='user_keyword'>"+kwdarray[2]+"</span>");
 				sbHtml.append("				</div>");				

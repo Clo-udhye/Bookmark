@@ -33,8 +33,8 @@
 	
     StringBuffer SearchResult = new StringBuffer();
     if (searchword != null){
-    	SearchResult.append("<div><h2><span id='result'>"+searchword+"</span> (으)로 검색한 결과</h2></div>");
-    	SearchResult.append("<div><h4>총 "+(tTotalRecord+nTotalRecord)+"건("+"게시글 "+tTotalRecord+" / 작가 "+nTotalRecord+")</h4></div>");
+    	SearchResult.append("<div style='width:1356px;'><h2 align='left'><span id='result'>"+searchword+"</span> (으)로 검색한 결과</h2></div>");
+    	SearchResult.append("<div style='width:1356px;'><h4 align='left'>총 "+(tTotalRecord+nTotalRecord)+"건("+"게시글 "+tTotalRecord+" / 작가 "+nTotalRecord+")</h4></div>");
     	//System.out.println(searchword);
     	//System.out.println(searchword.length());
     } 
@@ -60,6 +60,10 @@
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
+
+<!-- 글쓰기 Summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
 <!-- searchresult_tab -->
 
@@ -110,26 +114,48 @@ $(document).ready(function(){
 	$('.board1').click(function(e){
 		//alert($(this).attr('bseq')+"클릭");
 		//console.log("./view.do?seq=" + $(this).attr('bseq'));
-		$('.modal-content').load("./view.do?seq=" + $(this).attr('bseq'));
+		$('.view-content').load("./view.do?seq=" + $(this).attr('bseq'));
 	});
-})
+	
+	$("#write_button").on('click', function(){
+		<%if(userInfo!=null){%>
+			$("#write-modal").modal("show");
+			$('.write-content').load("./write.do");
+		<%}else{%>
+			var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
+			if(comfirm_login==true){
+				location.href="./login.do";
+			}
+		<%}%>	        	
+	});
+	
+	$('#view-modal').on('hidden.bs.modal', function(){
+		location.reload();
+	});
+});
 </script>
 
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+ #main{
+ font-family: 'Noto Serif KR', serif;
+}
+#view-modal{
+		font-family: 'Noto Serif KR', serif;
+}
 	.button1{
 	float: right;
 	margin-right: 0px;
 	
 	font-size: 30px;
-
-}
+	}
 	.button2{
 	float: right;
 	margin-right: 15px;
 	width: 30px;
 	font-size: 20px;
-}
+	}
 	.button3{
 	float: right;	
 	width: 30px;
@@ -147,9 +173,9 @@ $(document).ready(function(){
 	.board_pagetab a { text-decoration: none; font: 15px verdana; color: #000; padding: 0 3px 0 3px; }
 	.board_pagetab a:hover { text-decoration: underline; background-color:#f2f2f2; }
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
-	#content {position: absolute; left: 50%; transform: translateX(-50%);}
+	/*#content {position: absolute; left: 50%; transform: translateX(-50%);}*/
 	
-	.tabcontent {background-color: rgb(250, 250, 250); border: 3px solid #a6a6a6;}
+	.tabcontent {background-color: rgb(250, 250, 250); width:1356px; border: 3px solid #a6a6a6;}
 	.tab { width: 1356px; height: 50px; }
 	.tablinks {float: left; width: 50%; height: 100%; border: none; outline: none; font-size: 16px; font-weight: bold; color: #000; background-color: #fff;}
 	.tablinks.active {color: #fff; background-color: #a6a6a6;}
@@ -200,11 +226,16 @@ tab하나 처리
 		if(userInfo.getId().equals("testadmin1")) {%>
 			<a href="./admin.do">Admin Page</a>
 		<%} else{ %>
-			<a href="./mypage.do">My Page</a>
+			<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
 		<%}
 	}%>
 	<a href="./list.do">모든 게시글 보기</a>
 	<a href="./book_list.do">책 구경하기</a>
+	
+	<div style="padding:8px; position:absolute; bottom:2%; width:100%">
+		<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
+	</div>
+	
 </div>
 
 <div id="main">
@@ -229,7 +260,7 @@ tab하나 처리
 			</table>		
     	</div>
     </div>
-    <div id="content">
+    <div id="content" style="padding: 100px 0px;" align= "center">
         <!-- <h1>검색 결과 페이지</h1> -->
 		<%=SearchResult %>
         
@@ -252,12 +283,20 @@ tab하나 처리
 </div>
 
 <!-- 모달창 정보 -->
-<div id="modal" class="modal fade" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
-		<div class="modal-content">               
+<div id="view-modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content view-content">                   
 		</div>
 	</div>
 </div>
+		             
+<div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content write-content">
+		</div>
+	</div>
+</div>
+
 
 </body>
 </html>

@@ -1,3 +1,4 @@
+<%@page import="java.util.Set"%>
 <%@page import="com.exam.user.UserTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -14,7 +15,6 @@
 		userInfo = (UserTO)session.getAttribute("userInfo");
 		//System.out.println(session.getAttribute("userInfo"));
 	}
-
 	
 	BoardPagingTO pagingTO = (BoardPagingTO)request.getAttribute( "pagingTO" );
 
@@ -45,7 +45,7 @@
 			cnt++;
 			String seq = to.getSeq();
 			String date = to.getDate();
-			String filename = to.getFilename();
+			String filename = to.getFilename().split("//")[0];
 			String title = to.getTitle();
 			// title 처리랑, css에 text width 설정함.
 			if (title != null && title.length() > 25) {
@@ -87,7 +87,7 @@
 
 				//sbHtml.append("<td>"+filename+"</td>");
 			} else {
-				sbHtml.append("<td class='board board1' bseq='"+seq+"' data-bs-toggle='modal' data-bs-target='#modal'>");
+				sbHtml.append("<td class='board board1' bseq='"+seq+"' data-bs-toggle='modal' data-bs-target='#view-modal'>");
 				// 사진 크기 250 250
 				sbHtml.append("	<div class='img'>");
 				sbHtml.append("		<img src='./upload/"+filename+"' border='0' width=250px height=250px/>");
@@ -135,8 +135,20 @@
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
 
+<!-- 글쓰기 Summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
+
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">	
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+ #main{
+ font-family: 'Noto Serif KR', serif;
+}
+#view-modal{
+		font-family: 'Noto Serif KR', serif;
+}
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
    body {
  font-family: 'Noto Serif KR', serif;
@@ -160,9 +172,6 @@
 	width: 30px;
 	font-size: 20px;
 }
-#modal{
-	font-family: 'Noto Serif KR', serif;
-}
 	.board:hover .img {filter: brightness(60%);}
 	.text {text-align: center; position: absolute; top: 50%; left: 50%; transform: translate( -50%, -50% ); color: white; opacity: 0;}
 	.text {width: 180px;}
@@ -177,7 +186,6 @@
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
 	/*#content {position: absolute; left: 50%; transform: translateX(-50%);}*/
 	
-
 </style>
 <!--
 class=board에 마우스 갖다대면 class=img를 filter 적용
@@ -201,7 +209,23 @@ $(document).ready(function(){
 	$('.board1').click(function(e){
 		//alert($(this).attr('bseq')+"클릭");
 		//console.log("./view.do?seq=" + $(this).attr('bseq'));
-		$('.modal-content').load("./view.do?seq=" + $(this).attr('bseq'));
+		$('.view-content').load("./view.do?seq=" + $(this).attr('bseq'));
+	});
+	
+	$("#write_button").on('click', function(){
+		<%if(userInfo!=null){%>
+			$("#write-modal").modal("show");
+			$('.write-content').load("./write.do");
+		<%}else{%>
+			var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
+			if(comfirm_login==true){
+				location.href="./login.do";
+			}
+		<%}%>	
+	});
+	
+	$('#view-modal').on('hidden.bs.modal', function(){
+		location.reload();
 	});
 })
 </script>
@@ -231,11 +255,15 @@ $(document).ready(function(){
 		if(userInfo.getId().equals("testadmin1")) {%>
 			<a href="./admin.do">Admin Page</a>
 		<%} else{ %>
-			<a href="./mypage.do">My Page</a>
+			<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
 		<%}
 	}%>
 	<a href="./list.do">모든 게시글 보기</a>
 	<a href="./book_list.do">책 구경하기</a>
+	
+	<div style="padding:8px; position:absolute; bottom:2%; width:100%">
+		<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
+	</div>
 </div>
 
 <div id="main">
@@ -261,8 +289,8 @@ $(document).ready(function(){
     	</div>
     </div>
     
-    <div id="content">
-         <h1 >전체 게시글</h1>
+    <div id="content" style="padding: 100px 0px;" align= "center">
+         <div style="width:1320px"><h1 align='left'>전체 게시글</h1></div>
          <br/> 
         	
         <!-- ■■ 내가 추가한 부분 ■■ -->
@@ -340,10 +368,17 @@ $(document).ready(function(){
     </div>
 </div>
 <!-- 모달창 정보 -->
-<div id="modal" class="modal fade" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-dialog modal-xl modal-dialog-centered">
-		<div class="modal-content">               
+<div id="view-modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content view-content">                   
 		</div>
+	</div>
+</div>
+             
+<div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content write-content">
+	    </div>
 	</div>
 </div>
 </body>

@@ -16,6 +16,15 @@
 		out.println("location.href='./home.do'");
 		out.println("</script>");
 	}
+	
+	String infoAgreement = "아래의 내용으로 개인정보를 수집, 이용 및 제공하는데 동의합니다.\n"
+			+"□ 개인정보의 수집 및 이용에 관한 사항\n"
+			+"- 수집하는 개인정보 항목 :\n" 
+			+"  이메일, 주소\n"
+			+"- 개인정보의 이용 목적 :\n" 
+			+"  수집된 개인정보를 아이디, 비밀번호찾기의 용도로 활용하며,  목적 외의 용도로는 사용하지 않습니다.\n\n" 
+			+"□ 개인정보의 보관 및 이용 기간\n"
+			+"- 귀하의 개인정보를 다음과 같이 보관하며, 홈페이지 탈퇴시 삭제됩니다.";
 %>
 <!DOCTYPE html>
 <html>
@@ -34,6 +43,11 @@
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
 <script type="text/javascript" src="./js/sidebar.js"></script>
+
+<!-- 글쓰기 Summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
 <style>
   .button1{
 	float: right;
@@ -92,6 +106,13 @@ padding-left: 100px;
 	margin-top: 60px;
 	margin-left: 100px;
 }
+
+.kwdselect{
+	width: 110px;
+}
+#kwd3{
+	width: 120px;
+}
    
 </style>
 <script type="text/javascript">
@@ -109,10 +130,10 @@ padding-left: 100px;
 			$('#nickname').attr("check_result", "fail");
 		});
 		
-		document.getElementById('id_check').onclick = function(){
+		$(document).on('click', '#id_check', function(){
 			// 아이디 정규표현식, 5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.(네이버와 동일)
 			const regexp = /^[a-z0-9-_]{5,20}$/;
-			if(!regexp.test(document.signup_frm.userID.value.trim())){
+			if(!regexp.test($('#userID').val().trim())){
 				alert('아이디는 5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.');
 				
 				$('#userID').focus();
@@ -146,12 +167,12 @@ padding-left: 100px;
 				request.open('GET', './duplicationCheck.do?item=id&value=' + document.signup_frm.userID.value.trim(), true);
 				request.send();
 			}
-		};
+		});
 		
-		document.getElementById('nickname_check').onclick = function(){
+		$(document).on('click', '#nickname_check', function(){
 			// 별명 정규표현식, 한글 숫자만 가능, 2~12자
 			const regexp2 = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9a-zA-Z]{2,20}$/;
-			if(!regexp2.test(document.signup_frm.nickname.value.trim())){
+			if(!regexp2.test($('#nickname_check').val().trim())){
 				alert('별명은 20자 이내의 영문, 한글, 숫자만 가능합니다.');
 				$('#nickname').focus();
 				
@@ -185,34 +206,35 @@ padding-left: 100px;
 				request.open('GET', './duplicationCheck.do?item=nickname&value=' + document.signup_frm.nickname.value.trim(), true);
 				request.send();
 			}
-		};
+		});
 		
-		document.getElementById('signup').onclick = function(){
-			if(document.signup_frm.userID.value.trim()==''){
+		$(document).on('click', '#signup', function(){
+			if($('#userID').val().trim()==''){
 				alert('아이디를 입력하셔야합니다.');
 				$('#userID').focus();
 				return false;
 			}
-			if(document.signup_frm.nickname.value.trim()==''){
+			if($('#nickname').val().trim()==''){
 				alert('별명을 입력하셔야합니다.');
 				$('#nickname').focus();
 				return false;
 			}
-			if(document.signup_frm.userPassword.value.trim()==''){
+			if($('#userPassword').val().trim()==''){
 				alert('비밀번호를 입력하셔야합니다.');
 				$('#userPassword').focus();
 				return false;
 			}
-			if(document.signup_frm.userPasswordCheck.value.trim()==''){
+			if($('#userPasswordCheck').val().trim()==''){
 				alert('비밀번호 확인을 입력하셔야합니다.');
 				$('#userPasswordCheck').focus();
 				return false;
-			}
-			if(document.signup_frm.mail.value.trim()==''){
+			}			
+			if($('#mail').val().trim()==''){
 				alert('메일을 입력하셔야합니다.');
 				$('#mail').focus();
 				return false;
 			}
+			
 			// 아이디, 별명 중복확인 버튼 눌렀는지 확인
 			if ($('#userID').attr("check_result") == "fail"){
 			    alert("아이디 중복체크를 해주시기 바랍니다.");
@@ -225,7 +247,7 @@ padding-left: 100px;
 			    return false;
 			  }
 			// 비밀번호와 비밀번호확인이 동일한지 확인
-			if(document.signup_frm.userPasswordCheck.value.trim()!=document.signup_frm.userPassword.value.trim()){
+			if($('#userPassword').val().trim()!=$('#userPasswordCheck').val().trim()){
 				alert("비밀번호를 다시 확인해주세요");
 			    $('#userPassword').focus();
 			    return false;
@@ -246,23 +268,33 @@ padding-left: 100px;
 				$('#kwd3').focus();
 				return false;
 			}
+			if($('#agree').is(":checked")==false){
+				alert('정보제공 동의를 해주세요.');
+				return false;
+			}
+			
 			document.signup_frm.submit();
-		};
-	});
-</script>
+		});
 
-<script type="text/javascript">
-	$(document).ready(function(){
 	  $("#modal-button").click(function(){
 		  	const regexp2 = /^[ㄱ-ㅎ|ㅏ-ㅣ|가-힣|0-9]{2,12}$/;
 			if(!regexp2.test($('#address').val().trim())){
 				alert('동이름으로 검색해주세요');
 				$('#address').val('');
-			}
-			
-			$('.modal-content').load("./zipsearch.do?strDong="+$('#address').val());
-			
+			}		
+			$('.address-content-content').load("./zipsearch.do?strDong="+$('#address').val());			
 	  });
+	  $("#write_button").on('click', function(){
+			<%if(userInfo!=null){%>
+				$("#write-modal").modal("show");
+				$('.write-content').load("./write.do");
+			<%}else{%>
+				var comfirm_login = confirm("로그인이 필요한 서비스입니다. \n'확인'버튼을 클릭 시, 로그인 창으로 이동합니다.");
+				if(comfirm_login==true){
+					location.href="./login.do";
+				}
+			<%}%>	        	
+		});
 	});
 </script>
 	
@@ -290,12 +322,16 @@ padding-left: 100px;
 		<%if(userInfo != null){
 		if(userInfo.getId().equals("testadmin1")) {%>
 			<a href="./admin.do">Admin Page</a>
-		<%} else{ %>
-			<a href="./mypage.do">My Page</a>
+		<%} else{ %>			
+			<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
 		<%}
 	}%>
 	<a href="./list.do">모든 게시글 보기</a>
 	<a href="./book_list.do">책 구경하기</a>
+	
+	<div style="padding:8px; position:absolute; bottom:2%; width:100%">
+		<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
+	</div>
 </div>
 
 <div id="main">
@@ -369,7 +405,7 @@ padding-left: 100px;
 							</div>
 							
 							<div class="form-group" >
-								<input type="email" class="form-control" placeholder="이메일(*)" name="mail" maxlength="20" />
+								<input type="email" class="form-control" placeholder="이메일(*)" name="mail" id="mail" maxlength="20" />
 								
 							</div>
 						
@@ -395,7 +431,7 @@ padding-left: 100px;
 							<!-- 키워드 -->
 							<div class="form-group" style="height:70px;">
 								<!-- class="form-control" -->
-								<select class="kwdselect" name="kwd1" id="kwd1">
+								<select class="kwdselect form-select form-select-sm d-inline-block" name="kwd1" id="kwd1">
 									<option value="none">키워드1(*)</option>
 									<option value="경제">경제</option>
 									<option value="과학">과학</option>
@@ -415,7 +451,7 @@ padding-left: 100px;
 								</select>
 								
 								<span>을(를) 좋아하는 </span>
-								<select class="kwdselect" name="kwd2" id="kwd2">
+								<select class="kwdselect form-select form-select-sm d-inline-block" name="kwd2" id="kwd2">
 									<option value="none">키워드2(*)</option>
 									<option value="감성적인">감성적인</option>
 			    					<option value="계획적인">계획적인</option>
@@ -434,7 +470,7 @@ padding-left: 100px;
 			    					<option value="허술한">허술한</option>
 			    					<option value="활발한">활발한</option>
 			    				</select>
-			    				<select class="kwdselect" name="kwd3" id="kwd3">
+			    				<select class="kwdselect form-select form-select-sm d-inline-block" name="kwd3" id="kwd3">
 			    					<option value="none">키워드3(*)</option>
 			    					<option value="강사">강사</option>
 			    					<option value="개발자">개발자</option>
@@ -463,12 +499,13 @@ padding-left: 100px;
 							
 							
 							<div class="form-group">
-								<input type="text"  id="information" style="float:left; width: 430px; height: 150px; " value="책갈피 정보제공 동의" disabled />
+								<!-- <input type="text"  id="information" style="float:left; width: 430px; height: 150px; " value="<%=infoAgreement %>" disabled /> -->
+								<textarea  id="information" style="float:left; width: 430px; height: 150px; padding: 5px 10px" disabled><%=infoAgreement %></textarea>
 							</div>
 							
 							
-							<div class="form-group" style="padding-top: 150px; padding-left: 270px;">
-								<input type="checkbox" name="agree" value="동의합니다" />위 상기 사항에 동의합니다.
+							<div class="form-group" style="padding-top: 90px; padding-left: 240px;">
+								<input type="checkbox" name="agree" id="agree" value="동의합니다" />위 상기 사항에 동의합니다.
 							</div>
 							
 							<div class="form-group" >
@@ -481,6 +518,13 @@ padding-left: 100px;
             </div>
          </div>
       </div>
+</div>
+<!-- 모달창 정보 -->		             
+<div id="write-modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+		<div class="modal-content write-content">
+		</div>
+	</div>
 </div>
 
 </body>

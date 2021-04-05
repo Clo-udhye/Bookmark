@@ -49,6 +49,9 @@
 			String seq = to.getSeq();
 			String date = to.getDate();
 			String filename = to.getFilename();
+			if(filename!=null){
+				filename = filename.split("//")[0];
+			}
 			String title = to.getTitle();
 			// title 처리랑, css에 text width 설정함.
 			if (title != null && title.length() > 25) {
@@ -87,7 +90,7 @@
 				sbHtml.append("</td>");
 
 			} else {
-				sbHtml.append("<td class='board board1' bseq='"+seq+"' data-bs-toggle='modal' data-bs-target='#modal'>");
+				sbHtml.append("<td class='board board1' bseq='"+seq+"' data-bs-toggle='modal' data-bs-target='#view-modal'>");
 				// 사진 크기 250 250
 				sbHtml.append("	<div class='img'>");
 				sbHtml.append("		<a><img src='./upload/"+filename+"' border='0' width=250px height=250px/></a>");
