@@ -76,21 +76,32 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
 <style>
-	.button1{
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+	#main{
+		font-family: 'Noto Serif KR', serif;
+	}
+	#view-modal{
+		font-family: 'Noto Serif KR', serif;
+	}
+   body {
+ font-family: 'Noto Serif KR', serif;
+  background: #white;
+}	
+.button1{
+	float: right;
+	margin-right:20px;
+	width: 20px;
+	font-size: 20px;
+
+}
+.button2{
 	float: right;
 	margin-right: 50px;
 	width: 30px;
 	font-size: 20px;
-
 }
-	.button2{
+.button3{
 	float: right;
-	margin-right: 30px;
-	width: 30px;
-	font-size: 20px;
-}
-	.button3{
-	margin-right: 0px;
 	width: 30px;
 	font-size: 20px;
 }
@@ -106,7 +117,7 @@
 		width : 400px;
 	}
 	.vertical {
-		width: 100%;
+		width: 99%;
 		overflow-y: scroll;
 		height : 200px;
 	}

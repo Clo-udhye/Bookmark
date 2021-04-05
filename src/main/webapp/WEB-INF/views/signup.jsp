@@ -106,6 +106,13 @@ padding-left: 100px;
 	margin-top: 60px;
 	margin-left: 100px;
 }
+
+.kwdselect{
+	width: 110px;
+}
+#kwd3{
+	width: 120px;
+}
    
 </style>
 <script type="text/javascript">
@@ -245,12 +252,6 @@ padding-left: 100px;
 			    $('#userPassword').focus();
 			    return false;
 			}
-			
-			if($('#agree').is(":checked")==false){
-				alert('정보제공 동의를 해주세요.');
-				return false;
-			}
-			
 			// 키워드 알림창
 			if($("#kwd1 option:selected").val() == "none"){
 				alert('키워드1을 선택해주세요.');
@@ -267,6 +268,11 @@ padding-left: 100px;
 				$('#kwd3').focus();
 				return false;
 			}
+			if($('#agree').is(":checked")==false){
+				alert('정보제공 동의를 해주세요.');
+				return false;
+			}
+			
 			document.signup_frm.submit();
 		});
 
@@ -425,7 +431,7 @@ padding-left: 100px;
 							<!-- 키워드 -->
 							<div class="form-group" style="height:70px;">
 								<!-- class="form-control" -->
-								<select class="kwdselect" name="kwd1" id="kwd1">
+								<select class="kwdselect form-select form-select-sm d-inline-block" name="kwd1" id="kwd1">
 									<option value="none">키워드1(*)</option>
 									<option value="경제">경제</option>
 									<option value="과학">과학</option>
@@ -445,7 +451,7 @@ padding-left: 100px;
 								</select>
 								
 								<span>을(를) 좋아하는 </span>
-								<select class="kwdselect" name="kwd2" id="kwd2">
+								<select class="kwdselect form-select form-select-sm d-inline-block" name="kwd2" id="kwd2">
 									<option value="none">키워드2(*)</option>
 									<option value="감성적인">감성적인</option>
 			    					<option value="계획적인">계획적인</option>
@@ -464,7 +470,7 @@ padding-left: 100px;
 			    					<option value="허술한">허술한</option>
 			    					<option value="활발한">활발한</option>
 			    				</select>
-			    				<select class="kwdselect" name="kwd3" id="kwd3">
+			    				<select class="kwdselect form-select form-select-sm d-inline-block" name="kwd3" id="kwd3">
 			    					<option value="none">키워드3(*)</option>
 			    					<option value="강사">강사</option>
 			    					<option value="개발자">개발자</option>

@@ -39,38 +39,47 @@
 	int changeRow = 0;
 	StringBuffer sbHtml = new StringBuffer();
 	ArrayList<MyPageTO> myboard_lists = (ArrayList)request.getAttribute("myboard_list");
-	for (MyPageTO myboard_list : myboard_lists){
-		changeRow++;
-		String bseq = myboard_list.getSeq();
-		String title = myboard_list.getTitle();
-		if(title.length() > 20){
-			title = myboard_list.getTitle().substring(0, 20) + "...";
+	if(myboard_lists.size()==0){
+		sbHtml.append("<h4>현재 게시글이 존재하지 않습니다.</h4>");
+		if(mypage_flag == 1){
+			sbHtml.append("<h3>새로운 게시글을 작성 하시겠습니까?</h3>");
+			sbHtml.append("<button id='new_article' class='btn btn-dark write_button' >새로운 글 작성하기</button>");
 		}
-		String filename = myboard_list.getFilename().split("//")[0];
-		int likey = myboard_list.getLike();
-		int comment = myboard_list.getComment();
-		
-		sbHtml.append("<td class='board board1' bseq='"+bseq+"' data-bs-toggle='modal' data-bs-target='#view-modal'>");
-		// 사진 크기 250 250
-		sbHtml.append("	<div class='img'>");
-		sbHtml.append("		<img src='./upload/"+filename+"' border='0' width=200px height=200px/>");
-		sbHtml.append("	</div>");
-		sbHtml.append("	<div class='text'>");
-		sbHtml.append("      <div id='text_title'><p>"+title+"</p></div>");
-		sbHtml.append("      <div id='text_nickname'><p>by "+visit_nickname+"</p></div>");
-		sbHtml.append("      </br>");
-		sbHtml.append("      <div id='text_count' align='right'>");
-		sbHtml.append("         <span id='text_likey'><i class='fas fa-heart'></i>&nbsp;"+likey+"</span>");
-		sbHtml.append("         &nbsp;");
-		sbHtml.append("         <span id='text_comment'><i class='fas fa-comment-dots'></i>&nbsp;"+comment+"</span>");
-		sbHtml.append("      </div>");   
+	} else{
+		for (MyPageTO myboard_list : myboard_lists){
+			changeRow++;
+			String bseq = myboard_list.getSeq();
+			String title = myboard_list.getTitle();
+			if(title.length() > 20){
+				title = myboard_list.getTitle().substring(0, 20) + "...";
+			}
+			String filename = myboard_list.getFilename().split("//")[0];
+			int likey = myboard_list.getLike();
+			int comment = myboard_list.getComment();
+			
+			sbHtml.append("<td class='board board1' bseq='"+bseq+"' data-bs-toggle='modal' data-bs-target='#view-modal'>");
+			// 사진 크기 250 250
+			sbHtml.append("	<div class='img'>");
+			sbHtml.append("		<img src='./upload/"+filename+"' border='0' width=200px height=200px/>");
+			sbHtml.append("	</div>");
+			sbHtml.append("	<div class='text'>");
+			sbHtml.append("      <div id='text_title'><p>"+title+"</p></div>");
+			sbHtml.append("      <div id='text_nickname'><p>by "+visit_nickname+"</p></div>");
+			sbHtml.append("      </br>");
+			sbHtml.append("      <div id='text_count' align='right'>");
+			sbHtml.append("         <span id='text_likey'><i class='fas fa-heart'></i>&nbsp;"+likey+"</span>");
+			sbHtml.append("         &nbsp;");
+			sbHtml.append("         <span id='text_comment'><i class='fas fa-comment-dots'></i>&nbsp;"+comment+"</span>");
+			sbHtml.append("      </div>");   
 
-		sbHtml.append("	</div>");
-		sbHtml.append("</td>");
-		if(changeRow%3 == 1 && changeRow>3){
-			sbHtml.append("	</tr><tr>");
+			sbHtml.append("	</div>");
+			sbHtml.append("</td>");
+			if(changeRow%3 == 1 && changeRow>3){
+				sbHtml.append("	</tr><tr>");
+			}
 		}
 	}
+	
 	
 	
 %>    
@@ -186,7 +195,7 @@
 			$('.view-content').load("./view.do?seq=" + $(this).attr('bseq'));
 		});
 		
-		$("#write_button").on('click', function(){
+		$(".write_button").on('click', function(){
 			<%if(userInfo!=null){%>
 				$("#write-modal").modal("show");
 				$('.write-content').load("./write.do");
@@ -210,7 +219,13 @@
 
 	});
 </script>
-<style type="text/css">
+<style type="text/css">	
+	#main{
+		font-family: 'Noto Serif KR', serif;
+	}
+	#view-modal{
+		font-family: 'Noto Serif KR', serif;
+	}
 	
 	#modifymodal1 {width: 650px;}
 	
@@ -252,7 +267,7 @@
 		<a href="./book_list.do">책 구경하기</a>
 		
 		<div style="padding:8px; position:absolute; bottom:2%; width:100%">
-			<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light">글쓰기</button>
+			<button style="width:100%" id="write_button" type="button" class="btn btn-outline-light write_button">글쓰기</button>
 		</div>
 	</div>
 
@@ -308,7 +323,7 @@
 			    				</td>
 			    				<td width=30%>
 			    					<div class="profile_info"> 별명 : <%=visit_nickname %></div>
-			    					<div class="profile_info" style="overflow-y:scroll;"> 소개 : <%=visit_introduction %></div>
+			    					<div class="profile_info" style="height:100px; overflow-y:auto;"> 소개 : <%=visit_introduction %></div>
 			    					<!-- <div class="profile_info"> 태그 : <%= visit_keywords %></div> -->
 			    					<!-- <div class="profile_info"> 태그 : <%=kwdarray[0] %>을(를) 좋아하는 <%=kwdarray[1] %> <%=kwdarray[2] %></div> -->
 			    					<div class="profile_info">
@@ -324,15 +339,10 @@
 				    				<div id="vertical3">
 		       							<div class="wrap3">
 		       								<table  id="wrapTable3" >
-				    						<tr>
-				    							<%=sbHtml %>
-				    						</tr>
-				    						<tr>
-				    						<h4>현재 게시글이 존재하지 않습니다.</h4>
-				    						<h3>새로운 게시글을 작성 하시겠습니까?</h3>
-				    						<button id="new_article" class="btn btn-dark" >새로운 글 작성하기</button>
-				    						</tr>
-				    					</table>
+					    						<tr>
+					    							<%=sbHtml %>
+					    						</tr>
+				    						</table>
 				    					</div>	
 			    					</div>
 			    				</td>

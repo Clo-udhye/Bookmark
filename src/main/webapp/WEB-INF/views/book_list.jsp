@@ -25,9 +25,9 @@
     StringBuffer SearchResult = new StringBuffer();
     if (request.getAttribute("bookname") != null){
     	bookname = (String)request.getAttribute("bookname");
-    	SearchResult.append("<div ><h1><span id='result'>"+bookname+"</span> 으로 검색한 결과</h1></div>");
+    	SearchResult.append("<div style='width:1160px'><h1 align='left'><span id='result'>"+bookname+"</span> 으로 검색한 결과</h1></div>");
     } else {
-    	SearchResult.append("<div><h1 style='padding-left: 50px;'>도서 리스트</h1></div>");
+    	SearchResult.append("<div style='width:1160px'><h1 align='left'>도서 리스트</h1></div>");
     }
     String search = request.getParameter("search");
 	int totalRecord = pagelistTO.getTotalrecord();
@@ -60,8 +60,8 @@
 		}
 		String pub_date = to.getPub_date();
 			// 아래의 HTMl 양식으로 append하기
-			bookHTML.append("<div>");
-			bookHTML.append("<table id=innerlist align='center'>");
+			bookHTML.append("<div style='width:1160px'>");
+			bookHTML.append("<table id=innerlist>");
 			bookHTML.append("<tr>");
 			bookHTML.append("<td rowspan='4' width='20%'><img width='200px' src='"+img_url+"' alt='이미지 없음' border='1px'/></td>");
 			bookHTML.append("<td width=60% style='padding-top: 20px;'>책 제목 :"+title+"</td>");
@@ -101,7 +101,10 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&family=Quicksand:wght@500&display=swap');
-
+#main{
+		font-family: 'Noto Serif KR', serif;
+	}
+	
 .button1{
 	float: right;
 	margin-right: 0px;
@@ -123,7 +126,6 @@
 #resist-books{
 	font-family: 'Noto Serif KR', serif;
 	font-family: 'Quicksand', sans-serif;
-	padding-left: 50px;
 }
 #list {
   border: 1px solid black;
@@ -133,7 +135,7 @@
 #innerlist {
   border: 1px solid black;
   padding: 15px;
-  width:80%;
+  width:100%;
  
 }
 #logo{
@@ -240,17 +242,17 @@ table {
     	</div>
 	</div>
     
-    <div id="content" width=100% > 
+    <div id="content" style="padding: 100px 0px;" align= "center"> 
         <%=SearchResult %>
-        <div width=100% >
+        <div style='width:1160px'>
         	<table>
         	
-        	<tr><td width = 80% height="40" id="resist-books" > 현재 <%= totalRecord %>개의 책이 등록되어 있습니다.</td></tr>
+        		<tr><td width = 100% height="40" id="resist-books" > 현재 <%= totalRecord %>개의 책이 등록되어 있습니다.</td></tr>
         		<tr>
         			<td height="50" width="200" ></td>
         			<td>
-        				<table width="550">
-        				<form action="./book_list_search.do" type="get" align="left">
+        				<table width="422px">
+        				<form action="./book_list_search.do" type="get">
         				<tr>
 	        				<td  width="120">
 	        					<select name="search" style="border-radius: 4px">
@@ -273,10 +275,9 @@ table {
         		</tr>
         	</table>
         </div>
-     </div>
-     <div>
-   		<%= bookHTML %>
-     </div>
+        <div>
+   			<%= bookHTML %>
+     	</div>
      <br><br>
      <footer>
      <div align="center">
@@ -364,6 +365,8 @@ table {
      </footer>
      <br><br>
 </div>
+     </div>
+     
 
 <!-- 모달창 정보 -->
 <div id="write-modal" class="modal fade" tabindex="-1" role="dialog">

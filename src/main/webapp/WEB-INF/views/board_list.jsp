@@ -143,6 +143,13 @@
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">	
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+ #main{
+ font-family: 'Noto Serif KR', serif;
+}
+#view-modal{
+		font-family: 'Noto Serif KR', serif;
+}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
    body {
  font-family: 'Noto Serif KR', serif;
   background: #white;
@@ -178,15 +185,6 @@
 	.board_pagetab a:hover { text-decoration: underline; background-color:#f2f2f2; }
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
 	/*#content {position: absolute; left: 50%; transform: translateX(-50%);}*/
-
-#view-modal {
-	font-family: 'Noto Serif KR', serif;	
-}
-	
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
- #main{
- font-family: 'Noto Serif KR', serif;
-}
 	
 </style>
 <!--
@@ -292,7 +290,7 @@ $(document).ready(function(){
     </div>
     
     <div id="content" style="padding: 100px 0px;" align= "center">
-         <h1 >전체 게시글</h1>
+         <div style="width:1320px"><h1 align='left'>전체 게시글</h1></div>
          <br/> 
         	
         <!-- ■■ 내가 추가한 부분 ■■ -->

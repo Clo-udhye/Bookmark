@@ -33,8 +33,8 @@
 	
     StringBuffer SearchResult = new StringBuffer();
     if (searchword != null){
-    	SearchResult.append("<div><h2><span id='result'>"+searchword+"</span> (으)로 검색한 결과</h2></div>");
-    	SearchResult.append("<div><h4>총 "+(tTotalRecord+nTotalRecord)+"건("+"게시글 "+tTotalRecord+" / 작가 "+nTotalRecord+")</h4></div>");
+    	SearchResult.append("<div style='width:1356px;'><h2 align='left'><span id='result'>"+searchword+"</span> (으)로 검색한 결과</h2></div>");
+    	SearchResult.append("<div style='width:1356px;'><h4 align='left'>총 "+(tTotalRecord+nTotalRecord)+"건("+"게시글 "+tTotalRecord+" / 작가 "+nTotalRecord+")</h4></div>");
     	//System.out.println(searchword);
     	//System.out.println(searchword.length());
     } 
@@ -137,6 +137,13 @@ $(document).ready(function(){
 
 <!-- ■■ 내가 추가한 부분 ■■ -->
 <style type="text/css">
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap');
+ #main{
+ font-family: 'Noto Serif KR', serif;
+}
+#view-modal{
+		font-family: 'Noto Serif KR', serif;
+}
 	.button1{
 	float: right;
 	margin-right: 0px;
@@ -168,7 +175,7 @@ $(document).ready(function(){
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
 	/*#content {position: absolute; left: 50%; transform: translateX(-50%);}*/
 	
-	.tabcontent {background-color: rgb(250, 250, 250); border: 3px solid #a6a6a6;}
+	.tabcontent {background-color: rgb(250, 250, 250); width:1356px; border: 3px solid #a6a6a6;}
 	.tab { width: 1356px; height: 50px; }
 	.tablinks {float: left; width: 50%; height: 100%; border: none; outline: none; font-size: 16px; font-weight: bold; color: #000; background-color: #fff;}
 	.tablinks.active {color: #fff; background-color: #a6a6a6;}
@@ -253,7 +260,7 @@ tab하나 처리
 			</table>		
     	</div>
     </div>
-    <div id="content">
+    <div id="content" style="padding: 100px 0px;" align= "center">
         <!-- <h1>검색 결과 페이지</h1> -->
 		<%=SearchResult %>
         
