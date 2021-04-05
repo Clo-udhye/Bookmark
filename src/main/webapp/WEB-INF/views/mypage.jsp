@@ -386,8 +386,8 @@ $(document).ready(function(){
 				<a href="./admin.do">Admin Page</a>
 			<%} else{ %>
 				<a href="./mypage.do?useq=<%=userInfo.getSeq()%>" >My Page</a>
-			<%}
-		}%>
+			<%}%>
+		<%}%>
 		<a href="./list.do">모든 게시글 보기</a>
 		<a href="./book_list.do">책 구경하기</a>
 		
@@ -488,21 +488,21 @@ $(document).ready(function(){
 				<div>
 					<div style="float: left; width: 50%; padding-left:5%">
 						<div class="btn-group" style="padding-left:10%;" >
-						  <button type="button" class="btn btn-dark catalogue" value="action">액션</button>
-						  <button type="button" class="btn btn-dark catalogue" value="hit">조회수</button>
-						  <button type="button" class="btn btn-dark catalogue" value="like">좋아요</button>
-						  <button type="button" class="btn btn-dark catalogue" value="comment">댓글</button>
+						 	<button type="button" class="btn btn-dark catalogue" value="action">액션</button>
+						  	<button type="button" class="btn btn-dark catalogue" value="hit">조회수</button>
+						  	<button type="button" class="btn btn-dark catalogue" value="like">좋아요</button>
+						  	<button type="button" class="btn btn-dark catalogue" value="comment">댓글</button>
 						</div>
 					</div>
 					<div style="float: left; width: 50%; padding-left:25%">
 						<div class="dropdown">
-						  <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
-						    시간 구분
-						  </button>
-						  <div class="dropdown-menu">
-						    <a class="dropdown-item" value="day">일주일 조회</a>
-						    <a class="dropdown-item" value="time">하루 조회(24시간)</a>
-						  </div>
+						  	<button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
+						    	시간 구분
+						  	</button>
+						  	<div class="dropdown-menu">
+						    	<a class="dropdown-item" value="day">일주일 조회</a>
+						    	<a class="dropdown-item" value="time">하루 조회(24시간)</a>
+						  	</div>
 						</div>
 					</div>
 				</div>
@@ -514,7 +514,7 @@ $(document).ready(function(){
 		    	</div>
 	    	</div>
 	    	<br><br><hr><br><br>
-<script>
+	    	<script>
 
 	let catalogue = "action";
 	let timecontrol = "day";
