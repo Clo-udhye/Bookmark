@@ -8,7 +8,6 @@
 <%
 	ArrayList<UserTO> lists = (ArrayList)request.getAttribute( "lists" );
 
-
 	String seq = "";
 	String id = "";
 	String nickname = "";
@@ -16,6 +15,7 @@
 	String address = "";
 	String addresses = "";
 	String keywords = "";
+	String[] kwdarray = new String[3];
 	String introduction = "";
 	String profile_filename = "";
 	
@@ -32,7 +32,9 @@
 				addresses = to.getAddresses();
 			}
 			keywords = to.getKeywords();
-			introduction = to.getIntroduction();
+			kwdarray = keywords.split("//");
+			String intro = to.getIntroduction();
+			introduction = intro.replaceAll("<br/>", "\r\n");
 			profile_filename = to.getProfile_filename();
 		}
 	}
@@ -44,8 +46,10 @@
 <style type="text/css">
 	#user_img img {border-radius: 50%;}
 	.form-control0 {width: 300px;}
-	td { padding: 3px 4px 3px 4px;}
+	td { padding: 3px 4px 3px 4px; height:30px;}
 	.btn {padding: 2px 4px 2px 4px;}
+	.kwdselect {width:90px;}
+	#kwd3 {width:105px;}
 </style>
 
 
@@ -120,12 +124,37 @@
 			    alert("아이디 중복체크를 해주시기 바랍니다.");
 			    $('#id').focus();
 			    return false;
-			 }
+			}
 			if ($('#nickname').attr("check_result") == "fail"){
 			    alert("별명 중복체크를 해주시기 바랍니다.");
 			    $('#nickname').focus();
 			    return false;
-			  }
+			}
+			
+			// 상세 주소 입력 전 주소 입력하기
+			if($("#address").val() == "" && $("#addresses").val() != "") {
+				alert('상세 주소를 입력하시려면 주소를 입력하셔야합니다.')
+				$('#address').focus();
+				return false;				
+			}
+			
+			// 키워드 알림창
+			//$("#kwd1 option:selected").val();
+			if($("#kwd1 option:selected").val() == "none"){
+				alert('키워드1을 선택해주세요.');
+				$('#kwd1').focus();
+				return false;
+			}
+			if($("#kwd2 option:selected").val() == "none"){
+				alert('키워드2를 선택해주세요.');
+				$('#kwd2').focus();
+				return false;
+			}			
+			if($("#kwd3 option:selected").val() == "none"){
+				alert('키워드3을 선택해주세요.');
+				$('#kwd3').focus();
+				return false;
+			}
 			
 			//console.log($('#id').val());
 			//document.mypagemodify_frm.submit();
@@ -182,16 +211,20 @@
 				
 		  });
 	  
-		$("#imgchoice").click(function(){
-		 alert("imgchoice"); 
-		  });
-	  
-		$("#keywordset").click(function(){
-			 alert("keywordset");
-		});
 	});
 	
 </script>
+
+<!-- 키워드 부분 -->
+<script type="text/javascript">
+$(document).ready(function(){
+	// kwdarray[0]에 해당하는 값을 kwd1 네임을 갖는 곳에서 찾아서 그 option에 selected를 준다
+	$("select option[value='<%=kwdarray[0]%>']").attr("selected", true);
+	$("select option[value='<%=kwdarray[1]%>']").attr("selected", true);
+	$("select option[value='<%=kwdarray[2]%>']").attr("selected", true);
+});
+</script>
+
 
 <!-- 프로필 이미지 부분 -->
 <script type="text/javascript">
@@ -199,8 +232,9 @@
     $("input[type='file']").change(function(e){
 
       //div 내용 비워주기
-      // 설정한 확장자에 해당하는 파일이 아닐 경우 알림창이 뜨고 파일 선택 창이 사라지는데 모달창에 기존 이미지가 사라짐.. 처리하기 ★★★
+      // 설정한 확장자에 해당하는 파일이 아닐 경우 알림창이 뜨고 파일 선택 창이 사라지는데 모달창에 기존 이미지가 사라짐.. 처리함
       $('#preview-image').empty();
+
 
       var files = e.target.files;
       var arr = Array.prototype.slice.call(files);
@@ -240,6 +274,9 @@
 		if(extension != 'png' && extension != 'jpg' && extension != 'gif' && extension != 'PNG' && extension != 'JPG' && extension != 'GIF' ) {
 			alert('이미지 파일을 첨부하셔야 합니다.');
 			//$("input[type='file']").val("");  //파일 초기화
+            var str = '';
+			str += '<img src="./profile/<%=profile_filename %>" border="0" width=100px height=100px/>';
+            $(str).appendTo('#preview-image');			
 			return false;
 		}
 
@@ -248,7 +285,6 @@
     
     function preview(arr){
       arr.forEach(function(f){
-        
         //파일명이 길면 파일명...으로 처리
         var fileName = f.name;
         /* ... 처리하면 데이터 가지고 저장하기 번거로워서 안함
@@ -291,7 +327,7 @@
 		<span><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></span>
 	</div>
 	
-    <div class="modal-body" style="padding: 15px 18px 15px 18px;">
+    <div class="modal-body" style="padding: 15px 16px 15px 16px;">
     <!-- 파일 업로드 할 때 enctype~ 필요함  -->
     <form action="./mypage_modify_ok.do" name="mypagemodify_frm" id="mypagemodify_frm" method="post" enctype="multipart/form-data">
     <!-- <form method="post" action="./mypage_modify_ok.do" name="mypagemodify_frm" id="mypagemodify_frm"> -->
@@ -327,10 +363,13 @@
 					
     			</td>
     			<td><span class="form-title">아이디</span></td>
-    			<td>
+    			<td class="form-group">
+    				<!-- 
 					<div class="form-group">
     					<span><input type="text" class="form-control0" id="id" name="id" value="<%=id %>" maxlength="20" check_result="success" readonly/></span>
     				</div> 
+    				-->
+    				 <input type="text" class="form-control0" id="id" name="id" value="<%=id %>" maxlength="20" check_result="success" readonly/>
     			</td>
     			<td></td>
 
@@ -339,10 +378,13 @@
     		<!-- 별명 -->
     		<tr>
     			<td><span class="form-title">별명</span></td>
-    			<td>
+    			<td class="form-group">
+    				<!-- 
     				<div class="form-group">
     					<span><input type="text" class="form-control0" id="nickname" name="nickname" value="<%=nickname %>" maxlength="20" check_result="success" required /></span>
-    				</div>		
+    				</div>
+    				-->
+    				<input type="text" class="form-control0" id="nickname" name="nickname" value="<%=nickname %>" maxlength="20" check_result="success" required />
     			</td>
     			<td>
     				<span class="form-btn">
@@ -355,10 +397,13 @@
     		<!-- 소개 -->	
     		<tr>
     			<td><span class="form-title">소개</span></td>
-    			<td>
+    			<td  class="form-group">
+    				<!-- 
 					<div class="form-group">
     					<span><textarea class="form-control0" id="introduction" name="introduction" style="resize:none;"><%=introduction %></textarea></span>
     				</div>
+    				-->
+    				 <textarea class="form-control0" id="introduction" name="introduction" style="resize:none;"><%=introduction %></textarea>
     			</td>
     			<td></td>
     		</tr>    		
@@ -366,10 +411,13 @@
     		<!-- 메일 -->
     		<tr>
     			<td><span class="form-title">메일</span></td>
-    			<td>
+    			<td class="form-group">
+    				<!-- 
 					<div class="form-group">
     					<span><input type="email" class="form-control0" id="mail" name="mail" value="<%=mail %>" maxlength="20" /></span>
-    				</div>    			
+    				</div>
+    				-->
+    				<input type="email" class="form-control0" id="mail" name="mail" value="<%=mail %>" maxlength="20" />	
     			</td>
     			<td></td>
     		</tr>	
@@ -377,10 +425,13 @@
     		<!-- 주소 -->
     		<tr>
     			<td><span class="form-title">주소</span></td>
-    			<td>
+    			<td class="form-group">
+    				<!--  
     				<div class="form-group">
     					<span><input type="text" class="form-control0" id="address" name="address" value="<%=address %>"maxlength="20" /></span>
-    				</div>    			
+    				</div> 
+    				-->   		
+    				<input type="text" class="form-control0" id="address" name="address" value="<%=address %>"maxlength="20" />	
     			</td>
     			<td>
     				<span class="form-btn">
@@ -392,10 +443,13 @@
     		<!-- 상세 주소 -->
     		<tr>
     			<td><span class="form-title">상세 주소</span></td>
-    			<td>
+    			<td class="form-group">
+    				<!--  
        				<div class="form-group">
     					<span><input type="text" class="form-control0" id="addresses" name="addresses" value="<%=addresses %>" maxlength="20" /></span>
-    				</div>    			
+    				</div>
+    				-->
+    				<input type="text" class="form-control0" id="addresses" name="addresses" value="<%=addresses %>" maxlength="20" />	
     			</td>
     			<td></td>
     		</tr>
@@ -403,20 +457,90 @@
     		<!-- 태그 -->
     		<tr>
     			<td><span class="form-title">태그</span></td>
-    			<td>
+    			<td colspan="2" class="form-group">
+    				<!--  
        				<div class="form-group">
     					<span><input type="text" class="form-control0" id="keywords" name="keywords" value="<%=keywords %>" maxlength="20" /></span>
-    				</div>       			
+    				</div>
+    				-->      			
+					<select class="kwdselect" name="kwd1" id="kwd1">
+						<option value="none">키워드1</option>
+						<!-- IT / SF / 경제 / 과학 / 만화 / 사진 / 소설 / 시 / 에세이 / 여행 / 역사 / 자기 개발 / 잡지 / 추리 / 패션 -->
+						<option value="경제">경제</option>
+						<option value="과학">과학</option>
+						<option value="만화">만화</option>
+						<option value="사진">사진</option>
+						<option value="소설">소설</option>
+						<option value="시">시</option>
+						<option value="에세이">에세이</option>
+						<option value="여행">여행</option>
+						<option value="역사">역사</option>
+						<option value="자기 개발">자기 개발</option>
+						<option value="잡지">잡지</option>
+						<option value="추리">추리</option>
+						<option value="패션">패션</option>
+						<option value="IT">IT</option>
+						<option value="SF">SF</option>
+					</select>
+					
+					<span>을(를) 좋아하는 </span>
+					<select class="kwdselect" name="kwd2" id="kwd2">
+						<option value="none">키워드2</option>
+						<!-- 감성적인 / 계획적인 / 귀여운 / 꿈꾸는 / 똑똑한 / 말이 많은 / 매력있는 / 밝은 / 상큼한 / 섹시한 / 소심한 / 솔직한 / 잘생긴 / 적극적인 / 허술한 / 활발한 -->
+    					<option value="감성적인">감성적인</option>
+    					<option value="계획적인">계획적인</option>
+    					<option value="귀여운">귀여운</option>
+    					<option value="꿈꾸는">꿈꾸는</option>
+    					<option value="똑똑한">똑똑한</option>
+    					<option value="말이 많은">말이 많은</option>
+    					<option value="매력있는">매력있는</option>
+    					<option value="밝은">밝은</option>
+    					<option value="상큼한">상큼한</option>
+    					<option value="섹시한">섹시한</option>
+    					<option value="소심한">소심한</option>
+    					<option value="솔직한">솔직한</option>
+    					<option value="잘생긴">잘생긴</option>
+    					<option value="적극적인">적극적인</option>
+    					<option value="허술한">허술한</option>
+    					<option value="활발한">활발한</option>
+    				</select>
+    				<select class="kwdselect" name="kwd3" id="kwd3">
+    					<option value="none">키워드3</option>
+    					<!-- SNS스타 / 강사 / 개발자 / 건축가 / 기획자 / 디자이너 / 마케터 / 백수 / 소설가 / 쉐프 / 알바생 / 에세이스트 / 연예인 / 예술인 / 작가 지망생 / 주부 / 직장인 / 취준생 / 프로듀서 / 프리랜서 / 학생 -->
+    					<option value="강사">강사</option>
+    					<option value="개발자">개발자</option>
+    					<option value="건축가">건축가</option>
+    					<option value="기획자">기획자</option>
+    					<option value="디자이너">디자이너</option>
+    					<option value="마케터">마케터</option>
+    					<option value="백수">백수</option>
+    					<option value="소설가">소설가</option>
+    					<option value="쉐프">쉐프</option>
+    					<option value="알바생">알바생</option>
+    					<option value="에세이스트">에세이스트</option>
+    					<option value="연예인">연예인</option>
+    					<option value="예술인">예술인</option>
+    					<option value="작가 지망생">작가 지망생</option>
+    					<option value="주부">주부</option>
+    					<option value="직장인">직장인</option>
+    					<option value="취준생">취준생</option>
+    					<option value="프로듀서">프로듀서</option>
+    					<option value="프리랜서">프리랜서</option>
+    					<option value="학생">학생</option>
+    					<option value="SNS스타">SNS스타</option>
+    				</select>     			
     			</td>
+    			<!-- 
     			<td>
     				<span class="form-btn"><input type="button" id="keywordset" class="btn btn-dark" value="키워드 선택" /></span>    			
     			</td>
+    			 -->
     		</tr>
     	</table>
     </form>
     </div>
     
-    <div class="modal-footer" style="padding-top:3px; padding-bottom:3px;">
+    <div class="modal-footer" style="padding:3px 16px;">
     	<input type="button" id="save" class="btn btn-dark" value="저장하기" />
     </div>
     

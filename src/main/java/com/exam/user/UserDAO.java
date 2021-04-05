@@ -105,7 +105,7 @@ public class UserDAO {
 		try{
 			conn = dataSource.getConnection();
 
-			String sql = "insert into user values(0, ?, ?, ?, ?, ?, ?, DEFAULT, DEFAULT, DEFAULT)";
+			String sql = "insert into user values(0, ?, ?, ?, ?, ?, ?, ?, DEFAULT, DEFAULT)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, to.getId());
 			pstmt.setString(2, to.getPassword());
@@ -113,6 +113,7 @@ public class UserDAO {
 			pstmt.setString(4, to.getMail());
 			pstmt.setString(5, to.getAddress());
 			pstmt.setString(6, to.getAddresses());
+			pstmt.setString(7, to.getKeywords());
 			
 			int result = pstmt.executeUpdate();
 			if(result == 1){
@@ -336,7 +337,9 @@ public class UserDAO {
 			conn = dataSource.getConnection();
 
 			//System.out.println(to.getSeq()+"/"+to.getId()+"/"+to.getNickname()+"/"+to.getProfile_filename());
-			
+			//System.out.println(to.getIntroduction());
+			String intro = to.getIntroduction();
+			//System.out.println(intro.replaceAll("\r\n", "<br/>"));
 			
 			String sql = "update user set id=?, nickname=?, mail=?, address=?, addresses=?, keywords=?, introduction=?, profile_filename=? where seq=?";
 			
@@ -347,7 +350,7 @@ public class UserDAO {
 			pstmt.setString(4, to.getAddress());
 			pstmt.setString(5, to.getAddresses());
 			pstmt.setString(6, to.getKeywords());
-			pstmt.setString(7, to.getIntroduction());
+			pstmt.setString(7, intro.replaceAll("\r\n", "<br/>"));
 			pstmt.setString(8, to.getProfile_filename());
 			pstmt.setString(9, to.getSeq());
 			

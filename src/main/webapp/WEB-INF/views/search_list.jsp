@@ -33,7 +33,7 @@
 	
     StringBuffer SearchResult = new StringBuffer();
     if (searchword != null){
-    	SearchResult.append("<div ><h2><span id='result'>"+searchword+"</span> (으)로 검색한 결과</h2></div>");
+    	SearchResult.append("<div><h2><span id='result'>"+searchword+"</span> (으)로 검색한 결과</h2></div>");
     	SearchResult.append("<div><h4>총 "+(tTotalRecord+nTotalRecord)+"건("+"게시글 "+tTotalRecord+" / 작가 "+nTotalRecord+")</h4></div>");
     	//System.out.println(searchword);
     	//System.out.println(searchword.length());
@@ -180,12 +180,29 @@ tab하나 처리
 
 <div id="mySidebar" class="sidebar">
 	<div class="sidebar-header">
-		<h3>당신의 책갈피</h3>
+		<a><h3>당신의 책갈피</h3></a>
 	</div>
 
-	<p>User1님이 로그인 중 입니다.</p>
+	<%if (userInfo != null) {%>
+		<div class="sidebar-userprofile">
+			<div class="sidebar-user_img" align="center" style="padding-top: 10px; padding-bottom: 10px;">
+				<img src="./profile/<%=userInfo.getProfile_filename() %>" border="0" width=80px height=80px style="border-radius: 50%;"/>
+			</div>
+			<div  align="center" style="color:gray; font-size:18px;"><%=userInfo.getNickname()%>님이</div>
+			<div  align="center" style="color:gray; font-size:18px;">로그인 중 입니다.</div>
+			<br/>
+		</div>
+	<%} else {%>
+		<p>로그인해주세요.</p>
+	<%}%>
 	<a href="./home.do">Home</a>
-	<a href="./mypage.do">My Page</a>
+		<%if(userInfo != null){
+		if(userInfo.getId().equals("testadmin1")) {%>
+			<a href="./admin.do">Admin Page</a>
+		<%} else{ %>
+			<a href="./mypage.do">My Page</a>
+		<%}
+	}%>
 	<a href="./list.do">모든 게시글 보기</a>
 	<a href="./book_list.do">책 구경하기</a>
 </div>
