@@ -240,7 +240,7 @@
 										<span class="book_cover" >
 											<!-- 위치조정시 left 값으로 조절 -->
 											<div class="cont_cover" style="background-color:rgba(255,255,255,0); color:white">
-												<strong class="tit_cover">당신을 위한<br>이 달의<br>게시글<br></strong>
+												<strong class="tit_cover">당신을 위한<br>추천<br>게시글<br></strong>
 												<span class="txt_writer">bookmark 개발 일동</span>
 											</div> 
 							
