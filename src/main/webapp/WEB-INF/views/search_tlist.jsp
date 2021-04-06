@@ -53,10 +53,12 @@
 				filename = filename.split("//")[0];
 			}
 			String title = to.getTitle();
+			/* 210406
 			// title 처리랑, css에 text width 설정함.
 			if (title != null && title.length() > 25) {
 				title = title.substring(0, 24)+"...";
 			}
+			*/
 			String useq = to.getUseq();
 			String nickname = to.getNickname();
 			String Lcount = to.getLcount();
@@ -98,7 +100,8 @@
 				sbHtml.append("	<div class='text'>");
 
 				//sbHtml.append("		<a href='board_view.jsp'><p>"+title+"</p></a>");
-				sbHtml.append("		<div id='text_title'><p>"+title+"</p></div>");
+				//sbHtml.append("		<div id='text_title'><p>"+title+"</p></div>");
+				sbHtml.append("		<div id='text_title' style='width:180px; height:48px; overflow-x:hidden; overflow-y:hidden; margin-bottom: 16px;'><p>"+title+"</p></div>");
 				sbHtml.append("		<div id='text_nickname'><p>by "+nickname+"</p></div>");
 				sbHtml.append("		</br>");
 				//sbHtml.append("		<span id='text_likey'><i class='fas fa-heart'></i>"+Lcount+"</span>");
