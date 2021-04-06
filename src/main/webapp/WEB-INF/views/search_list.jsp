@@ -147,17 +147,18 @@ $(document).ready(function(){
 	.button1{
 	float: right;
 	margin-right: 0px;
-	
-	font-size: 30px;
-	}
-	.button2{
-	float: right;
-	margin-right: 15px;
 	width: 30px;
 	font-size: 20px;
-	}
-	.button3{
-	float: right;	
+
+}
+.button2{
+	float: right;
+	margin-right: 30px;
+	width: 30px;
+	font-size: 20px;
+}
+.button3{
+	float: right;
 	width: 30px;
 	font-size: 20px;
 }
@@ -170,8 +171,8 @@ $(document).ready(function(){
 	.board:hover .text {opacity: 1;}
 	.board {position: relative;}
 	.board_pagetab { text-align: center; } 
-	.board_pagetab a { text-decoration: none; font: 15px verdana; color: #000; padding: 0 3px 0 3px; }
-	.board_pagetab a:hover { text-decoration: underline; background-color:#f2f2f2; }
+	.board_pagetab a { text-decoration: none; font: 15px verdana; padding: 0 3px 0 3px; color: gray;}
+	.board_pagetab a:hover { text-decoration: underline; color: black; }
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
 	/*#content {position: absolute; left: 50%; transform: translateX(-50%);}*/
 	
