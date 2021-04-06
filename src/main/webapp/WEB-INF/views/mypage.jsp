@@ -88,14 +88,22 @@
 		    sbHtml.append("      </div>");  
 		    sbHtml.append("   </div>");
 		    sbHtml.append("</td>");
-		      
-		    		    if(myboard_lists.size()%3!=0){
-				for(int i = 1; i<=(3-myboard_lists.size()%3); i++ ){
-					sbHtml.append("<td width=200></td>");
-				}
-			}
 		}
 		
+	}
+	if(myboard_lists.size()%3!=0){
+    	System.out.println("myboard_lists.size() :" + myboard_lists.size());
+    	if(myboard_lists.size()<3){
+    		for(int i = 1; i<=(3-myboard_lists.size()); i++ ){
+				System.out.println("<td></td>");
+				sbHtml.append("<td width=200 height=200></td>");
+			}
+    	}else {
+    		for(int i = 1; i<=(3-(myboard_lists.size()%3)); i++ ){
+				System.out.println("<td></td>");
+				sbHtml.append("<td width=200></td>");
+			}
+    	}	
 	}
 	int insight_flag = 0;
 	
