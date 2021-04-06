@@ -45,7 +45,10 @@
 			cnt++;
 			String seq = to.getSeq();
 			String date = to.getDate();
-			String filename = to.getFilename().split("//")[0];
+			 String filename = to.getFilename();
+	         if(filename!=null){
+	            filename = filename.split("//")[0];
+	         }
 			String title = to.getTitle();
 			// title 처리랑, css에 text width 설정함.
 			if (title != null && title.length() > 25) {
@@ -156,14 +159,14 @@
 }	
 .button1{
 	float: right;
-	margin-right:20px;
-	width: 20px;
+	margin-right: 0px;
+	width: 30px;
 	font-size: 20px;
 
 }
 .button2{
 	float: right;
-	margin-right: 50px;
+	margin-right: 30px;
 	width: 30px;
 	font-size: 20px;
 }
@@ -181,8 +184,8 @@
 	.board:hover .text {opacity: 1;}
 	.board {position: relative;}
 	.board_pagetab { text-align: center; } 
-	.board_pagetab a { text-decoration: none; font: 15px verdana; color: #000; padding: 0 3px 0 3px; }
-	.board_pagetab a:hover { text-decoration: underline; background-color:#f2f2f2; }
+	.board_pagetab a { text-decoration: none; font: 15px verdana; padding: 0 3px 0 3px; color: gray;}
+	.board_pagetab a:hover { text-decoration: underline; color: black; }
 	.board {padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;}
 	/*#content {position: absolute; left: 50%; transform: translateX(-50%);}*/
 	
@@ -309,17 +312,17 @@ $(document).ready(function(){
 	// << 표시 설정
 	//if(startBlock == 1) {
 	if(cpage == 1) {
-		out.println("<span class='off'><a style='color:black'>처음</a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a style='color:gray;'>처음</a>&nbsp;&nbsp;</span>");
 	} else {
 		//out.println("<span class='off'><a href='./list.do?cpage="+(startBlock-blockPerPage)+"'>&lt;처음&gt;</a>&nbsp;&nbsp;</span>");
-		out.println("<span class='off'><a href='./list.do?cpage="+1+" style='color:black'>처음</a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a href='./list.do?cpage="+1+"' >처음</a>&nbsp;&nbsp;</span>");
 	}
 
 	// < 표시 설정
 	if (cpage == 1) {
-		out.println("<span class='off'><a><i class='fa fa-arrow-left' aria-hidden='true' style='color:black'></i></a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a style='color:gray;'>이전</a>&nbsp;&nbsp;</span>");
 	} else {
-		out.println("<span class='off'><a href='./list.do?cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' style='color:black'></i></a>&nbsp;&nbsp;</span>");
+		out.println("<span class='off'><a href='./list.do?cpage="+(cpage-1)+"'>이전</a>&nbsp;&nbsp;</span>");
 	}
 
 
@@ -327,7 +330,7 @@ $(document).ready(function(){
 		
 		if(cpage == i) {
 			// 현재 페이지
-			out.println("<span class='on'><a>( "+i+" )</a></span>");
+			out.println("<span class='on'><a style='color: black;'>[ "+i+" ]</a></span>");
 		} else {
 			out.println("<span class='off'><a href='./list.do?cpage="+i+"'>"+i+"</a></span>");
 		}
@@ -335,18 +338,18 @@ $(document).ready(function(){
 
 	// > 표시 설정
 	if (cpage == totalPage) {
-		out.println("<span class='off'>&nbsp;&nbsp;<a style='color:black'>&lt;다음&gt;</a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a style='color:gray;'>다음</a></span>");
 	} else {
-		out.println("<span class='off'>&nbsp;&nbsp;<a href='./list.do?cpage="+(cpage+1)+"'><i class='fa fa-arrow-right' aria-hidden='true' style='color:black'></i></a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a href='./list.do?cpage="+(cpage+1)+"'>다음</a></span>");
 	}
 
 	// >> 표시 설정
 	//if(endBlock == totalPage) {
 	if(cpage == totalPage) {
-		out.println("<span class='off'>&nbsp;&nbsp;<a style='color:black'>끝</a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a style='color:gray;'>끝</a></span>");
 	} else {
 		//out.println("<span class='off'>&nbsp;&nbsp;<a href='list.do?cpage="+(startBlock+blockPerPage)+"'>&lt;끝&gt;</a></span>");
-		out.println("<span class='off'>&nbsp;&nbsp;<a href='list.do?cpage="+totalPage+"' style='color:black'>끝</a></span>");
+		out.println("<span class='off'>&nbsp;&nbsp;<a href='list.do?cpage="+totalPage+"'>끝</a></span>");
 	}
 		
 %>
