@@ -26,10 +26,11 @@
    	out.println("<script type='text/javascript'>");
    	if (flag == 1) {
    		out.println("alert('게시글 삭제에 성공했습니다.');");
-   		out.println("location.href='./admin.do';");
+   		//out.println("location.href='./admin.do';");
+   		out.println("history.back()");
    	} else {
    		out.println("alert('게시글 삭제에 실패했습니다.');");
-   		out.println("location.href='./admin.do';");
+   		out.println("history.back()");
    	}
    	out.println("</script>");
  %>
