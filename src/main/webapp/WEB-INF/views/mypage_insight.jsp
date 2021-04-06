@@ -1,3 +1,4 @@
+<%@page import="java.io.PrintWriter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.util.Collections"%>
 <%@page import="com.exam.MyPage.WeekTO"%>
@@ -8,12 +9,19 @@
     <%
     	String changeRow = (String)request.getAttribute("changeRow");
     
-	 // TodayCounts
+	 // TodayCounts, weekcount ArrayList로 받아오기
 	 	ArrayList<TodayTO> today_counts = (ArrayList)request.getAttribute("today_count");
-	 	if(today_counts.get(0).getTime() == 0){
-	 		today_counts.remove(0);
+	 	ArrayList<WeekTO> week_counts = (ArrayList)request.getAttribute("week_count");
+
+	 	if(today_counts.size()!= 0 && week_counts.size()!= 0){
+		 	if(today_counts.get(0).getTime() == 0){
+		 		today_counts.remove(0);
+		 	}
+		 	if(week_counts.get(0).getTime() == 0){
+		 		week_counts.remove(0);
+		 	}
 	 	}
-	
+	 	
 	 	ArrayList<TodayTO> blank_count_today = new ArrayList();
 	 	for (int i = 1; i<=8; i++){
 	 		TodayTO to = new TodayTO();
@@ -68,12 +76,8 @@
 	 	}
 	 			
 	 		
-	 	//weekcount ArrayList로 받아오기
-	 	ArrayList<WeekTO> week_counts = (ArrayList)request.getAttribute("week_count");
-	 	// null값 정리
-	 	if(week_counts.get(0).getTime()==0){
-	 		week_counts.remove(0);
-	 	}
+	 	
+	 	
 	 	// 출력 될 list 생성
 	 	ArrayList<Integer> week_action = new ArrayList();
 	 	ArrayList<Integer> week_hit = new ArrayList();
@@ -121,22 +125,17 @@
 				<div>
 					<div style="float: left; width: 50%; padding-left:5%">
 						<div class="btn-group" style="padding-left:10%;" >
-						  <button type="button" class="btn btn-dark catalogue1" value="action">액션</button>
-						  <button type="button" class="btn btn-dark catalogue1" value="hit">조회수</button>
-						  <button type="button" class="btn btn-dark catalogue1" value="like">좋아요</button>
-						  <button type="button" class="btn btn-dark catalogue1" value="comment">댓글</button>
+						  <button type="button" class="btn btn-outline-secondary catalogue1" value="action">액션</button>
+						  <button type="button" class="btn btn-outline-secondary catalogue1" value="hit">조회수</button>
+						  <button type="button" class="btn btn-outline-secondary catalogue1" value="like">좋아요</button>
+						  <button type="button" class="btn btn-outline-secondary catalogue1" value="comment">댓글</button>
 						</div>
 					</div>
 					<div style="float: left; width: 50%; padding-left:25%">
-						<div class="dropdown">
-						  <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
-						    시간 구분
-						  </button>
-						  <div class="dropdown-menu">
-						    <a class="dropdown-item dropdown-item1" value="day">일주일 조회</a>
-						    <a class="dropdown-item dropdown-item1" value="time">하루 조회(24시간)</a>
-						  </div>
-						</div>
+							<select class="form-select btn-outline-secondary" style="width: 200px;" aria-label="Default select example">
+								<option value="day">일주일 조회</option>
+								<option value="time">하루 조회(24시간)</option>
+							</select>
 					</div>
 				</div>
 				<div style="padding-left:10%; padding-top:3%">
@@ -273,9 +272,7 @@ function highChartFunc1() {
 $(document).ready(function() {
 	highChartFunc1();
 });
-$(document).on("click", fuction(e){
-	
-});
+
 //액션,조회수,좋아요,댓글 클릭 시
 $(function() {
 	$(document).on("click",".catalogue1",function(){
@@ -285,11 +282,11 @@ $(function() {
 });
 // 시간 구분 클릭 시, default 
 $(function() {
-	$(document).on("click",".dropdown-item1",function(){
-					timecontrol1 = $(this).attr("value");
-					highChartFunc1();
-				});
-			});
+	$(document).on("change",".form-select",function(){
+        timecontrol =$(this).val();
+		highChartFunc1();
+	});
+});
 			
 //myModal.dispose()
 </script>
