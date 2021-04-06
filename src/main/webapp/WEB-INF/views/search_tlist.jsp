@@ -168,7 +168,7 @@
 					
 					if(tpage == i) {
 						// 현재 페이지
-						out.println("<span class='on'><a style='color: black;'>[ "+i+" ]</a></span>");
+						out.println("<span class='on'><a style='color: black;'>["+i+"]</a></span>");
 					} else {
 						out.println("<span class='off'><a href='./search_list.do?active=tab1&searchword="+searchword+"&tpage="+i+"&npage="+npage+"'>"+i+"</a></span>");
 					}

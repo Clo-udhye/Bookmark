@@ -377,6 +377,7 @@ public class HomeController {
 		
 		int flag = userDao.mypagemodifyOk(to) ;
 		model.addAttribute("flag", flag);
+		model.addAttribute("userInfo",to);
 		
 		if(flag == 0) {
 			// 업로드 안했으면 파일 삭제되면 안되니까

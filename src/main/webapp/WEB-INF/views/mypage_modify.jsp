@@ -254,10 +254,10 @@ $(document).ready(function(){
     function checkExtension(fileName,fileSize){
 
       //var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
-      var maxSize = 1024 * 1024 * 1;  //1MB
+      var maxSize = 1024 * 1024 * 2;  //2MB
       
       if(fileSize >= maxSize){
-        alert('이미지파일 용량이 1MB를 사이즈 초과할 수 없습니다.');
+        alert('이미지파일 용량이 2MB를 사이즈 초과할 수 없습니다.');
         $("input[type='file']").val("");  //파일 초기화
         return false;
       }

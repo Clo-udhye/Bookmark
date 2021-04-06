@@ -137,6 +137,15 @@ $(document).ready(function(){
 		$("#booklist-modal").modal("hide");
 	});
 	
+	//$('#write-modal').on('hidden.bs.modal', function(){
+	//	console.log($(this).attr('id'));
+	//	if($(this)  .attr('id')=="booklist-modal"){
+	//		
+	//	} else {
+	//		//location.reload();
+	//	}
+	//});
+	
 	$('#book-search').on('click', function(){
 		$('#searchword').attr("bookseq", "-1");
 		//console.log($('#searchword').attr("bookseq"));

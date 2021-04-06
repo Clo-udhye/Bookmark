@@ -77,7 +77,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR&display=swap" rel="stylesheet">
-
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 
 <!-- sidebar -->
 <link rel="stylesheet" type="text/css" href="./css/sidebar.css">
@@ -324,10 +324,10 @@
 
 										<div class="append_info">
 											<div class="info_g">
-												<div class="inner_g">
+												<div class="inner_g" style="width:405.8px;">
 													<em class="cate_pic"></em> <div class="tit_pic" style="padding-left : 20px ;padding-right : 20px; height:84px; overflow-x:hidden; overflow-y:hidden;"><%=title3%></div> 
 													<span class="txt_pic">
-														</span> <span class="info_by">by&nbsp;<%= nickname3 %></span>
+														</span> <span class="info_by" style="font-size: 14px;">by&nbsp;<%= nickname3 %></span>
 														
 													<!-- 추가 (위에 nickname부분 글씨 크기 조절도)-->
 													<br/>
@@ -428,8 +428,8 @@
 							width="80" height="80" class="img_brunch thumb_img"
 							alt="Adela"> <strong
 							class="tit_wirter">손민지</strong> 
-							<span class="team_writer">분석적인 개발자</span>
-							<span class="txt_wirter">코딩에 Analysis를 갈아넣다</span>
+							<span class="team_writer">분석하는 개발자</span>
+							<span class="txt_wirter" style="font-size:15px;">코딩에 Analysis를 갈아넣다</span>
 					</a>
 						<div class="writer_keyword_wrap keyword_inside_wrap">
 							<button type="button"
@@ -441,7 +441,6 @@
 								<button type="button"
 								class="keyword_item brunch_keyword_item_button #home_writers_keywords"
 								data-keyword="재테크">IT</button>
-							
 						</div>
 					</li>
 					

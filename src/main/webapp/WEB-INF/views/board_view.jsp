@@ -135,6 +135,11 @@ $(document).ready(function(){
 		location.reload();
 	});
 	
+	$('#view-modal').on('hidden.bs.modal', function(){
+		location.reload();
+	// 음... .viewcontent --> text 비우기 생각하기!!!!!!!!!!!!!!!!!!!!!!!!!!
+	});
+	
 	$('#board_modify').click(function(e){
 		//alert($(this).attr('bseq')+"클릭");
 		//console.log("./view.do?seq=" + $(this).attr('bseq'));
