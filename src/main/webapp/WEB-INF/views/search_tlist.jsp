@@ -147,17 +147,17 @@
 				// << 표시 설정
 				//if(startBlock == 1) {
 				if(tpage == 1) {
-					out.println("<span class='off'><a>&lt;처음&gt;</a>&nbsp;&nbsp;</span>");
+					out.println("<span class='off'><a style='color: gray'>처음</a>&nbsp;&nbsp;</span>");
 				} else {
 					//out.println("<span class='off'><a href='./list.do?cpage="+(startBlock-blockPerPage)+"'>&lt;처음&gt;</a>&nbsp;&nbsp;</span>");
-					out.println("<span class='off'><a href='./search_list.do?active=tab1&searchword="+searchword+"&tpage="+1+"&npage="+npage+"'>&lt;처음&gt;</a>&nbsp;&nbsp;</span>");
+					out.println("<span class='off'><a href='./search_list.do?active=tab1&searchword="+searchword+"&tpage="+1+"&npage="+npage+"'>처음</a>&nbsp;&nbsp;</span>");
 				}
 			
 				// < 표시 설정
 				if (tpage == 1) {
-					out.println("<span class='off'><a>&lt;이전&gt;</a>&nbsp;&nbsp;</span>");
+					out.println("<span class='off'><a style='color: gray;'>이전</a>&nbsp;&nbsp;</span>");
 				} else {
-					out.println("<span class='off'><a href='./search_list.do?active=tab1&searchword="+searchword+"&tpage="+(tpage-1)+"&npage="+npage+"'>&lt;이전&gt;</a>&nbsp;&nbsp;</span>");
+					out.println("<span class='off'><a href='./search_list.do?active=tab1&searchword="+searchword+"&tpage="+(tpage-1)+"&npage="+npage+"'>이전</a>&nbsp;&nbsp;</span>");
 				}
 			
 				
@@ -165,7 +165,7 @@
 					
 					if(tpage == i) {
 						// 현재 페이지
-						out.println("<span class='on'><a>( "+i+" )</a></span>");
+						out.println("<span class='on'><a style='color: black;'>[ "+i+" ]</a></span>");
 					} else {
 						out.println("<span class='off'><a href='./search_list.do?active=tab1&searchword="+searchword+"&tpage="+i+"&npage="+npage+"'>"+i+"</a></span>");
 					}
@@ -173,18 +173,18 @@
 			
 				// > 표시 설정
 				if (tpage == totalPage) {
-					out.println("<span class='off'>&nbsp;&nbsp;<a>&lt;다음&gt;</a></span>");
+					out.println("<span class='off'>&nbsp;&nbsp;<a style='color: gray;'>다음</a></span>");
 				} else {
-					out.println("<span class='off'>&nbsp;&nbsp;<a href='./search_list.do?active=tab1&searchword="+searchword+"&tpage="+(tpage+1)+"&npage="+npage+"'>&lt;다음&gt;</a></span>");
+					out.println("<span class='off'>&nbsp;&nbsp;<a href='./search_list.do?active=tab1&searchword="+searchword+"&tpage="+(tpage+1)+"&npage="+npage+"' >다음</a></span>");
 				}
 			
 				// >> 표시 설정
 				//if(endBlock == totalPage) {
 				if(tpage == totalPage) {
-					out.println("<span class='off'>&nbsp;&nbsp;<a>&lt;끝&gt;</a></span>");
+					out.println("<span class='off'>&nbsp;&nbsp;<a style='color: gray;'>끝</a></span>");
 				} else {
 					//out.println("<span class='off'>&nbsp;&nbsp;<a href='list.do?cpage="+(startBlock+blockPerPage)+"'>&lt;끝&gt;</a></span>");
-					out.println("<span class='off'>&nbsp;&nbsp;<a href='search_list.do?active=tab1&searchword="+searchword+"&tpage="+totalPage+"&npage="+npage+"'>&lt;끝&gt;</a></span>");
+					out.println("<span class='off'>&nbsp;&nbsp;<a href='search_list.do?active=tab1&searchword="+searchword+"&tpage="+totalPage+"&npage="+npage+"'>끝</a></span>");
 				}
 					
 			%>

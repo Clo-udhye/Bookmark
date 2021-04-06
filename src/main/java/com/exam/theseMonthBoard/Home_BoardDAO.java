@@ -44,7 +44,7 @@ public class Home_BoardDAO {
 						"where seq in ( select * from (select bseq from hit where date_time between date_sub(now(), interval 1 month) and now() group by bseq order by count(bseq) desc limit 3) as subquery)"+
 						") as o join user as u on o.useq = u.seq"+
 						") as b left outer join likey as l on b.seq = l.useq group by b.seq"+
-						") as bl left outer join comment as c on bl.seq = c.bseq group by bl.seq";
+						") as bl left outer join comment as c on bl.seq = c.bseq group by bl.seq order by bl.seq desc";
 		ArrayList<JoinBULCTO> lists = (ArrayList<JoinBULCTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<JoinBULCTO>(JoinBULCTO.class));
 		return lists;
 	}

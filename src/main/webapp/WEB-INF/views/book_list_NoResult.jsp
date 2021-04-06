@@ -65,19 +65,19 @@
 <style>
 .button1{
 	float: right;
-	margin-right:50px;
+	margin-right: 0px;
 	width: 30px;
 	font-size: 20px;
 
 }
 .button2{
 	float: right;
-	margin-right: 50px;
+	margin-right: 30px;
 	width: 30px;
 	font-size: 20px;
 }
 .button3{
-	align: right;
+	float: right;
 	width: 30px;
 	font-size: 20px;
 }

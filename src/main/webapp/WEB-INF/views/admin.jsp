@@ -329,14 +329,14 @@
 <style>
 .button1{
 	float: right;
-	margin-right:50px;
+	margin-right: 0px;
 	width: 30px;
 	font-size: 20px;
 
 }
 .button2{
 	float: right;
-	margin-right: 80px;
+	margin-right: 30px;
 	width: 30px;
 	font-size: 20px;
 }
@@ -345,7 +345,6 @@
 	width: 30px;
 	font-size: 20px;
 }
-
 </style>
 </head>
 <body>
