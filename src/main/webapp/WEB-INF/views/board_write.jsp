@@ -229,24 +229,22 @@ $(document).ready(function(){
                 check_flag=0;
                 return;
             }
-            /*
-            var regex = /^[a-zA-Z0-9_-.]$/;
-            if(!regex.test(f.name)){
-            	alert('['+fileName+']:이미지 이름은 ~~~만 가능합니다.');
-            	$("#img-selector").val("");
-            	check_flag=0;
-            	return false;
-			}
-            */
-            var maxSize = 20971520; //20MB
+            var regexp = /^[ㄱ-힣0-9a-zA-Z-_.]{1,25}$/;
+            if(!regexp.test(f.name)){
+               alert('['+f.name+']:이미지 이름은 영문자, 한글, 특수문자(_,-)만 가능합니다.');
+               $("#img-selector").val("");
+               check_flag=0;
+               return false;
+         	}
+            var maxSize = 1024*1024*3; //3MB
             if (f.size >= maxSize) {
-    			alert('['+f.name+']: 파일 사이즈 초과');
-    			$("#img-selector").val("");
-    			check_flag=0;
-    			return false;
-    		}
+				alert('['+f.name+']: 이미지파일 용량이 3MB를 사이즈 초과할 수 없습니다.');
+				$("#img-selector").val("");
+				check_flag=0;
+				return false;
+         	}
             if(f.name.length>20) {
-    			alert('['+f.name+']: 파일이름의 길이는 20자를 초과할수 없습니다.');
+    			alert('['+f.name+']: 파일이름의 길이는 20자를 초과할 수 없습니다.');
     			$("#img-selector").val("");
     			check_flag=0;
     			return false;
@@ -276,8 +274,8 @@ $(document).ready(function(){
                	contents.push(data);
                 content_files.push(f);
                         
-				str += '<li class="myslide"><button type="button" class="delete_btn del-btn btn" index="'+index+'"><i class="fas fa-times-circle fa-3x"></i></button><img src="'+url_src+'" title="'+f.name+'" width=600px /></li>';
-				$('#img_preview').data('flexslider').addSlide($(str));
+                str += '<li class="myslide"><button type="button" class="delete_btn del-btn btn" index="'+index+'"><i class="fas fa-times-circle fa-3x"></i></button><img src="'+url_src+'" title="'+f.name+'" style="width:492px; height:492px;" /></li>';
+                $('#img_preview').data('flexslider').addSlide($(str));
 				
 				let count_files =0;
 				for(let i=0; i<contents.length; i++){
@@ -303,7 +301,7 @@ $(document).ready(function(){
 		}
         if(count_files==1){
         	//console.log('마지막');
-        	let str = '<li><a><img class="no-image" src="./images/no_Image_upload.jpg" title="no_Image_upload" width=600px /></a></li>';
+        	let str = '<li><img class="no-image" src="./images/no_Image_upload.jpg" title="no_Image_upload" style="width:492px; height:492px;"" /></li>';
         	$('#img_preview').data('flexslider').addSlide($(str));
         }
         $('#img_preview').data('flexslider').removeSlide($('#img_preview').data('flexslider').currentSlide);
@@ -383,7 +381,7 @@ ul, ol, li{ margin:0; padding:0; list-style:none;}
 				<div id="img_preview" class="flexslider">
 					<div class="darkness"></div>
         			<ul class="slides">
-        				<li><img class="no-image" src="./images/no_Image_upload.jpg" /></li>
+        				<li><img class="no-image" src="./images/no_Image_upload.jpg" title="no_Image_upload" style="width:492px; height:492px;" /></li>
         			</ul>
         		</div>
 			</td>

@@ -252,6 +252,12 @@ padding-left: 100px;
 			    $('#userPassword').focus();
 			    return false;
 			}
+			// 상세 주소 입력 전 주소 입력하기
+			if($("#address").val() == "" && $("#addresses").val() != "") {
+				alert('상세 주소를 입력하시려면 주소를 입력하셔야합니다.')
+				$('#address').focus();
+				return false;				
+			}
 			// 키워드 알림창
 			if($("#kwd1 option:selected").val() == "none"){
 				alert('키워드1을 선택해주세요.');
@@ -282,7 +288,7 @@ padding-left: 100px;
 				alert('동이름으로 검색해주세요');
 				$('#address').val('');
 			}		
-			$('.address-content-content').load("./zipsearch.do?strDong="+$('#address').val());			
+			$('.address-content').load("./zipsearch.do?strDong="+$('#address').val());			
 	  });
 	  $("#write_button").on('click', function(){
 			<%if(userInfo!=null){%>
@@ -425,7 +431,7 @@ padding-left: 100px;
 							</div>
 						
 							<div class="form-group">
-								<input type="text" class="form-control" placeholder="상세 주소" name="addresses" maxlength="20" />
+								<input type="text" class="form-control" placeholder="상세 주소" id="addresses" name="addresses" maxlength="20" />
 							</div>
 							
 							<!-- 키워드 -->

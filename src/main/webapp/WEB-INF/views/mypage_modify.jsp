@@ -257,7 +257,7 @@ $(document).ready(function(){
       var maxSize = 1024 * 1024 * 1;  //1MB
       
       if(fileSize >= maxSize){
-        alert('파일 사이즈 초과');
+        alert('이미지파일 용량이 1MB를 사이즈 초과할 수 없습니다.');
         $("input[type='file']").val("");  //파일 초기화
         return false;
       }
@@ -272,7 +272,7 @@ $(document).ready(function(){
 		// 확장자 처리 수정.. 대문자는 이미지로 인식을 안함..ㅠ ★★★
 		const extension = fileName.split('.').pop();
 		if(extension != 'png' && extension != 'jpg' && extension != 'gif' && extension != 'PNG' && extension != 'JPG' && extension != 'GIF' ) {
-			alert('이미지 파일을 첨부하셔야 합니다.');
+			alert('이미지 파일을 첨부하셔야 합니다. ( *.png || *.jpg || *.gif )');
 			//$("input[type='file']").val("");  //파일 초기화
             var str = '';
 			str += '<img src="./profile/<%=profile_filename %>" border="0" width=100px height=100px/>';

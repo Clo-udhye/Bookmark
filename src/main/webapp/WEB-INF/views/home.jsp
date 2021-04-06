@@ -264,7 +264,7 @@
 											<div class="info_g">
 												<div class="inner_g" style="padding-left : 10px;padding-right : 10px; padding-top : 180px;">
 													<em class="cate_pic"></em> 
-													<strong class="tit_pic"><%= title1%></strong> 
+													<div class="tit_pic" style='height:84px; overflow-x:hidden; overflow-y:hidden;'><%= title1%></div> 
 													<span class="txt_pic">&quot;</span> 
 														<span class="info_by" style="font-size: 14px;">by&nbsp;<%= nickname1 %></span>
 														
@@ -294,7 +294,7 @@
 										<div class="append_info">
 											<div class="info_g">
 												<div class="inner_g">
-													<em class="cate_pic"></em> <strong class="tit_pic" style="padding-left : 20px ;padding-right : 20px;"><%=title2%></strong> 
+													<em class="cate_pic"></em> <div class="tit_pic" style="padding-left : 20px ;padding-right : 20px; height:84px; overflow-x:hidden; overflow-y:hidden;"><%=title2%></div> 
 													<span class="txt_pic"></span>
 														<span class="info_by" style="font-size: 14px;">by&nbsp;<%= nickname2 %></span>
 														
@@ -326,7 +326,7 @@
 										<div class="append_info">
 											<div class="info_g">
 												<div class="inner_g">
-													<em class="cate_pic"></em> <strong class="tit_pic" style="padding-left : 20px ;padding-right : 20px;"><%=title3%></strong> 
+													<em class="cate_pic"></em> <div class="tit_pic" style="padding-left : 20px ;padding-right : 20px; height:84px; overflow-x:hidden; overflow-y:hidden;"><%=title3%></div> 
 													<span class="txt_pic">
 														</span> <span class="info_by">by&nbsp;<%= nickname3 %></span>
 														
@@ -388,7 +388,7 @@
 							alt="Adela"> <strong
 							class="tit_wirter">박다혜</strong> 
 							<span class="team_writer">외모만큼 뇌도 섹시한 개발자</span>
-							<span class="txt_wirter">그게 나! 박.다.혜</span>
+							<span class="txt_wirter">그게 나! 박.다.혜.</span>
 					</a>
 						<div class="writer_keyword_wrap keyword_inside_wrap">
 							<button type="button"
@@ -429,8 +429,8 @@
 							width="80" height="80" class="img_brunch thumb_img"
 							alt="Adela"> <strong
 							class="tit_wirter">손민지</strong> 
-							<span class="team_writer">꼬북좌? 으으응~~</span>
-							<span class="txt_wirter">민지띠가 더 귀엽띠? </span>
+							<span class="team_writer">분석적인 개발자</span>
+							<span class="txt_wirter">코딩에 Analysis를 갈아넣다</span>
 					</a>
 						<div class="writer_keyword_wrap keyword_inside_wrap">
 							<button type="button"

@@ -55,9 +55,11 @@
 			changeRow++;
 			String bseq = myboard_list.getSeq();
 			String title = myboard_list.getTitle();
+			/*
 			if(title.length() > 20){
 				title = myboard_list.getTitle().substring(0, 20) + "...";
 			}
+			*/
 			String filename = myboard_list.getFilename().split("//")[0];
 			int likey = myboard_list.getLike();
 			int comment = myboard_list.getComment();
@@ -67,8 +69,9 @@
 		    sbHtml.append("   <div class='img'>");
 		    sbHtml.append("      <img src='./upload/"+filename+"' border='0' width=200px height=200px/>");
 		    sbHtml.append("   </div>");
-		    sbHtml.append("   <div class='text'>");
-		    sbHtml.append("      <div id='text_title'><p>"+title+"</p></div>");
+		    sbHtml.append("   <div class='text' style='width:140px;'>");
+		    //sbHtml.append("      <div id='text_title'><p>"+title+"</p></div>");
+		    sbHtml.append("		<div id='text_title' style='height:48px; overflow-x:hidden; overflow-y:hidden; margin-bottom: 16px;'><p>"+title+"</p></div>");
 		    sbHtml.append("      <div id='text_nickname'><p>by "+visit_nickname+"</p></div>");
 		    sbHtml.append("      </br>");
 		    sbHtml.append("      <div id='text_count' align='right'>"); //onclick='event.cancelBubble=true' --> 특정 영역 이벤트 방지
