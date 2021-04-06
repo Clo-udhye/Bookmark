@@ -114,7 +114,7 @@
 }
 .button2{
 	float: right;
-	margin-right: 50px;
+	margin-right: 30px;
 	width: 30px;
 	font-size: 20px;
 }
@@ -166,6 +166,8 @@ table {
 }
 .opener { display:none; }
 .opener:checked ~ .nav_item { display:block; }
+.board_paging a { text-decoration: none; font: 15px verdana; padding: 0 3px 0 3px; color: gray;}
+.board_paging a:hover { text-decoration: underline; color: black; }
 </style>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -280,45 +282,45 @@ table {
      	</div>
      <br><br>
      <footer>
-     <div align="center">
+     <div class="board_paging" align="center">
      <%
      if(request.getAttribute("bookname") == null){
 	     	if (startBlock== 1){
-				out.println("<span><a style='color:black'>처음</a></span>");
+				out.println("<span><a style='color:gray;'>처음</a></span>");
 			} else {
-				out.println("<span><a href='./book_list.do?cpage=1' style='color:black'>처음</a></span>");
+				out.println("<span><a href='./book_list.do?cpage=1'>처음</a></span>");
 			}
 			
 			out.println("&nbsp;");
 			
 			if(cpage == 1){
-				out.println("<span><a href=''><i class='fa fa-arrow-left' aria-hidden='true' style='color:black'></i></a></span>");
+				out.println("<span><a style='color: gray;'>이전</a></span>");
 			} else{
-				out.println("<span><a href='./book_list.do?cpage="+(cpage-1)+"'><i class='fa fa-arrow-left' aria-hidden='true' style='color:black'></i></a></span>");
+				out.println("<span><a href='./book_list.do?cpage="+(cpage-1)+"'>이전</a></span>");
 			}
 			
 			out.println("&nbsp;&nbsp;");
 	     	
 	     	for(int i=startBlock; i<=endBlock; i++){
 	     		if(cpage == i){
-	     			out.println("<span>["+i+"]</span>");
+	     			out.println("<span style='color: black;'>["+i+"]</span>");
 	     		} else {
-	     			out.println("<span><a href ='./book_list.do?cpage="+i+"' style='color:black'>"+i+"</a></span>");
+	     			out.println("<span><a href ='./book_list.do?cpage="+i+"' >"+i+"</a></span>");
 	     		}
 	     	}
 	     	
 	     	out.println("&nbsp;");
 				if(cpage == totalPage){
-					out.println("<span><a href=''><i class='fa fa-arrow-right' aria-hidden='true' color='black;'></i></a></span>");
+					out.println("<span><a href='' style='color:gray'>다음</a></span>");
 				} else{
-					out.println("<span><a href='./book_list.do?cpage="+(cpage+1)+"' ><i class='fa fa-arrow-right' aria-hidden='true' style='color:black'></i></a></span>");
+					out.println("<span><a href='./book_list.do?cpage="+(cpage+1)+"'>다음</a></span>");
 				}
 	     	
 			out.println("&nbsp;");
 				if (endBlock== totalPage){
-					out.println("<span><a> 끝</a></span>");
+					out.println("<span><a style='color:gray;'> 끝</a></span>");
 				} else {
-					out.println("<span><a href='./book_list.do?cpage="+totalPage+"'style='color:black'> 끝</a></span>");
+					out.println("<span><a href='./book_list.do?cpage="+totalPage+"'> 끝</a></span>");
 				}
 			
      } else {

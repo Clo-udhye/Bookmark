@@ -94,8 +94,8 @@
 }	
 .button1{
 	float: right;
-	margin-right:20px;
-	width: 20px;
+	margin-right: 0px;
+	width: 30px;
 	font-size: 20px;
 
 }
@@ -105,8 +105,8 @@
 	width: 30px;
 	font-size: 20px;
 }
-	.button3{
-	margin-right: 0px;
+.button3{
+	float: right;
 	width: 30px;
 	font-size: 20px;
 }
@@ -137,9 +137,7 @@
 		background-color : ivory;
 		font-color : black; 
 	}
-	.button1, .button2{
-	width: 30px;
-	font-size: 25px;
+	
 
 </style>
 
@@ -232,10 +230,10 @@ $(document).ready(function(){
     <div id="content" style="padding-top : 100px;">
     <table id="table" align="center">
     	<tr>
-    		<td colspan="3" align="right"><div ><input type="button" onclick="history.back()" value="뒤로 가기"></div></td>
+    		<td colspan="3" align="right"><div ><input type="button" class="btn btn-dark" onclick="history.back()" value="뒤로 가기" ></div></td>
    		</tr>
    		<tr>
-   			<td width="25%" rowspan="6"><img src="<%=img_url %>" alt="이미지 없음" id = "img"/></td>
+   			<td width="25%" rowspan="6" ><img src="<%=img_url %>" alt="이미지 없음" id = "img"/></td>
    			<td colspan="2"><div>책 제목 : <%=title %></div></td>
    		</tr>
    		<tr>
