@@ -27,7 +27,7 @@
 <script>
 var contents = new Array();
 var content_files = new Array();
-
+var count_img=0;
 $(document).ready(function(){
 	$(".flexslider").flexslider({
 		animation: "slide",	
@@ -217,34 +217,36 @@ $(document).ready(function(){
 		var filesArr = Array.prototype.slice.call(files);
 	
 		var check_flag=1;
-		if(filesArr.length>5){
-			alert("이미지는 5장까지만 업로드가능합니다.");
-			$("#img-selector").val("");
-            return;
-		}
+		
+
+		if(count_img+filesArr.length>5){
+	         alert("이미지는 5장까지만 업로드가능합니다.");
+	         $("#img-selector").val("");
+	            return;
+	      }
 		
 		filesArr.forEach(function(f) {
 			//console.log(f.name.length);
             if(!f.type.match("image.*")) {
-		alert("이미지 파일만 업로드가능합니다.");
-		$("#img-selector").val("");
-		check_flag=0;
-		return false;
+				alert("이미지 파일만 업로드가능합니다.");
+				$("#img-selector").val("");
+				check_flag=0;
+				return false;
             }          
-            var regexp = /^[ㄱ-힣0-9a-zA-Z-_.]{1,25}$/;
+            var regexp = /^[ㄱ-힣0-9a-zA-Z-_.]{1,100}$/;
             if(!regexp.test(f.name)){
             	alert('['+f.name+']:이미지 이름은 영문자, 한글, 특수문자(_,-)만 가능합니다.');
             	$("#img-selector").val("");
             	check_flag=0;
             	return false;
-	}
+			}
             var maxSize = 1024*1024*3; //3MB
             if (f.size >= maxSize) {
-    		alert('['+f.name+']: 이미지파일 용량이 3MB를 사이즈 초과할수없습니다.');
-    		$("#img-selector").val("");
-    		check_flag=0;
-    		return false;
-    	}
+    			alert('['+f.name+']: 이미지파일 용량이 3MB를 사이즈 초과할 수 없습니다.');
+    			$("#img-selector").val("");
+    			check_flag=0;
+    			return false;
+    		}
 
             if(f.name.length>20) {
     			alert('['+f.name+']: 파일이름의 길이는 20자를 초과할 수 없습니다.');
@@ -281,6 +283,7 @@ $(document).ready(function(){
                 str += '<li class="myslide"><button type="button" class="delete_btn del-btn btn" index="'+index+'"><i class="fas fa-times-circle fa-3x"></i></button><img src="'+url_src+'" title="'+f.name+'" style="width:492px; height:492px;" /></li>';
                 $('#img_preview').data('flexslider').addSlide($(str));
 
+                count_img++;
 				
 				let count_files =0;
 				for(let i=0; i<contents.length; i++){
@@ -311,6 +314,7 @@ $(document).ready(function(){
         }
         $('#img_preview').data('flexslider').removeSlide($('#img_preview').data('flexslider').currentSlide);
         contents[index].is_delete = true;
+        count_img--;
     }
 </script>
 

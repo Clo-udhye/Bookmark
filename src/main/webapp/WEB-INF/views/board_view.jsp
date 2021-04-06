@@ -252,6 +252,9 @@ $(document).ready(function(){
 				} else if(comment.length < 5){
 					alert('최소 5자 이상 입력이 필요합니다.');
 					$('#comment_text').focus();
+				} else if(comment.length > 2000){
+	                  alert('2000자까지만 입력 가능합니다.');
+	                  $('#comment_text').focus();
 				} else {
 					$.ajax({
 						url : './comment.do',

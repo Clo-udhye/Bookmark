@@ -403,7 +403,7 @@ $(document).ready(function(){
     					<span><textarea class="form-control0" id="introduction" name="introduction" style="resize:none;"><%=introduction %></textarea></span>
     				</div>
     				-->
-    				 <textarea class="form-control0" id="introduction" name="introduction" style="resize:none;"><%=introduction %></textarea>
+    				 <textarea class="form-control0" id="introduction" name="introduction" style="resize:none;" maxlength="250"><%=introduction %></textarea>
     			</td>
     			<td></td>
     		</tr>    		
@@ -412,12 +412,7 @@ $(document).ready(function(){
     		<tr>
     			<td><span class="form-title">메일</span></td>
     			<td class="form-group">
-    				<!-- 
-					<div class="form-group">
-    					<span><input type="email" class="form-control0" id="mail" name="mail" value="<%=mail %>" maxlength="20" /></span>
-    				</div>
-    				-->
-    				<input type="email" class="form-control0" id="mail" name="mail" value="<%=mail %>" maxlength="20" />	
+    				<input type="email" class="form-control0" id="mail" name="mail" value="<%=mail %>" maxlength="50" />	
     			</td>
     			<td></td>
     		</tr>	

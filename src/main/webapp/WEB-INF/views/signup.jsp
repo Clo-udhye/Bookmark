@@ -411,7 +411,7 @@ padding-left: 100px;
 							</div>
 							
 							<div class="form-group" >
-								<input type="email" class="form-control" placeholder="이메일(*)" name="mail" id="mail" maxlength="20" />
+								<input type="email" class="form-control" placeholder="이메일(*)" name="mail" id="mail" maxlength="50" />
 								
 							</div>
 						
