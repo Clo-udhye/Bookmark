@@ -80,7 +80,9 @@ $(document).ready(function(){
         	$('#summernote').focus();
         	return false;
         }
-        if($('#summernote').val().length>10000){
+        var text = $('#summernote').val();
+        text = text.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");
+        if(text.length>10000){
         	alert('10000자 이하로 입력하세요.');
         	$('#summernote').focus();
         	return false;
@@ -224,25 +226,26 @@ $(document).ready(function(){
 		filesArr.forEach(function(f) {
 			//console.log(f.name.length);
             if(!f.type.match("image.*")) {
-                alert("이미지 파일만 업로드가능합니다.");
-                $("#img-selector").val("");
-                check_flag=0;
-                return;
-            }
+		alert("이미지 파일만 업로드가능합니다.");
+		$("#img-selector").val("");
+		check_flag=0;
+		return false;
+            }          
             var regexp = /^[ㄱ-힣0-9a-zA-Z-_.]{1,25}$/;
             if(!regexp.test(f.name)){
-               alert('['+f.name+']:이미지 이름은 영문자, 한글, 특수문자(_,-)만 가능합니다.');
-               $("#img-selector").val("");
-               check_flag=0;
-               return false;
-         	}
+            	alert('['+f.name+']:이미지 이름은 영문자, 한글, 특수문자(_,-)만 가능합니다.');
+            	$("#img-selector").val("");
+            	check_flag=0;
+            	return false;
+	}
             var maxSize = 1024*1024*3; //3MB
             if (f.size >= maxSize) {
-				alert('['+f.name+']: 이미지파일 용량이 3MB를 사이즈 초과할 수 없습니다.');
-				$("#img-selector").val("");
-				check_flag=0;
-				return false;
-         	}
+    		alert('['+f.name+']: 이미지파일 용량이 3MB를 사이즈 초과할수없습니다.');
+    		$("#img-selector").val("");
+    		check_flag=0;
+    		return false;
+    	}
+
             if(f.name.length>20) {
     			alert('['+f.name+']: 파일이름의 길이는 20자를 초과할 수 없습니다.');
     			$("#img-selector").val("");
@@ -274,8 +277,10 @@ $(document).ready(function(){
                	contents.push(data);
                 content_files.push(f);
                         
+
                 str += '<li class="myslide"><button type="button" class="delete_btn del-btn btn" index="'+index+'"><i class="fas fa-times-circle fa-3x"></i></button><img src="'+url_src+'" title="'+f.name+'" style="width:492px; height:492px;" /></li>';
                 $('#img_preview').data('flexslider').addSlide($(str));
+
 				
 				let count_files =0;
 				for(let i=0; i<contents.length; i++){

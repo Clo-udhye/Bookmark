@@ -45,11 +45,15 @@
 	StringBuffer sbHtml = new StringBuffer();
 	ArrayList<MyPageTO> myboard_lists = (ArrayList)request.getAttribute("myboard_list");
 	if(myboard_lists.size()==0){
-		sbHtml.append("<h4>현재 게시글이 존재하지 않습니다.</h4>");
-		if(mypage_flag == 1){
+		sbHtml.append("<td> <div style='padding-top:80px;'>");
+		if(mypage_flag==0){
+		sbHtml.append("<h4>아직 책을 읽고 있는 중이에요! 다음에 또 방문해 주세요.</h4>");
+		} else if(mypage_flag == 1){
+			sbHtml.append("<h4>등록 되어있는 게시글이 없습니다.</h4>");
 			sbHtml.append("<h3>새로운 게시글을 작성 하시겠습니까?</h3>");
 			sbHtml.append("<button id='new_article' class='btn btn-dark write_button' >새로운 글 작성하기</button>");
 		}
+		sbHtml.append("</div></td>");
 	} else{
 		for (MyPageTO myboard_list : myboard_lists){
 			changeRow++;
@@ -64,6 +68,9 @@
 			int likey = myboard_list.getLike();
 			int comment = myboard_list.getComment();
 			
+			if(changeRow%3 == 1 && changeRow>3){
+			       sbHtml.append("   </tr><tr>");
+			    }	
 			sbHtml.append("<td class='board board1' bseq='"+bseq+"' data-bs-toggle='modal' data-bs-target='#view-modal'>");
 		    // 사진 크기 250 250
 		    sbHtml.append("   <div class='img'>");
@@ -84,68 +91,118 @@
 		    sbHtml.append("      </div>");  
 		    sbHtml.append("   </div>");
 		    sbHtml.append("</td>");
-		      
-		    if(changeRow%3 == 1 && changeRow>3){
-		       sbHtml.append("   </tr><tr>");
-		    }
 		}
-		if(myboard_lists.size()%3!=0){
-			for(int i = 1; i<=(3-myboard_lists.size()%3); i++ ){
-				sbHtml.append("<td></td>");
+		
+	}
+	if(myboard_lists.size()%3!=0){
+	   	//System.out.println("myboard_lists.size() :" + myboard_lists.size());
+	   	if(myboard_lists.size()<3){
+	   		for(int i = 1; i<=(3-myboard_lists.size()); i++ ){
+				//System.out.println("<td></td>");
+				sbHtml.append("<td width=200 height=200></td>");
 			}
+	   	}else {
+	   		for(int i = 1; i<=(3-(myboard_lists.size()%3)); i++ ){
+				//System.out.println("<td></td>");
+				sbHtml.append("<td width=200></td>");
+			}
+	   	}	
+	}
+	int insight_flag = 0;
+	
+	
+   // 24시간동안 데이터 받기 TodayCounts
+	   ArrayList<TodayTO> today_counts = (ArrayList)request.getAttribute("today_count");
+	   //게시글 데이터 count check
+	   if(today_counts.size()==0){
+		   insight_flag =1;
+	   } else {
+		 	//null값 정리
+			if(today_counts.get(0).getTime() == 0){
+				today_counts.remove(0);
+			}
+	   }
+   //weekcount ArrayList로 받아오기
+	   ArrayList<WeekTO> week_counts = (ArrayList)request.getAttribute("week_count");
+	   //게시글 데이터 count check
+	   if(week_counts.size()==0){
+		   insight_flag =1;
+	   } else {
+		// null값 정리
+		   if(week_counts.get(0).getTime()==0){
+		      week_counts.remove(0);
+		   }
+	   }
+   //기준 Arraylist 생성 --> today
+	   ArrayList<TodayTO> blank_count_today = new ArrayList();
+	   for (int i = 1; i<=8; i++){
+	      TodayTO to = new TodayTO();
+	      to.setAction_count(0);
+	      to.setComment_count(0);
+	      to.setHit_count(0);
+	      if(i==7 || i ==8){
+	         to.setTime(3*i);
+	         blank_count_today.add(to);
+	      } else {
+	         to.setTime((3*i) -1); 
+	         blank_count_today.add(to);
+	      }
+	   }
+   // 기존 Arraylist 만들기 week
+	   ArrayList<WeekTO> blank_count_week = new ArrayList();
+	   for(int i=1; i<=7;i++){
+	      WeekTO to1 = new WeekTO();
+	      to1.setComment_count(0);
+	      to1.setHit_count(0);
+	      to1.setLike_count(0);
+	      to1.setTime(i);
+	      blank_count_week.add(to1);
+	   }
+	   
+	   
+   if(myboard_lists.size()!=0){
+	   // 받아온 데이터 수정 --> today
+	   for (int i = 0; i<=7; i++){
+	      //System.out.println(blank_count_today.get(0).getTime()+" : " +blank_count_today.get(1).getTime()+" : " +blank_count_today.get(2).getTime()+" : " +blank_count_today.get(3).getTime()+" : " +blank_count_today.get(4).getTime()+" : " +blank_count_today.get(5).getTime()+" : " +blank_count_today.get(6).getTime());
+	      for(TodayTO to : today_counts){
+	         if(i == 6 || i==7){
+	            if(to.getTime() == (3*i +3)){
+	               blank_count_today.remove(i);
+	               blank_count_today.add(i,to);
+	               //System.out.println("index :"+i+"|| to.getTime() :"+ (3*i +3));
+	               break;
+	            }
+	         	}else {
+	            	if(to.getTime()== (3*i+2)){
+	               		blank_count_today.remove(i);
+	               		blank_count_today.add(i,to);
+	               		//System.out.println("index :"+i+"|| to.getTime() :"+ ((3*i)+2));
+	               		break;
+	            	}
+	         	}
+	   		}
+		}
+		// 받아온 데이터 교체해주기 --> week
+		for (int i =0; i<7; i++){
+			for(WeekTO to : week_counts){
+	            if(to.getTime()==i+1){
+					blank_count_week.remove(i);
+	               	blank_count_week.add(i,to);
+	               	//System.out.println(to.getHit_count() + "시작" + i);
+					break;
+	            }
+			}      
 		}
 	}
-	
-   // TodayCounts
-   ArrayList<TodayTO> today_counts = (ArrayList)request.getAttribute("today_count");
-   if(today_counts.get(0).getTime() == 0){
-      today_counts.remove(0);
-   }
-   ArrayList<TodayTO> blank_count_today = new ArrayList();
-   for (int i = 1; i<=8; i++){
-      TodayTO to = new TodayTO();
-      to.setAction_count(0);
-      to.setComment_count(0);
-      to.setHit_count(0);
-      if(i==7 || i ==8){
-         to.setTime(3*i);
-         blank_count_today.add(to);
-      } else {
-         to.setTime((3*i) -1); 
-         blank_count_today.add(to);
-      }
-   }
-   
-   for (int i = 0; i<=7; i++){
-      //System.out.println(blank_count_today.get(0).getTime()+" : " +blank_count_today.get(1).getTime()+" : " +blank_count_today.get(2).getTime()+" : " +blank_count_today.get(3).getTime()+" : " +blank_count_today.get(4).getTime()+" : " +blank_count_today.get(5).getTime()+" : " +blank_count_today.get(6).getTime());
-      for(TodayTO to : today_counts){
-         if(i == 6 || i==7){
-            if(to.getTime() == (3*i +3)){
-               blank_count_today.remove(i);
-               blank_count_today.add(i,to);
-               //System.out.println("index :"+i+"|| to.getTime() :"+ (3*i +3));
-               break;
-            }
-         }else {
-            if(to.getTime()== (3*i+2)){
-               blank_count_today.remove(i);
-               blank_count_today.add(i,to);
-               //System.out.println("index :"+i+"|| to.getTime() :"+ ((3*i)+2));
-               break;
-            }
-         }
-      }
-   }
    
    // 순서 바꿈
    Collections.reverse(blank_count_today);
-   
+   //highchart양식 준비
    ArrayList<Integer> today_action = new ArrayList();
    ArrayList<Integer> today_hit = new ArrayList();
    ArrayList<Integer> today_comment = new ArrayList();
    ArrayList<Integer> today_like = new ArrayList();
    ArrayList<String> today_time = new ArrayList();
-   
    for(TodayTO to : blank_count_today){
       today_hit.add(to.getHit_count());
       today_like.add(to.getLike_count());
@@ -155,39 +212,16 @@
    }
          
 	      
-   //weekcount ArrayList로 받아오기
-   ArrayList<WeekTO> week_counts = (ArrayList)request.getAttribute("week_count");
-   // null값 정리
-   if(week_counts.get(0).getTime()==0){
-      week_counts.remove(0);
-   }
+   
+   
    // 출력 될 list 생성
    ArrayList<Integer> week_action = new ArrayList();
    ArrayList<Integer> week_hit = new ArrayList();
    ArrayList<Integer> week_comment = new ArrayList();
    ArrayList<Integer> week_like = new ArrayList();
    ArrayList<String> week_time = new ArrayList();
-   // 기존 Arraylist 만들고
-   ArrayList<WeekTO> blank_count_week = new ArrayList();
-   for(int i=1; i<=7;i++){
-      WeekTO to1 = new WeekTO();
-      to1.setComment_count(0);
-      to1.setHit_count(0);
-      to1.setLike_count(0);
-      to1.setTime(i);
-      blank_count_week.add(to1);
-   }
-   // 받아온 데이터 교체해주기
-	for (int i =0; i<7; i++){
-		for(WeekTO to : week_counts){
-            if(to.getTime()==i+1){
-				blank_count_week.remove(i);
-               	blank_count_week.add(i,to);
-               	//System.out.println(to.getHit_count() + "시작" + i);
-				break;
-            }
-		}      
-   	}
+   
+   
    // 순서 바꿈
    Collections.reverse(blank_count_week);
    // 각각의 Arraylist에 입력
@@ -234,18 +268,19 @@
 <style>
 .button1{
 	float: right;
-	margin-right:50px;
+	margin-right: 0px;
 	width: 30px;
 	font-size: 20px;
+
 }
 .button2{
 	float: right;
-	margin-right: 70px;
+	margin-right: 30px;
 	width: 30px;
 	font-size: 20px;
 }
 .button3{
-	align: right;
+	float: right;
 	width: 30px;
 	font-size: 20px;
 }
@@ -271,14 +306,13 @@
 }
 
 #wrapTable3 {
-	height :300px;
-	width : 100%;
-	border : 1px solid #F5F5DC;
+	height :150px;
+	width : 650px;
 	
 }
 #vertical3 {
 		width: max-content;
-		overflow-y: scroll;
+		overflow-y: auto;
 		height : 300px;
 }
 .mypage{
@@ -335,16 +369,15 @@
 
 		});
 		
-		$('#view-modal').on('hidden.bs.modal', function(){
-			location.reload();
-		});
-
 		for(var i = 0; i <=<%=changeRow%>; i++){
 			$('#insight-modal'+i).click(function(e){
-				console.log('okok');
 				$('.insight-content').load("./insight.do?bseq=" + $(this).attr('bseq')+"&changeRow="+i);
 			});
 		}
+		
+		$('#insightmodal').on('hidden.bs.modal', function(){
+			location.reload();
+		});
 });
 </script>
 <style type="text/css">	
@@ -449,8 +482,8 @@
 				    				</div>
 			    				</td>
 			    				<td width=42%>
-			    					<div class="profile_info"> 별명 : <%=visit_nickname %></div>
-			    					<div class="profile_info" style="height:100px; overflow-y:auto;"> 소개 : <%=visit_introduction %></div>
+			    					<div class="profile_info"> 별명 : <b><%=visit_nickname %></b></div>
+			    					<div class="profile_info" style="height:100px; overflow-y:auto;"> 소개 : <b><%=visit_introduction %></b></div>
 			    					<!-- <div class="profile_info"> 태그 : <%= visit_keywords %></div> -->
 			    					<!-- <div class="profile_info"> 태그 : <%=kwdarray[0] %>을(를) 좋아하는 <%=kwdarray[1] %> <%=kwdarray[2] %></div> -->
 			    					<div class="profile_info">
@@ -494,25 +527,20 @@
                <h2>전체 게시글 인사이트</h2>
             </div>
             <div>
-               <div class="d-inline-block" align="left" style="padding-right:500px;">
+               <div class="d-inline-block" align="left" style="padding-right:630px;">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-dark catalogue" value="action">액션</button>
-                    <button type="button" class="btn btn-dark catalogue" value="hit">조회수</button>
-                    <button type="button" class="btn btn-dark catalogue" value="like">좋아요</button>
-                    <button type="button" class="btn btn-dark catalogue" value="comment">댓글</button>
+                    <button type="button" class="btn btn-outline-secondary catalogue" value="action">액션</button>
+                    <button type="button" class="btn btn-outline-secondary catalogue" value="hit">조회수</button>
+                    <button type="button" class="btn btn-outline-secondary catalogue" value="like">좋아요</button>
+                    <button type="button" class="btn btn-outline-secondary catalogue" value="comment">댓글</button>
                   </div>
                </div>
                <div class="d-inline-block" align="right" style="padding-left:500px;">
-                  <div class="dropdown">
-                    <button type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
-                      시간 구분
-                    </button>
-                    <div class="dropdown-menu">
-                      <a class="dropdown-item" value="day">일주일 조회</a>
-                      <a class="dropdown-item" value="time">하루 조회(24시간)</a>
-                    </div>
-                  </div>
-               </div>
+                    <select class="form-select btn-outline-secondary"  aria-label="Default select example">
+					<option value="day">일주일 조회</option>
+					<option value="time">하루 조회(24시간)</option>
+					</select>
+              </div>
             </div>
             <div align="left" style="padding:10px 0px 0px 35px">
                <h6 style="color:gray; font-size:10px;">액션은 '조회수','좋아요','댓글'를 합친 횟수입니다.</h6>
@@ -651,8 +679,8 @@ $(function() {
 });
 // 시간 구분 클릭 시, default 
 $(function() {
-   $(document).on("click",".dropdown-item",function(){
-               timecontrol = $(this).attr("value");
+   $(document).on("change",".form-select",function(){
+               timecontrol =$(this).val();
                highChartFunc();
             });
          });

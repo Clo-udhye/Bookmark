@@ -49,16 +49,16 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
 <style>
-  .button1{
+ .button1{
 	float: right;
-	margin-right:0px;
+	margin-right: 0px;
 	width: 30px;
 	font-size: 20px;
 
 }
 .button2{
 	float: right;
-	margin-right: 50px;
+	margin-right: 30px;
 	width: 30px;
 	font-size: 20px;
 }
