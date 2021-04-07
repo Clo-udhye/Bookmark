@@ -306,7 +306,7 @@ keyword 연결하는 문구 글자 크기, 글자색
 		
 		if(npage == i) {
 			// 현재 페이지
-			out.println("<span class='on'><a style='color:black;'>[ "+i+" ]</a></span>");
+			out.println("<span class='on'><a style='color:black;'>["+i+"]</a></span>");
 		} else {
 			out.println("<span class='off'><a href='./search_list.do?active=tab2&searchword="+searchword+"&tpage="+tpage+"&npage="+i+"'>"+i+"</a></span>");
 		}

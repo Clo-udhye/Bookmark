@@ -137,6 +137,16 @@ $(document).ready(function(){
 		$("#booklist-modal").modal("hide");
 	});
 	
+	$('#write-modal').on('hidden.bs.modal', function(){
+		//console.log('모달닫기');
+		location.reload();
+	});
+	
+	$("#booklist-modal").on('hidden.bs.modal', function(event){
+		event.stopPropagation() 
+		//console.log('책모달 닫기');		
+	});
+	
 	$('#book-search').on('click', function(){
 		$('#searchword').attr("bookseq", "-1");
 		//console.log($('#searchword').attr("bookseq"));

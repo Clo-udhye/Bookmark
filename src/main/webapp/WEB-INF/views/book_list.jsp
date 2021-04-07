@@ -64,14 +64,14 @@
 			bookHTML.append("<table id=innerlist>");
 			bookHTML.append("<tr>");
 			bookHTML.append("<td rowspan='4' width='20%'><img width='200px' src='"+img_url+"' alt='이미지 없음' border='1px'/></td>");
-			bookHTML.append("<td width=60% style='padding-top: 20px;'>책 제목 :"+title+"</td>");
+			bookHTML.append("<td width=60% style='padding-top: 20px;'>책 제목 : "+title+"</td>");
 			bookHTML.append("<td rowspan='4' width=40 align='center'>");
 			bookHTML.append("<a type='button' href='./book_info.do?master_seq="+master_seq+"' id='simple_button' class='btn btn-dark' ' >자세히 보기</a>");
 			bookHTML.append("</td>");
 			bookHTML.append("</tr>");
-			bookHTML.append("<tr><td><div>저자 :"+author+"</div></td></tr>");
-			bookHTML.append("<tr><td><div>출판사 :"+publisher+"</div></td></tr>");
-			bookHTML.append("<tr><td><p>책 설명 :"+description+"</p></td></tr>");
+			bookHTML.append("<tr><td><div>저자 : "+author+"</div></td></tr>");
+			bookHTML.append("<tr><td><div>출판사 : "+publisher+"</div></td></tr>");
+			bookHTML.append("<tr><td><p>책 설명 : "+description+"</p></td></tr>");
 			bookHTML.append("</table>");
 			bookHTML.append("</div>");
 	}
