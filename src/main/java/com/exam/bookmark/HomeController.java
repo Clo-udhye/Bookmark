@@ -696,4 +696,9 @@ public class HomeController {
         
         return "booklist_search";
     }
+    @RequestMapping(value="/id_check.do")
+    public String id_serch(HttpServletRequest request , Model model) {
+        
+        return "id_check";
+    }
 }
