@@ -394,4 +394,33 @@ public class UserDAO {
 		}
 		return board_counts;
 	}
+	
+	public String id_search (String user_mail) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		String result= null;
+		try{
+			conn = dataSource.getConnection();
+			
+			String sql = "select id from user where mail=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, user_mail);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getString("id");
+			}
+			
+		} catch(SQLException e){
+			System.out.println("[에러] " + e.getMessage());
+		} finally {
+			if(rs!=null) try{rs.close();}catch(SQLException e) {}
+			if(pstmt!=null) try{pstmt.close();}catch(SQLException e) {}
+			if(conn!=null) try{conn.close();}catch(SQLException e) {}
+		}
+		
+		return result;
+	}
 }

@@ -121,6 +121,7 @@
 				}
 			<%}%>	        	
 		});
+		
 		$("#check_id").on('click', function(){
 				$("#idcheck-modal").modal("show");
 				$('.idcheck-content').load("./id_check.do");        	
