@@ -253,12 +253,14 @@
 							                    </div>
 							                        <script type="text/javascript">
 														//var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://localhost:8080/bookmark/callback1.do");    // Client ID, CallBack URL 삽입
-														var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://49.50.174.216:8080/Project_BM/callback1.do");    // Client ID, CallBack URL 삽입
+														//var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://49.50.174.216:8080/Project_BM/callback1.do");    // Client ID, CallBack URL 삽입
+														var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://bookmark-project.com/callback1.do");    // Client ID, CallBack URL 삽입
 														var state = naver_id_login.getUniqState();
 													        
 														naver_id_login.setButton("white", 2, 40);
 														//naver_id_login.setDomain("http://localhost:8080/bookmark/login.do");    //  URL
-														naver_id_login.setDomain("http://49.50.174.216:8080/Project_BM/login.do");    //  URL
+														//naver_id_login.setDomain("http://49.50.174.216:8080/Project_BM/login.do");    //  URL
+														naver_id_login.setDomain("http://bookmark-project.com/login.do");    //  URL
 														naver_id_login.setState(state);
 														naver_id_login.setPopup();
 														naver_id_login.init_naver_id_login();

@@ -17,7 +17,8 @@
 <body>
   <script type="text/javascript">
         //var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://localhost:8080/bookmark//callback1.do"); //'localhost'가 포함된 CallBack URL
-        var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://49.50.174.216:8080/Project_BM/callback1.do"); //'localhost'가 포함된 CallBack URL
+        //var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://49.50.174.216:8080/Project_BM/callback1.do"); //'localhost'가 포함된 CallBack URL
+        var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://bookmark-project.com/callback1.do"); //'localhost'가 포함된 CallBack URL
         
         // 접근 토큰 값 출력
         //alert(naver_id_login.oauthParams.access_token);
