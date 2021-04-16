@@ -68,6 +68,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
+<!-- 링크공유시 미리보기 -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="생각을 보고, 나눔에 감동하다. 책갈피">
+<meta property="og:url" content="bookmark-project.com">
+<meta property="og:description" content="책에 대한 감성과 느낌을 담아 책갈피에 넣어두세요. 나눔 속 당신의 마음을 울림을 위한, 당신의 책갈피.">
+<meta property="og:image" content="./images/preview_img.png">
+
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
