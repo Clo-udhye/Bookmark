@@ -121,6 +121,11 @@
 				}
 			<%}%>	        	
 		});
+		
+		$("#check_id").on('click', function(){
+				$("#idcheck-modal").modal("show");
+				$('.idcheck-content').load("./id_check.do");        	
+		});
 	});
 </script>
 </head>
@@ -246,10 +251,10 @@
 							                </tr>
 							                
 							                <tr>
-							                    <td align="center">
+							                    <td >
 							                   	<div>
-							                        <input type="button" class="btn btn-dark" value="회원가입" onclick="location.href='./signup.do'" style="margin" style="display: inline-block;"/>
-							                        <div id = "naver_id_login" style="display: inline-block;"></div>
+							                        <input type="button" class="btn btn-dark" value="회원가입" onclick="location.href='./signup.do'" style="display: inline-block; width:200px; float:left;"/>
+							                        <div id = "naver_id_login" style="display: inline-block; float:left; padding-left:43px; "></div>
 							                    </div>
 							                        <script type="text/javascript">
 														//var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://localhost:8080/bookmark/callback1.do");    // Client ID, CallBack URL 삽입
@@ -267,6 +272,12 @@
 													</script>
 							                    </td>
 							                </tr>
+							                <tr>
+							                	<td>
+							                		<input type="button" class="btn btn-dark " value="ID 찾기" id="check_id" style="width:98px;"> <!-- 모달 창 생성 이메일을 입력하면 조회 후, 아이디 출력 (ajax) -->
+							                		<input type="button" class="btn btn-dark " value="PW 찾기" id="check_password" style="width:98px;"> <!--  모달 창 생성 -> 아이디, 이메일 조회 -> 해당 이메일로 비밀번호 번경 링크가 입력 되었습니다. -> 그 다음 다혜랑 얘기해볼 것   -->
+							                	</td>
+							                </tr>
 							            </table>
 							        </td>
 							    </tr>
@@ -281,7 +292,13 @@
 	<div class="modal-dialog modal-xl modal-dialog-centered">
 		<div class="modal-content write-content">
 		</div>
+	</div>	
+</div>
+<div id="idcheck-modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-content idcheck-content">
 	</div>
+</div>
 </div>
 </body>
 </html>

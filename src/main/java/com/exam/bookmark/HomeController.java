@@ -696,4 +696,19 @@ public class HomeController {
         
         return "booklist_search";
     }
+    
+    @RequestMapping(value="/id_check.do")
+    public String id_serch(HttpServletRequest request , Model model) {
+        return "id_check";
+    }
+    
+    @RequestMapping(value="/id_check_ok.do")
+    public String id_serch_ok(HttpServletRequest request , Model model) {
+        String mail_1 = request.getParameter("mail_1");
+        String mail_2 = request.getParameter("mail_2");
+        String user_mail = mail_1 + "@" + mail_2;
+        String id = userDao.id_search(user_mail);
+        model.addAttribute("id", id);
+        return "id_check_xml";
+    }
 }
