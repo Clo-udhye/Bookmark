@@ -37,6 +37,7 @@ public class Home_BoardDAO {
 				"left outer join likey on bnutable.seq = likey.bseq group by bnutable.seq) bnunltable " + 
 				"left outer join comment on bnunltable.seq = comment.bseq group by bnunltable.seq order by date desc limit 3 offset 4";
 		*/
+		/*
 		String sql = "select bl.seq as seq, bl.date as date, bl.filename as filename, bl.title as title, bl.useq as useq,bl.nickname as nickname, bl.likey as lcount, count(bl.seq) as ccount from ("+
 				"select b.seq as seq, b.date as date, b.filename as filename, b.title as title, b.useq as useq, b.nickname as nickname, count(b.seq) as likey from (" +
 						"select o.seq as seq, o.date as date, o.filename as filename, o.title as title, o.useq as useq, u.nickname as nickname from ("+
@@ -45,6 +46,8 @@ public class Home_BoardDAO {
 						") as o join user as u on o.useq = u.seq"+
 						") as b left outer join likey as l on b.seq = l.useq group by b.seq"+
 						") as bl left outer join comment as c on bl.seq = c.bseq group by bl.seq order by bl.seq desc";
+		*/
+		String sql = "select bnunltable.seq, date, filename, title, bnunltable.useq, nickname, Lcount, count(comment.bseq) Ccount from (select bnutable.seq, date, filename, title, bnutable.useq, nickname, count(likey.bseq) Lcount from (select board.seq, date, board.filename, title, useq, nickname from board inner join user on board.useq = user.seq) bnutable left outer join likey on bnutable.seq = likey.bseq group by bnutable.seq) bnunltable left outer join comment on bnunltable.seq = comment.bseq group by bnunltable.seq order by date desc limit 3;";	
 		ArrayList<JoinBULCTO> lists = (ArrayList<JoinBULCTO>) jdbcTemplate.query(sql, new BeanPropertyRowMapper<JoinBULCTO>(JoinBULCTO.class));
 		return lists;
 	}
