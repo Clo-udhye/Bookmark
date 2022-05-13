@@ -252,8 +252,8 @@
 							                        <div id = "naver_id_login" style="display: inline-block;"></div>
 							                    </div>
 							                        <script type="text/javascript">
-														//var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://localhost:8080/bookmark/callback1.do");    // Client ID, CallBack URL 삽입
-														var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://49.50.174.216:8080/Project_BM/callback1.do");    // Client ID, CallBack URL 삽입
+														var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://localhost:8080/bookmark/callback1.do");    // Client ID, CallBack URL 삽입
+														//var naver_id_login = new naver_id_login("ayKuMJkaKd7XupXX8g4J", "http://118.67.132.80:8080/Project_BM/callback1.do");    // Client ID, CallBack URL 삽입
 														var state = naver_id_login.getUniqState();
 													        
 														naver_id_login.setButton("white", 2, 40);
