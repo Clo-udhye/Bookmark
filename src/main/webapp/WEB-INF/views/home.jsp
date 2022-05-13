@@ -68,6 +68,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
+<!-- 미리보기이미지 설정 -->
+<meta property="og:url" content="http://www.bookmark-project.com/" />
+<meta property="og:title" content="생각을 보고, 나눔에 감동하다. 책갈피" />
+<meta property="og:description" content="책에 대한 감성과 느낌을 담아 책갈피에 넣어두세요. 나눔 속 당신의 마음을 울림을 위한, 당신의 책갈피." />
+<meta property="og:image" content="http://www.bookmark-project.com/images/preview_image.png" />
+
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
@@ -386,8 +392,8 @@
 							width="80" height="80" class="img_brunch thumb_img"
 							alt="Adela"> <strong
 							class="tit_wirter">박다혜</strong> 
-							<span class="team_writer">외모만큼 뇌도 섹시한 개발자</span>
-							<span class="txt_wirter">그게 나! 박.다.혜.</span>
+							<span class="team_writer">불굴의 개발자</span>
+							<span class="txt_wirter">포기하지않습니다</span>
 					</a>
 						<div class="writer_keyword_wrap keyword_inside_wrap">
 							<button type="button"
