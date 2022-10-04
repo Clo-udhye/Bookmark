@@ -392,8 +392,8 @@
 							width="80" height="80" class="img_brunch thumb_img"
 							alt="Adela"> <strong
 							class="tit_wirter">박다혜</strong> 
-							<span class="team_writer">불굴의 개발자</span>
-							<span class="txt_wirter">포기하지않습니다</span>
+							<span class="team_writer">운동부족 개발자</span>
+							<span class="txt_wirter">척추수술 1700만원</span>
 					</a>
 						<div class="writer_keyword_wrap keyword_inside_wrap">
 							<button type="button"
