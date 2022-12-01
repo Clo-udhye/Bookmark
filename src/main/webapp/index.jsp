@@ -1,8 +1,5 @@
-<html>
-<body>
-<h2>Hello World!</h2>
-<ul>
-	<li><a href="./home.do">home.do</a></li>
-</ul>
-</body>
-</html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+    response.sendRedirect("./home.do"); 
+%>
